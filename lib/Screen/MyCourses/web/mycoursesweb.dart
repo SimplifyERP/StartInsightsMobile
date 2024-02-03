@@ -4,11 +4,11 @@ import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CoursesDetailsResponse.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_bloc.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_state.dart';
-import 'package:startinsights/Screen/MyCourses/web/MyCourseItem.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
 import 'package:startinsights/Widgets/sidemenu.dart';
+import 'package:video_player/video_player.dart';
 
 class MyCoursesWeb extends StatefulWidget {
   final String mCourseid;
@@ -28,9 +28,25 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
   bool checkedValue = false;
   List<Course> mCoursesDetailsList = [];
   String mDescriptionText = "";
+//  late YoutubePlayerController _controller;
+  late VideoPlayerController _controller;
   @override
   void initState() {
     super.initState();
+    /* _controller = YoutubePlayerController(
+      initialVideoId: 'Y_kfP5vobV8Onpzt',
+      flags: YoutubePlayerFlags(
+        autoPlay: true,
+        mute: true,
+      ),
+    );*/
+
+    _controller = VideoPlayerController.networkUrl(Uri.parse(''))
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+      });
+    _controller.value.isInitialized;
   }
 
   @override
@@ -65,13 +81,14 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
               if (state is GetMyCoursesInfoSuccessState) {
                 mCoursesDetailsList = state.mCoursesDetails;
 
+                mDescriptionText = mCoursesDetailsList![0].description ?? "";
                 // mCoursesDetailsList![0].description!
-                for (var i = 0;
+                /*for (var i = 0;
                     i < (mCoursesDetailsList![0].description ?? []).length;
                     i++) {
                   mDescriptionText =
                       "$mDescriptionText${mCoursesDetailsList![0].description![i]}\n\n";
-                }
+                }*/
 
                 return SafeArea(
                   child: SingleChildScrollView(
@@ -254,7 +271,62 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                                 mCoursesDetailsList![0].chapters!.length,
                                                                             itemBuilder: (context, index) {
                                                                               final mgetCoursesDetails = mCoursesDetailsList![0].chapters![index];
-                                                                              return MyCourseItem(mChapterList: mgetCoursesDetails);
+                                                                              return Card(
+                                                                                color: mCardColorOne,
+                                                                                child: ExpansionTile(
+                                                                                    iconColor: Colors.black,
+                                                                                    collapsedIconColor: Colors.black,
+                                                                                    title: Text(
+                                                                                      mgetCoursesDetails.chapterName ?? "",
+                                                                                      style: const TextStyle(fontFamily: 'ManropeSemiBold', fontSize: 16, color: mBlackColor),
+                                                                                    ),
+                                                                                    children: [
+                                                                                      Container(
+                                                                                        height: mgetCoursesDetails.lessons!.length * 40,
+                                                                                        color: mWhiteColor,
+                                                                                        child: ListView.builder(
+                                                                                          itemBuilder: ((context, index) {
+                                                                                            final mLessonsList = mgetCoursesDetails.lessons![index];
+                                                                                            return ListTile(
+                                                                                                leading: Image.asset(
+                                                                                                  'assets/ic_video.png',
+                                                                                                  height: 20,
+                                                                                                ),
+                                                                                                // Align(
+                                                                                                //     alignment: Alignment.center,
+                                                                                                //     child: Image.asset(
+                                                                                                //       'assets/ic_video.png',
+                                                                                                //       height: 20,
+                                                                                                //     )),
+                                                                                                title: Align(
+                                                                                                  alignment: Alignment.centerLeft,
+                                                                                                  child: Text(mLessonsList.lessonName ?? "", style: const TextStyle(fontFamily: 'ManropeRegular', fontSize: 14, color: kTextColorOne)),
+                                                                                                ),
+                                                                                                onTap: () {
+                                                                                                  setState(() {
+                                                                                                    //https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4
+                                                                                                    var mVideoId = (mLessonsList.body ?? "").replaceAll('%3A', ':');
+                                                                                                    _controller = VideoPlayerController.networkUrl(Uri.parse(mVideoId))
+                                                                                                      ..initialize().then((_) {
+                                                                                                        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+                                                                                                        setState(() {
+                                                                                                          _controller.play();
+                                                                                                        });
+                                                                                                      });
+                                                                                                    // _controller.value.isInitialized;
+                                                                                                  });
+                                                                                                  //ErrorToast(context: context, text: mStartTimeList);
+                                                                                                });
+
+                                                                                            //VideoItem(mLessonList: mLessonsList);
+                                                                                          }),
+                                                                                          itemCount: mgetCoursesDetails.lessons!.length,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ]),
+                                                                              );
+
+                                                                              //MyCourseItem(mChapterList: mgetCoursesDetails);
                                                                             }),
                                                                   )
                                                                 ]),
@@ -285,19 +357,98 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                         children: [
                                                           Container(
                                                             padding:
-                                                                EdgeInsets.all(
-                                                                    5),
+                                                                const EdgeInsets
+                                                                    .all(5),
                                                             margin: EdgeInsets
                                                                 .fromLTRB(10,
                                                                     100, 10, 0),
-                                                            color: Colors.red,
+                                                            color: Colors.white,
                                                             height: 300,
                                                             width:
                                                                 MediaQuery.of(
                                                                         context)
                                                                     .size
                                                                     .width,
-                                                            child: Text("Test"),
+                                                            child: Scaffold(
+                                                                body: Center(
+                                                                    child: _controller
+                                                                            .value
+                                                                            .isInitialized
+                                                                        ? AspectRatio(
+                                                                            aspectRatio:
+                                                                                _controller.value.aspectRatio,
+                                                                            child:
+                                                                                VideoPlayer(_controller),
+                                                                          )
+                                                                        : Container(
+                                                                            color:
+                                                                                Colors.white,
+                                                                          )
+
+                                                                    // VideoPlayer(
+                                                                    //     _controller),
+                                                                    ),
+                                                                floatingActionButton:
+                                                                    Visibility(
+                                                                  visible: _controller
+                                                                          .value
+                                                                          .isInitialized
+                                                                      ? true
+                                                                      : false,
+                                                                  child:
+                                                                      FloatingActionButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      setState(
+                                                                          () {
+                                                                        _controller.value.isPlaying
+                                                                            ? _controller.pause()
+                                                                            : _controller.play();
+                                                                      });
+                                                                    },
+                                                                    child: Icon(
+                                                                      _controller
+                                                                              .value
+                                                                              .isPlaying
+                                                                          ? Icons
+                                                                              .pause
+                                                                          : Icons
+                                                                              .play_arrow,
+                                                                    ),
+                                                                  ),
+                                                                )),
+                                                            /*YoutubePlayerBuilder(
+                                                              player:
+                                                                  YoutubePlayer(
+                                                                controller:
+                                                                    _controller,
+                                                                showVideoProgressIndicator:
+                                                                    true,
+                                                                progressIndicatorColor:
+                                                                    Colors
+                                                                        .amber,
+                                                                progressColors:
+                                                                    ProgressBarColors(
+                                                                  playedColor:
+                                                                      Colors
+                                                                          .amber,
+                                                                  handleColor:
+                                                                      Colors
+                                                                          .amberAccent,
+                                                                ),
+                                                                onReady: () {
+                                                                  _controller
+                                                                      .addListener(
+                                                                          () {
+                                                                    _controller
+                                                                        .initialVideoId;
+                                                                  });
+                                                                },
+                                                              ),
+                                                              builder: (context,
+                                                                      player) =>
+                                                                  player,
+                                                            )*/
                                                           )
                                                         ],
                                                       ),

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:startinsights/Screen/BookanExpert/bloc/bookanexpert_bloc.dart';
+import 'package:startinsights/Screen/BookanExpert/web/bookanexpertweb.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/web/dashboardweb.dart';
+import 'package:startinsights/Screen/ExpertBooking/bloc/expertbooking_bloc.dart';
+import 'package:startinsights/Screen/ExpertBooking/web/expertbookingweb.dart';
 import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
 import 'package:startinsights/Screen/Login/web/loginweb.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_bloc.dart';
@@ -80,6 +84,36 @@ class Routes {
               )
             ],
             child: MyCoursesWeb(mCourseid: args![0]),
+          ),
+        );
+
+      case bookinganexpertRoute:
+        // List<dynamic>? args = settings.arguments as List?;
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<BookanExpertBloc>(
+                  create: (context) => BookanExpertBloc(mContext: context)
+                    ..getBookanexpertListData()
+                  //..getCoursesListData(args![0]),
+                  )
+            ],
+            child: BookanexpertWeb(),
+          ),
+        );
+
+      case expertbookingRoute:
+        List<dynamic>? args = settings.arguments as List?;
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<ExpertBookingBloc>(
+                  create: (context) => ExpertBookingBloc(mContext: context)
+                    ..getexpertBookingData(args![0])
+                  //..getCoursesListData(args![0]),
+                  )
+            ],
+            child: ExpertBookingWeb(),
           ),
         );
 

@@ -106,8 +106,8 @@ checkNetworkStatus() async {
   return isNetworkConnected;
 }
 
-String changeDateFormat(String mdate) {
-  DateTime parseDate = DateFormat('yyyy-MM-dd').parse(mdate);
+String changeDateFormat(String mdate, String mDateformat) {
+  DateTime parseDate = DateFormat(mDateformat).parse(mdate);
   var inputDate = DateTime.parse(parseDate.toString());
   var outputFormat = DateFormat('dd MMM yyyy');
   var mSelecteddate = outputFormat.format(inputDate);
@@ -119,6 +119,15 @@ String changeTimeFormat(String mdate) {
   DateTime parseDate = DateFormat('HH:mm:ss').parse(mdate);
   var inputDate = DateTime.parse(parseDate.toString());
   var outputFormat = DateFormat('HH:mm a');
+  var mSelecteddate = outputFormat.format(inputDate);
+
+  return mSelecteddate;
+}
+
+String changeTimeFormat1(String mdate) {
+  DateTime parseDate = DateFormat('HH:mm:ss').parse(mdate);
+  var inputDate = DateTime.parse(parseDate.toString());
+  var outputFormat = DateFormat('hh:mm a');
   var mSelecteddate = outputFormat.format(inputDate);
 
   return mSelecteddate;

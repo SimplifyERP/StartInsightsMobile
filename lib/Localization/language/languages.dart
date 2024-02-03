@@ -23,7 +23,7 @@ abstract class Languages {
 
   String get mMobile;
   String get mEnterMobile;
-
+  String get rupess => "₹";
   String get mType;
   String get mSelectType;
   String get mCreatePassword;
@@ -69,4 +69,14 @@ abstract class Languages {
   String get mBasicsofPitching;
   String get mDescription;
   String get mCourseDetails;
+  String get mService;
+
+  String get mEventStart;
+  String get mEventend;
+  String get mEventStarttime;
+  String get mEventendtime;
+
+  String get mEarnedBadges;
+  String get mStartupAspirant;
+  String get mYouearnedabadge;
 }

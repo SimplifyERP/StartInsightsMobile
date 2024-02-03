@@ -17,7 +17,9 @@ const Color kBorderColor = Color(0xFFF1F1F1);
 
 const Color kTextGrayColor = Color(0xFF5F5F5F);
 const Color kTextColorOne = Color(0xFF2D2F31);
-Color mCardColorOne = const Color(0xFF276CEC).withOpacity(0.3);
+const Color kTextColorTwo = Color(0xFF333333);
+Color mCardColorOne = const Color(0xFF276CEC).withOpacity(0.1);
+Color mCardDashboard = const Color(0xFFdfe9fc);
 
 // const Color defaultTwitterColor = Color(0xff00acee);
 // Color defaultLightWhite = mPrimaryColor.withOpacity(0.1);

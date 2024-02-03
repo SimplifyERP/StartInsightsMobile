@@ -19,6 +19,7 @@ class LanguageEn extends Languages {
   String get mMobile => "Mobile Number";
   String get mEnterMobile => "Enter Mobile Number";
 
+  String get rupess => "₹";
   String get mType => "Type";
   String get mSelectType => "Select Type";
   String get mCreatePassword => "Create Password";
@@ -66,4 +67,14 @@ class LanguageEn extends Languages {
   String get mBasicsofPitching => "Basics of Pitching";
   String get mDescription => "Description";
   String get mCourseDetails => "Course Details";
+  String get mService => " / Service";
+
+  String get mEventStart => "Event start date";
+  String get mEventend => "Event end date";
+  String get mEventStarttime => "Event start time";
+  String get mEventendtime => "Event end time";
+
+  String get mEarnedBadges => "Earned Badges";
+  String get mStartupAspirant => "Startup Aspirant";
+  String get mYouearnedabadge => "You earned a badge";
 }

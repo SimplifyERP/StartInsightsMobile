@@ -1,4 +1,6 @@
-const String baseUrl = 'http://44.211.143.105/api';
+const String mToken = 'token f3d40080905efdd:a9969f40877e947';
+
+const String baseUrl = 'http://52.151.253.79/api';
 const String masterAPI =
     '$baseUrl/method/startinsights.website_api.masters.get_masters';
 
@@ -16,3 +18,9 @@ const String savedcoursesAPI =
 
 const String coursesdetailsAPI =
     '$baseUrl/method/startinsights.website_api.lms_course.lms_course_details';
+
+const String bookanexpertlistAPI =
+    '$baseUrl/method/startinsights.website_api.book_an_expert.get_book_an_expert_list';
+
+const String expertbookingAPI =
+    '$baseUrl/method/startinsights.website_api.book_an_expert.book_an_expert';

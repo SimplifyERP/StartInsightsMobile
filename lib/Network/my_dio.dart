@@ -26,7 +26,7 @@ class MyDio {
   }) async {
     dio.options.headers = {
       "Content-Type": "application/json",
-      "Authorization": "token 643fbb1c61993f1:26532288ebbddc0",
+      "Authorization": mToken,
       // "Access-Control-Allow-Origin": "*",
     };
     try {
@@ -68,7 +68,7 @@ class MyDio {
 
     dio.options.headers = {
       "Accept": "application/json",
-      "Authorization": "token 643fbb1c61993f1:26532288ebbddc0",
+      "Authorization": mToken,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,PATCH,POST,DELETE",
       // "Access-Control-Allow-Headers":

@@ -17,7 +17,7 @@ class SideMenu extends StatelessWidget {
 
   Future<void> onLoad() async {
     mClickPich = await sl<StorageService>()
-            .getString(StorageServiceConstant.MLOGINSTATUS) ??
+            .getString(StorageServiceConstant.MCLICKPITCH) ??
         false;
   }
 
@@ -221,7 +221,7 @@ class SideMenu extends StatelessWidget {
                         height: 20,
                       ),
                       Visibility(
-                        visible: false,
+                        visible: true,
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
@@ -362,6 +362,13 @@ class SideMenu extends StatelessWidget {
                                     padding:
                                         const EdgeInsets.fromLTRB(10, 0, 5, 0),
                                     child: InkWell(
+                                      onTap: () {
+                                        sl<StorageService>().setBool(
+                                            StorageServiceConstant.MCLICKPITCH,
+                                            false);
+                                        Navigator.pushReplacementNamed(
+                                            context, bookinganexpertRoute);
+                                      },
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Row(children: [

@@ -13,11 +13,12 @@ import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_state.dart
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/pref_manager.dart';
+import 'package:startinsights/Utils/screens.dart';
 
 class StartupSchoolBloc extends Bloc<StartupSchoolEvent, StartupSchoolStatus> {
   final BuildContext mContext;
   // List<CoursesList> mCoursesList = [];
-
+  bool mCLickSave = false;
   StartupSchoolBloc({
     required this.mContext,
   }) : super(StartupSchoolInitialState()) {
@@ -37,9 +38,15 @@ class StartupSchoolBloc extends Bloc<StartupSchoolEvent, StartupSchoolStatus> {
       if (apiResults is ApiSuccess) {
         // mCoursesList =
         //     CoursesListResponse.fromJson(apiResults.data).message!.coursesList!;
+        // setState(() => counterBloc.dispatch(CounterEvent.decrement));
+        if (mCLickSave) {
+          mCLickSave = false;
+          Navigator.pushReplacementNamed(mContext, startupSchoolRoute);
+        } else {
+          emit(GetStartupSchoolInfoSuccessState(
+              CoursesListResponse.fromJson(apiResults.data).message!));
+        }
 
-        emit(GetStartupSchoolInfoSuccessState(
-            CoursesListResponse.fromJson(apiResults.data).message!));
         // hideLoading(mContext);
         Loading.stop();
       } else if (apiResults is ApiFailure) {
@@ -63,7 +70,9 @@ class StartupSchoolBloc extends Bloc<StartupSchoolEvent, StartupSchoolStatus> {
         //
         // emit(GetStartupSchoolInfoSuccessState(mCoursesList));
         // hideLoading(mContext);
+        mCLickSave = true;
         getCoursesListData();
+
         Loading.stop();
       } else if (apiResults is ApiFailure) {
         //  Loading.stop();

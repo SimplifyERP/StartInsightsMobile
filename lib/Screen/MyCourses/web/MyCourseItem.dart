@@ -39,34 +39,6 @@ class MyCourseItem extends StatelessWidget {
                 itemCount: mChapterList.lessons!.length,
               ),
             ),
-            /* Row(
-          children: [
-            Expanded(
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child:
-                  // Row(children: [
-                  //   ScrollConfiguration(
-                  //     behavior:
-                  //         ScrollConfiguration.of(context).copyWith(dragDevices: {
-                  //       PointerDeviceKind.touch,
-                  //       PointerDeviceKind.mouse,
-                  //     }),
-                  //     child: ListView.builder(
-                  //       controller: controller,
-                  //       scrollDirection: Axis.horizontal,
-                  //       itemBuilder: ((context, index) {
-                  //         // final mgetCoursesList = mCoursesList[index];
-                  //         return VideoItem();
-                  //       }),
-                  //       itemCount: 10,
-                  //     ),
-                  //   )
-                  // ]),
-                  ),
-            ),
-          ],
-        ),*/
           ]),
     );
   }

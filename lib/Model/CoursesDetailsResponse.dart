@@ -56,7 +56,7 @@ class Course {
   String? id;
   String? name;
   String? courseTitle;
-  List<String>? description;
+  String? description;
   List<Chapter>? chapters;
 
   Course({
@@ -71,9 +71,10 @@ class Course {
         id: json["id"],
         name: json["name"],
         courseTitle: json["course_title"],
-        description: json["description"] == null
-            ? []
-            : List<String>.from(json["description"]!.map((x) => x)),
+        description: json["description"],
+        // description: json["description"] == null
+        //     ? []
+        //     : List<String>.from(json["description"]!.map((x) => x)),
         chapters: json["chapters"] == null
             ? []
             : List<Chapter>.from(
@@ -84,9 +85,10 @@ class Course {
         "id": id,
         "name": name,
         "course_title": courseTitle,
-        "description": description == null
-            ? []
-            : List<dynamic>.from(description!.map((x) => x)),
+        "description": description,
+        // "description": description == null
+        //     ? []
+        //     : List<dynamic>.from(description!.map((x) => x)),
         "chapters": chapters == null
             ? []
             : List<dynamic>.from(chapters!.map((x) => x.toJson())),
