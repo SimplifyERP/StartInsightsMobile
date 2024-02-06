@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
-import 'package:startinsights/Widgets/primary_button.dart';
 
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
   Appbar({
@@ -61,46 +60,46 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 150,
-                          height: 40,
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              width: 150,
-                              child: PrimaryButton(
-                                  mButtonname: Languages.of(context)!.mUpgrade,
-                                  onpressed: () {},
-                                  mSelectcolor: mBtnColor,
-                                  mTextColor: mWhiteColor,
-                                  mFontSize: 16,
-                                  mHeigth: 35),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 120,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Image(
-                                width: 25,
-                                height: 25,
-                                image: AssetImage(
-                                  "assets/ic_chat.png",
-                                ),
-                              ),
-                              Text(
-                                Languages.of(context)!.mLivechat,
-                                style: const TextStyle(
-                                  color: mBlackColor,
-                                  fontFamily: 'ManropeSemiBold',
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        // Container(
+                        //   width: 150,
+                        //   height: 40,
+                        //   child: Align(
+                        //     alignment: Alignment.center,
+                        //     child: Container(
+                        //       width: 150,
+                        //       child: PrimaryButton(
+                        //           mButtonname: Languages.of(context)!.mUpgrade,
+                        //           onpressed: () {},
+                        //           mSelectcolor: mBtnColor,
+                        //           mTextColor: mWhiteColor,
+                        //           mFontSize: 16,
+                        //           mHeigth: 35),
+                        //     ),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   width: 120,
+                        //   child: Column(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       const Image(
+                        //         width: 25,
+                        //         height: 25,
+                        //         image: AssetImage(
+                        //           "assets/ic_chat.png",
+                        //         ),
+                        //       ),
+                        //       Text(
+                        //         Languages.of(context)!.mLivechat,
+                        //         style: const TextStyle(
+                        //           color: mBlackColor,
+                        //           fontFamily: 'ManropeSemiBold',
+                        //           fontSize: 14,
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         SizedBox(
                           width: 120,
                           child: Column(

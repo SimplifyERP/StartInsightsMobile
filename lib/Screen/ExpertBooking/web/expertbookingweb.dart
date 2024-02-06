@@ -578,39 +578,44 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
                                                                   onDaySelected:
                                                                       (selectedDay,
                                                                           focusedDay) {
-                                                                    if (!isSameDay(
-                                                                        _selectedDay,
-                                                                        selectedDay)) {
-                                                                      setState(
-                                                                          () {
-                                                                        // mDayeventsList
-                                                                        //     .clear();
-                                                                        mStartTime
-                                                                            .clear();
-                                                                        mEndTime
-                                                                            .clear();
-                                                                        mStatus
-                                                                            .clear();
-                                                                        for (var i =
-                                                                                0;
-                                                                            i < mBookAnExpertList[0].booking!.length;
-                                                                            i++) {
-                                                                          if (mBookAnExpertList[0].booking![i].date! ==
-                                                                              DateFormat("dd-MM-yyyy").format(selectedDay)) {
-                                                                            mStartTime.add(mBookAnExpertList[0].booking![i].startTime!);
-                                                                            mEndTime.add(mBookAnExpertList[0].booking![i].endTime!);
-                                                                            mStatus.add(false);
-                                                                          }
+                                                                    // if (!isSameDay(
+                                                                    //     _selectedDay,
+                                                                    //     selectedDay)) {
+                                                                    setState(
+                                                                        () {
+                                                                      // mDayeventsList
+                                                                      //     .clear();
+                                                                      mStartTime
+                                                                          .clear();
+                                                                      mEndTime
+                                                                          .clear();
+                                                                      mStatus
+                                                                          .clear();
+                                                                      for (var i =
+                                                                              0;
+                                                                          i < mBookAnExpertList[0].booking!.length;
+                                                                          i++) {
+                                                                        if (mBookAnExpertList[0].booking![i].date! ==
+                                                                            DateFormat("dd-MM-yyyy").format(selectedDay)) {
+                                                                          mStartTime.add(mBookAnExpertList[0]
+                                                                              .booking![i]
+                                                                              .startTime!);
+                                                                          mEndTime.add(mBookAnExpertList[0]
+                                                                              .booking![i]
+                                                                              .endTime!);
+                                                                          mStatus
+                                                                              .add(false);
                                                                         }
+                                                                      }
 
-                                                                        // print(
-                                                                        //     mDayeventsList);
-                                                                        _selectedDay =
-                                                                            selectedDay;
-                                                                        _focusedDay =
-                                                                            focusedDay;
-                                                                      });
-                                                                    }
+                                                                      // print(
+                                                                      //     mDayeventsList);
+                                                                      _selectedDay =
+                                                                          selectedDay;
+                                                                      _focusedDay =
+                                                                          focusedDay;
+                                                                    });
+                                                                    //}
                                                                   },
                                                                   onPageChanged:
                                                                       (focusedDay) {

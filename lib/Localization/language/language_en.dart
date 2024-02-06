@@ -55,6 +55,8 @@ class LanguageEn extends Languages {
   String get mBookanExpert => "Book an Expert";
   String get mHireourteam => "Hire our team";
   String get mContactUs => "Contact Us";
+  String get mBAngelInvesting => "B-Angel Investing";
+  String get mInvestmentDeals => "Investment Deals";
 
   String get mStartX => "StartX/ ";
   String get mCourses => "Courses";
@@ -77,4 +79,22 @@ class LanguageEn extends Languages {
   String get mEarnedBadges => "Earned Badges";
   String get mStartupAspirant => "Startup Aspirant";
   String get mYouearnedabadge => "You earned a badge";
+  String get mKnowMore => "Know More";
+  String get mBenefits => "Benefits";
+  String get mDocuments => "Documents";
+  String get mDeliverables => "Deliverables";
+  String get mdocumentsrequired => "Documents Required";
+  String get mCancel => "Cancel";
+  String get mGetStarted => "Get Started";
+  String get mMockPitch => "Mock Pitch";
+  String get mGold => "Gold";
+  String get mDocumentCreated => "Document Created";
+  String get mStartupCourseCompleted => "Startup Course Completed";
+  String get mServiceCompleted => "Service Completed";
+  String get mExpertBooked => "Expert Booked";
+  String get mViewDetails => "View Details";
+  String get mAbout => "About";
+  String get mFounders => "Founders";
+  String get minvestmentdetails => "Investment Details";
+  String get mPreview => "Preview";
 }

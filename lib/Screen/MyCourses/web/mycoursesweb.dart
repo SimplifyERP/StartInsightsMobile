@@ -355,69 +355,98 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                             CrossAxisAlignment
                                                                 .center,
                                                         children: [
-                                                          Container(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(5),
-                                                            margin: EdgeInsets
-                                                                .fromLTRB(10,
-                                                                    100, 10, 0),
-                                                            color: Colors.white,
-                                                            height: 300,
-                                                            width:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                            child: Scaffold(
-                                                                body: Center(
-                                                                    child: _controller
+                                                          SizedBox(
+                                                            height: 100,
+                                                          ),
+                                                          Align(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              margin:
+                                                                  const EdgeInsets
+                                                                      .fromLTRB(
+                                                                      10,
+                                                                      10,
+                                                                      10,
+                                                                      0),
+                                                              child: Text(
+                                                                  Languages.of(
+                                                                          context)!
+                                                                      .mPreview,
+                                                                  style: const TextStyle(
+                                                                      fontFamily:
+                                                                          'ManropeSemiBold',
+                                                                      fontSize:
+                                                                          16,
+                                                                      color:
+                                                                          mBlackColor)),
+                                                            ),
+                                                          ),
+                                                          Center(
+                                                            child: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5),
+                                                              margin: EdgeInsets
+                                                                  .fromLTRB(
+                                                                      10,
+                                                                      10,
+                                                                      10,
+                                                                      0),
+                                                              color:
+                                                                  Colors.white,
+                                                              height: 300,
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              child: Scaffold(
+                                                                  body: Center(
+                                                                      child: _controller
+                                                                              .value
+                                                                              .isInitialized
+                                                                          ? AspectRatio(
+                                                                              aspectRatio: _controller.value.aspectRatio,
+                                                                              child: VideoPlayer(_controller),
+                                                                            )
+                                                                          : Container(
+                                                                              color: Colors.white,
+                                                                            )
+
+                                                                      // VideoPlayer(
+                                                                      //     _controller),
+                                                                      ),
+                                                                  floatingActionButton:
+                                                                      Visibility(
+                                                                    visible: _controller
                                                                             .value
                                                                             .isInitialized
-                                                                        ? AspectRatio(
-                                                                            aspectRatio:
-                                                                                _controller.value.aspectRatio,
-                                                                            child:
-                                                                                VideoPlayer(_controller),
-                                                                          )
-                                                                        : Container(
-                                                                            color:
-                                                                                Colors.white,
-                                                                          )
-
-                                                                    // VideoPlayer(
-                                                                    //     _controller),
-                                                                    ),
-                                                                floatingActionButton:
-                                                                    Visibility(
-                                                                  visible: _controller
-                                                                          .value
-                                                                          .isInitialized
-                                                                      ? true
-                                                                      : false,
-                                                                  child:
-                                                                      FloatingActionButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      setState(
+                                                                        ? true
+                                                                        : false,
+                                                                    child:
+                                                                        FloatingActionButton(
+                                                                      onPressed:
                                                                           () {
+                                                                        setState(
+                                                                            () {
+                                                                          _controller.value.isPlaying
+                                                                              ? _controller.pause()
+                                                                              : _controller.play();
+                                                                        });
+                                                                      },
+                                                                      child:
+                                                                          Icon(
                                                                         _controller.value.isPlaying
-                                                                            ? _controller.pause()
-                                                                            : _controller.play();
-                                                                      });
-                                                                    },
-                                                                    child: Icon(
-                                                                      _controller
-                                                                              .value
-                                                                              .isPlaying
-                                                                          ? Icons
-                                                                              .pause
-                                                                          : Icons
-                                                                              .play_arrow,
+                                                                            ? Icons.pause
+                                                                            : Icons.play_arrow,
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                )),
-                                                            /*YoutubePlayerBuilder(
+                                                                  )),
+                                                              /*YoutubePlayerBuilder(
                                                               player:
                                                                   YoutubePlayer(
                                                                 controller:
@@ -449,6 +478,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                       player) =>
                                                                   player,
                                                             )*/
+                                                            ),
                                                           )
                                                         ],
                                                       ),

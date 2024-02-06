@@ -56,6 +56,8 @@ abstract class Languages {
   String get mBookanExpert;
   String get mHireourteam;
   String get mContactUs;
+  String get mBAngelInvesting;
+  String get mInvestmentDeals;
 
   String get mStartX;
   String get mCourses;
@@ -79,4 +81,24 @@ abstract class Languages {
   String get mEarnedBadges;
   String get mStartupAspirant;
   String get mYouearnedabadge;
+  String get mKnowMore;
+
+  String get mBenefits;
+  String get mDocuments;
+  String get mDeliverables;
+  String get mdocumentsrequired;
+
+  String get mCancel;
+  String get mGetStarted;
+  String get mMockPitch;
+  String get mGold;
+  String get mDocumentCreated;
+  String get mStartupCourseCompleted;
+  String get mServiceCompleted;
+  String get mExpertBooked;
+  String get mViewDetails;
+  String get mAbout;
+  String get mFounders;
+  String get minvestmentdetails;
+  String get mPreview;
 }

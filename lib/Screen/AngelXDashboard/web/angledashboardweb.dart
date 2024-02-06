@@ -3,24 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/MastersResponse.dart';
 import 'package:startinsights/Network/di.dart';
-import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
-import 'package:startinsights/Screen/Dashboard/bloc/dashboard_state.dart';
+import 'package:startinsights/Screen/AngelXDashboard/bloc/angledashboard_bloc.dart';
+import 'package:startinsights/Screen/AngelXDashboard/bloc/angledashboard_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/pref_manager.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
-import 'package:startinsights/Widgets/sidemenu.dart';
+import 'package:startinsights/Widgets/anglesidemenu.dart';
 
-class DashboardWeb extends StatefulWidget {
-  DashboardWeb({super.key});
+class AngleDashboardWeb extends StatefulWidget {
+  AngleDashboardWeb({super.key});
 
   @override
-  State<DashboardWeb> createState() => _DashboardWebState();
+  State<AngleDashboardWeb> createState() => _AngleDashboardWebState();
 }
 
-class _DashboardWebState extends State<DashboardWeb> {
+class _AngleDashboardWebState extends State<AngleDashboardWeb> {
   @override
-  late DashboardBloc mDashboardBloc;
+  late AngleDashboardBloc mAngleDashboardBloc;
   bool checkedValue = false;
   List<UserType>? mUserTypeDataList;
   List<UserType> getUserType = <UserType>[];
@@ -44,7 +44,7 @@ class _DashboardWebState extends State<DashboardWeb> {
   }
 
   Widget build(BuildContext context) {
-    mDashboardBloc = DashboardBloc(mContext: context);
+    mAngleDashboardBloc = AngleDashboardBloc(mContext: context);
 
     return WillPopScope(
       onWillPop: () {
@@ -58,9 +58,9 @@ class _DashboardWebState extends State<DashboardWeb> {
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: Appbar(mText: "TExt", mUserImage: "", mFrom: 1),
-          body: BlocConsumer<DashboardBloc, DashboardStatus>(
+          body: BlocConsumer<AngleDashboardBloc, AngleDashboardStatus>(
             listener: (context, state) {
-              if (state is GetDashboardInfoSuccessState) {}
+              if (state is GetAngleDashboardInfoSuccessState) {}
             },
             builder: (context, state) {
               return SafeArea(
@@ -83,7 +83,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(0),
                                         color: kBorderColor),
-                                    child: SideMenu(mFrom: 1))),
+                                    child: AngleSideMenu(mFrom: 1))),
                             Expanded(
                                 flex: 9,
                                 child: Container(
@@ -208,7 +208,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                         30,
                                                                         0,
                                                                         20),
-                                                                width: 340,
+                                                                width: 265,
                                                                 height: 20,
                                                                 child: Align(
                                                                     alignment:
@@ -229,7 +229,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                         30,
                                                                         0,
                                                                         20),
-                                                                width: 350,
+                                                                width: 275,
                                                                 height: 20,
                                                                 child: Align(
                                                                     alignment:
@@ -250,7 +250,28 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                         30,
                                                                         0,
                                                                         20),
-                                                                width: 340,
+                                                                width: 265,
+                                                                height: 20,
+                                                                child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topRight,
+                                                                    child: Image
+                                                                        .asset(
+                                                                      'assets/ic_polygon.png',
+                                                                      height:
+                                                                          40,
+                                                                    )),
+                                                              ),
+                                                              Container(
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .fromLTRB(
+                                                                        0,
+                                                                        30,
+                                                                        0,
+                                                                        20),
+                                                                width: 265,
                                                                 height: 20,
                                                                 child: Align(
                                                                     alignment:
@@ -281,7 +302,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                     .symmetric(
                                                                     vertical:
                                                                         20),
-                                                                width: 350,
+                                                                width: 275,
                                                                 height: 20,
                                                                 child:
                                                                     const ClipRRect(
@@ -317,7 +338,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                         20,
                                                                         0,
                                                                         20),
-                                                                width: 350,
+                                                                width: 275,
                                                                 height: 20,
                                                                 child:
                                                                     const ClipRRect(
@@ -351,9 +372,45 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                         .fromLTRB(
                                                                         0,
                                                                         20,
+                                                                        0,
+                                                                        20),
+                                                                width: 275,
+                                                                height: 20,
+                                                                child:
+                                                                    const ClipRRect(
+                                                                  borderRadius: BorderRadius.only(
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              0),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              0),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              0),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              0)),
+                                                                  child:
+                                                                      LinearProgressIndicator(
+                                                                    value: 0.5,
+                                                                    valueColor:
+                                                                        AlwaysStoppedAnimation<Color>(
+                                                                            kprogressbarmockpitch),
+                                                                    backgroundColor:
+                                                                        kprogressbarbg,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .fromLTRB(
+                                                                        0,
+                                                                        20,
                                                                         20,
                                                                         20),
-                                                                width: 350,
+                                                                width: 275,
                                                                 height: 20,
                                                                 child:
                                                                     const ClipRRect(
@@ -375,7 +432,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                     value: 0.5,
                                                                     valueColor:
                                                                         AlwaysStoppedAnimation<Color>(
-                                                                            kprogressbarmockpitch),
+                                                                            kprogressbarexpertbooking),
                                                                     backgroundColor:
                                                                         kprogressbarbg,
                                                                   ),
@@ -402,7 +459,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                         50,
                                                                         0,
                                                                         20),
-                                                                width: 360,
+                                                                width: 285,
                                                                 height: 20,
                                                                 child: Align(
                                                                     alignment:
@@ -410,7 +467,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                             .topRight,
                                                                     child: Text(
                                                                         Languages.of(context)!
-                                                                            .mStartupSchool,
+                                                                            .mDocumentCreated,
                                                                         style: const TextStyle(
                                                                             fontFamily:
                                                                                 'ManropeSemiBold',
@@ -427,7 +484,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                         50,
                                                                         0,
                                                                         20),
-                                                                width: 360,
+                                                                width: 285,
                                                                 height: 20,
                                                                 child: Align(
                                                                     alignment:
@@ -435,7 +492,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                             .topRight,
                                                                     child: Text(
                                                                         Languages.of(context)!
-                                                                            .mPitchCraft,
+                                                                            .mStartupCourseCompleted,
                                                                         style: const TextStyle(
                                                                             fontFamily:
                                                                                 'ManropeSemiBold',
@@ -452,7 +509,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                         50,
                                                                         0,
                                                                         20),
-                                                                width: 360,
+                                                                width: 285,
                                                                 height: 20,
                                                                 child: Align(
                                                                     alignment:
@@ -460,7 +517,32 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                                             .topRight,
                                                                     child: Text(
                                                                         Languages.of(context)!
-                                                                            .mMockPitch,
+                                                                            .mServiceCompleted,
+                                                                        style: const TextStyle(
+                                                                            fontFamily:
+                                                                                'ManropeSemiBold',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                mBlackColor))),
+                                                              ),
+                                                              Container(
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .fromLTRB(
+                                                                        0,
+                                                                        50,
+                                                                        0,
+                                                                        20),
+                                                                width: 285,
+                                                                height: 20,
+                                                                child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topRight,
+                                                                    child: Text(
+                                                                        Languages.of(context)!
+                                                                            .mExpertBooked,
                                                                         style: const TextStyle(
                                                                             fontFamily:
                                                                                 'ManropeSemiBold',
@@ -535,7 +617,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                       ),
                                                       Text(
                                                         Languages.of(context)!
-                                                            .mStartupAspirant,
+                                                            .mGold,
                                                         style: const TextStyle(
                                                             fontFamily:
                                                                 'ManropeSemiBold',
@@ -592,7 +674,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                       ),
                                                       Text(
                                                         Languages.of(context)!
-                                                            .mStartupAspirant,
+                                                            .mGold,
                                                         style: const TextStyle(
                                                             fontFamily:
                                                                 'ManropeSemiBold',
@@ -649,7 +731,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                       ),
                                                       Text(
                                                         Languages.of(context)!
-                                                            .mStartupAspirant,
+                                                            .mGold,
                                                         style: const TextStyle(
                                                             fontFamily:
                                                                 'ManropeSemiBold',

@@ -99,7 +99,7 @@ class SideMenu extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(
+                      /*const SizedBox(
                         height: 20,
                       ),
                       Container(
@@ -151,7 +151,7 @@ class SideMenu extends StatelessWidget {
                             ),
                           ],
                         ),
-                      ),
+                      ),*/
                       const SizedBox(
                         height: 20,
                       ),
@@ -225,55 +225,131 @@ class SideMenu extends StatelessWidget {
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              InkWell(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(children: [
-                                    const Expanded(
-                                      flex: 3,
-                                      child: Text(""),
-                                    ),
+                              Container(
+                                child: Row(
+                                  children: [
                                     Expanded(
-                                        flex: 7,
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              child: SidemenuText(
-                                                  menuname:
-                                                      Languages.of(context)!
-                                                          .mMyServices,
-                                                  textColor: mFrom == 4
-                                                      ? mWhiteColor
-                                                      : mBlackColor),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: double.infinity,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: mFrom == 4
+                                              ? Colors.black
+                                              : Colors.white,
+                                          border: Border.all(
+                                            color: mStatusbar,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 5, 0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              sl<StorageService>().setBool(
+                                                  StorageServiceConstant
+                                                      .MCLICKPITCH,
+                                                  true);
+                                              Navigator.pushReplacementNamed(
+                                                  context,
+                                                  pitchcraftmyserviceRoute);
+                                            },
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Row(children: [
+                                                const Expanded(
+                                                  flex: 3,
+                                                  child: Text(""),
+                                                ),
+                                                Expanded(
+                                                    flex: 7,
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          child: SidemenuText(
+                                                              menuname: Languages
+                                                                      .of(
+                                                                          context)!
+                                                                  .mMyServices,
+                                                              textColor: mFrom ==
+                                                                      4
+                                                                  ? mWhiteColor
+                                                                  : mBlackColor),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                      ],
+                                                    )),
+                                              ]),
                                             ),
-                                            const SizedBox(
-                                              width: 20,
-                                            ),
-                                          ],
-                                        )),
-                                  ]),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(
-                                height: 20,
+                                height: 5,
                               ),
-                              InkWell(
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(children: [
-                                    const Expanded(
-                                      flex: 3,
-                                      child: Text(""),
-                                    ),
+                              Container(
+                                child: Row(
+                                  children: [
                                     Expanded(
-                                        flex: 7,
-                                        child: SidemenuText(
-                                            menuname: Languages.of(context)!
-                                                .mServices,
-                                            textColor: mFrom == 5
-                                                ? mWhiteColor
-                                                : mBlackColor)),
-                                  ]),
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: double.infinity,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: mFrom == 5
+                                              ? Colors.black
+                                              : Colors.white,
+                                          border: Border.all(
+                                            color: mStatusbar,
+                                            width: 1,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 5, 0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              sl<StorageService>().setBool(
+                                                  StorageServiceConstant
+                                                      .MCLICKPITCH,
+                                                  true);
+                                              Navigator.pushReplacementNamed(
+                                                  context, pitchcraftlistRoute);
+                                            },
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Row(children: [
+                                                const Expanded(
+                                                  flex: 3,
+                                                  child: Text(""),
+                                                ),
+                                                Expanded(
+                                                    flex: 7,
+                                                    child: SidemenuText(
+                                                        menuname: Languages.of(
+                                                                context)!
+                                                            .mServices,
+                                                        textColor: mFrom == 5
+                                                            ? mWhiteColor
+                                                            : mBlackColor)),
+                                              ]),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               const SizedBox(

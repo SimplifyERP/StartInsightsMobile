@@ -71,30 +71,33 @@ class _MyAppState extends State<MyApp> {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          onGenerateRoute: Routes.onGenerateRoute,
-          locale: const Locale('en'),
-          supportedLocales: const [
-            Locale('en', ''),
-            // Locale('ar', ''),
-            // Locale('hi', '')
-          ],
-          localizationsDelegates: const [
-            AppLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          //SizerUtil.deviceType == DeviceType.mobile
-          home: mIsLogin
-              ? BlocProvider(
-                  create: (_) => LoginBloc(mContext: context)..getMasterData(),
-                  child: LoginWeb())
-              : BlocProvider(
-                  create: (_) => DashboardBloc(mContext: context),
-                  child: DashboardWeb()),
-        );
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            onGenerateRoute: Routes.onGenerateRoute,
+            locale: const Locale('en'),
+            supportedLocales: const [
+              Locale('en', ''),
+              // Locale('ar', ''),
+              // Locale('hi', '')
+            ],
+            localizationsDelegates: const [
+              AppLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            //SizerUtil.deviceType == DeviceType.mobile
+            home: mIsLogin
+                ? BlocProvider(
+                    create: (_) =>
+                        LoginBloc(mContext: context)..getMasterData(),
+                    child: LoginWeb())
+                : BlocProvider(
+                    create: (_) => DashboardBloc(mContext: context),
+                    child: DashboardWeb())
+            // create: (_) => AngleDashboardBloc(mContext: context),
+            // child: AngleDashboardWeb()),
+            );
       },
     );
   }

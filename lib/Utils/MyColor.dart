@@ -18,6 +18,12 @@ const Color kBorderColor = Color(0xFFF1F1F1);
 const Color kTextGrayColor = Color(0xFF5F5F5F);
 const Color kTextColorOne = Color(0xFF2D2F31);
 const Color kTextColorTwo = Color(0xFF333333);
+const Color kPitchcraftbg = Color(0xFFD2FCF5);
+const Color kprogressbarbg = Color(0xFFDFDFDF);
+const Color kprogressbarstartupschool = Color(0xFFFF2257);
+const Color kprogressbarpitchcraft = Color(0xFF5F3990);
+const Color kprogressbarmockpitch = Color(0xFFECA727);
+const Color kprogressbarexpertbooking = Color(0xFF276CEC);
 Color mCardColorOne = const Color(0xFF276CEC).withOpacity(0.1);
 Color mCardDashboard = const Color(0xFFdfe9fc);
 

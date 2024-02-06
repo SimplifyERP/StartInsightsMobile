@@ -24,3 +24,12 @@ const String bookanexpertlistAPI =
 
 const String expertbookingAPI =
     '$baseUrl/method/startinsights.website_api.book_an_expert.book_an_expert';
+
+const String pitchcraftlistAPI =
+    '$baseUrl/method/startinsights.website_api.pitch_craft.pitch_craft_list';
+
+const String pitchcraftservicedetailsAPI =
+    '$baseUrl/method/startinsights.website_api.pitch_craft.pitch_craft_service_details';
+
+const String investmentdealsdetailsAPI =
+    '$baseUrl/method/startinsights.website_api.investment_deals.investment_deals_details';
