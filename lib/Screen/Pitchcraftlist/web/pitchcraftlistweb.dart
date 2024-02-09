@@ -1,6 +1,7 @@
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/PitchCraftServiceDetailsResponse.dart';
 import 'package:startinsights/Model/PitchcraftlistResponse.dart';
@@ -30,14 +31,20 @@ class _PitchcraftlistState extends State<PitchcraftlistWeb> {
   List<PitchCraftServiceDetail> mPitchCraftServiceDetail = [];
   List<MyService> mPitchCraftList = [];
   final PitchcraftListRepo _apiService1 = PitchcraftListRepo();
+  late Razorpay _razorpay;
   @override
   void initState() {
     super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override
   void dispose() {
     super.dispose();
+    _razorpay.clear();
   }
 
   Widget build(BuildContext context) {
@@ -669,8 +676,12 @@ class _PitchcraftlistState extends State<PitchcraftlistWeb> {
                                         alignment: Alignment.centerLeft,
                                         child: PrimaryButton(
                                             mButtonname: Languages.of(context)!
-                                                .mGetStarted,
-                                            onpressed: () {},
+                                                .mPurchase,
+                                            onpressed: () {
+                                              openCheckout(
+                                                  mPitchCraftServiceDetail
+                                                      .pricing);
+                                            },
                                             mSelectcolor: mBtnColor,
                                             mTextColor: mWhiteColor,
                                             mFontSize: 16,
@@ -679,7 +690,7 @@ class _PitchcraftlistState extends State<PitchcraftlistWeb> {
                                     )))
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                       ],
@@ -690,5 +701,45 @@ class _PitchcraftlistState extends State<PitchcraftlistWeb> {
             ))),
           );
         });
+  }
+
+  void openCheckout(int? pricing) async {
+    var mTotalPrice = (pricing ?? 0) * 100;
+    var options = {
+      'key': 'rzp_test_s2QKOArJgFxKfp',
+      'amount': mTotalPrice,
+      'name': 'StartInsight',
+      'description': 'Pitch craft service purchase',
+      'retry': {'enabled': true, 'max_count': 1},
+      'send_sms_hash': true,
+      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
+      // 'external': {
+      //   'wallets': ['paytm']
+      // }
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Fluttertoast.showToast(
+    //     msg: "SUCCESS: ${response.paymentId!}",
+    //     toastLength: Toast.LENGTH_SHORT);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Fluttertoast.showToast(
+    //     msg: "ERROR: ${response.code} - ${response.message!}",
+    //     toastLength: Toast.LENGTH_SHORT);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Fluttertoast.showToast(
+    //     msg: "EXTERNAL_WALLET: ${response.walletName!}",
+    //     toastLength: Toast.LENGTH_SHORT);
   }
 }

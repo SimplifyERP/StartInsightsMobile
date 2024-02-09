@@ -1,3 +1,4 @@
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:startinsights/Localization/language/languages.dart';
@@ -6,6 +7,7 @@ import 'package:startinsights/Screen/MyCourses/bloc/mycourses_bloc.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
+import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
 import 'package:startinsights/Widgets/sidemenu.dart';
 import 'package:video_player/video_player.dart';
@@ -29,7 +31,9 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
   List<Course> mCoursesDetailsList = [];
   String mDescriptionText = "";
 //  late YoutubePlayerController _controller;
-  late VideoPlayerController _controller;
+  // late VideoPlayerController _controller;
+  late ChewieController _chewieController;
+  double _aspectRatio = 16 / 9;
   @override
   void initState() {
     super.initState();
@@ -41,16 +45,48 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
       ),
     );*/
 
-    _controller = VideoPlayerController.networkUrl(Uri.parse(''))
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
-    _controller.value.isInitialized;
+    // _controller = VideoPlayerController.networkUrl(Uri.parse(''))
+    //   ..initialize().then((_) {
+    //     // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+    //     setState(() {});
+    //   });
+    // _controller.value.isInitialized;
+
+    _chewieController = ChewieController(
+      videoPlayerController: VideoPlayerController.networkUrl(Uri.parse("")),
+      aspectRatio: 16 / 9,
+      autoInitialize: true,
+      autoPlay: true,
+      looping: true,
+      errorBuilder: (context, errorMessage) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+
+    _chewieController.addListener(() {
+      if (_chewieController.isFullScreen) {
+      } else {
+        setState(() {
+          _chewieController.dispose();
+          ErrorToast(context: context, text: "Error");
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
+    //   _controller.dispose();
+    _chewieController.dispose();
+
     super.dispose();
   }
 
@@ -306,13 +342,33 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                                                   setState(() {
                                                                                                     //https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4
                                                                                                     var mVideoId = (mLessonsList.body ?? "").replaceAll('%3A', ':');
-                                                                                                    _controller = VideoPlayerController.networkUrl(Uri.parse(mVideoId))
+
+                                                                                                    _chewieController = ChewieController(
+                                                                                                      videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(mVideoId)),
+                                                                                                      //  aspectRatio: 16 / 9,
+                                                                                                      autoInitialize: true,
+                                                                                                      autoPlay: true,
+                                                                                                      looping: true,
+                                                                                                      errorBuilder: (context, errorMessage) {
+                                                                                                        return Center(
+                                                                                                          child: Padding(
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: Text(
+                                                                                                              errorMessage,
+                                                                                                              style: TextStyle(color: Colors.white),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        );
+                                                                                                      },
+                                                                                                    );
+
+                                                                                                    /* _controller = VideoPlayerController.networkUrl(Uri.parse(mVideoId))
                                                                                                       ..initialize().then((_) {
                                                                                                         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
                                                                                                         setState(() {
                                                                                                           _controller.play();
                                                                                                         });
-                                                                                                      });
+                                                                                                      });*/
                                                                                                     // _controller.value.isInitialized;
                                                                                                   });
                                                                                                   //ErrorToast(context: context, text: mStartTimeList);
@@ -405,47 +461,61 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                       .size
                                                                       .width,
                                                               child: Scaffold(
-                                                                  body: Center(
-                                                                      child: _controller
-                                                                              .value
-                                                                              .isInitialized
-                                                                          ? AspectRatio(
-                                                                              aspectRatio: _controller.value.aspectRatio,
-                                                                              child: VideoPlayer(_controller),
-                                                                            )
-                                                                          : Container(
-                                                                              color: Colors.white,
-                                                                            )
-
-                                                                      // VideoPlayer(
-                                                                      //     _controller),
-                                                                      ),
-                                                                  floatingActionButton:
-                                                                      Visibility(
-                                                                    visible: _controller
-                                                                            .value
-                                                                            .isInitialized
-                                                                        ? true
-                                                                        : false,
-                                                                    child:
-                                                                        FloatingActionButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          _controller.value.isPlaying
-                                                                              ? _controller.pause()
-                                                                              : _controller.play();
-                                                                        });
-                                                                      },
-                                                                      child:
-                                                                          Icon(
-                                                                        _controller.value.isPlaying
-                                                                            ? Icons.pause
-                                                                            : Icons.play_arrow,
-                                                                      ),
-                                                                    ),
-                                                                  )),
+                                                                  body:
+                                                                      AspectRatio(
+                                                                aspectRatio:
+                                                                    16 / 9,
+                                                                child: Chewie(
+                                                                  controller:
+                                                                      _chewieController,
+                                                                ),
+                                                              )
+                                                                  // Chewie(
+                                                                  //   controller:
+                                                                  //       _chewieController,
+                                                                  // ),
+                                                                  // Center(
+                                                                  //     child: _controller
+                                                                  //             .value
+                                                                  //             .isInitialized
+                                                                  //         ? AspectRatio(
+                                                                  //             aspectRatio: _controller.value.aspectRatio,
+                                                                  //             child: VideoPlayer(_controller),
+                                                                  //           )
+                                                                  //         : Container(
+                                                                  //             color: Colors.white,
+                                                                  //           )
+                                                                  //
+                                                                  //     // VideoPlayer(
+                                                                  //     //     _controller),
+                                                                  //     ),
+                                                                  // floatingActionButton:
+                                                                  //     Visibility(
+                                                                  //   visible: _controller
+                                                                  //           .value
+                                                                  //           .isInitialized
+                                                                  //       ? true
+                                                                  //       : false,
+                                                                  //   child:
+                                                                  //       FloatingActionButton(
+                                                                  //     onPressed:
+                                                                  //         () {
+                                                                  //       setState(
+                                                                  //           () {
+                                                                  //         _controller.value.isPlaying
+                                                                  //             ? _controller.pause()
+                                                                  //             : _controller.play();
+                                                                  //       });
+                                                                  //     },
+                                                                  //     child:
+                                                                  //         Icon(
+                                                                  //       _controller.value.isPlaying
+                                                                  //           ? Icons.pause
+                                                                  //           : Icons.play_arrow,
+                                                                  //     ),
+                                                                  //   ),
+                                                                  // )
+                                                                  ),
                                                               /*YoutubePlayerBuilder(
                                                               player:
                                                                   YoutubePlayer(

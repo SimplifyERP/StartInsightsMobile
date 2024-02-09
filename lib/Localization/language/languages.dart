@@ -101,4 +101,5 @@ abstract class Languages {
   String get mFounders;
   String get minvestmentdetails;
   String get mPreview;
+  String get mPurchase;
 }

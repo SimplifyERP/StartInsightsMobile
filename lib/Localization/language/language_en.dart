@@ -97,4 +97,5 @@ class LanguageEn extends Languages {
   String get mFounders => "Founders";
   String get minvestmentdetails => "Investment Details";
   String get mPreview => "Preview";
+  String get mPurchase => "Purchase";
 }
