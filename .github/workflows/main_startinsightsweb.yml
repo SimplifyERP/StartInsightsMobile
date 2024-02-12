@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - StartInsightsWeb
+name: Build and deploy Node.js app to Azure Web App - startinsightsweb
 
 on:
   push:
@@ -42,6 +42,8 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -51,12 +53,19 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5609EE60A8814A6F84682F856D9B6A1A }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0F905F5F9D014E798E69D2FA10802D31 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7C890A9751D74552BFB59EC2DFCCB854 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'StartInsightsWeb'
+          app-name: 'startinsightsweb'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C992EBAE5ED94866A98BC01AF650DC69 }}
           package: .
+          
