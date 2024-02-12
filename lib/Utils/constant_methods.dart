@@ -133,6 +133,15 @@ String changeTimeFormat1(String mdate) {
   return mSelecteddate;
 }
 
+String changeTimeFormat2(String mdate) {
+  DateTime parseDate = DateFormat('HH:mm:ss').parse(mdate);
+  var inputDate = DateTime.parse(parseDate.toString());
+  var outputFormat = DateFormat('HH:mm');
+  var mSelecteddate = outputFormat.format(inputDate);
+
+  return mSelecteddate;
+}
+
 bool isMobileNumberValid(String phoneNumber) {
   //String regexPattern = r'^(?:[+0][1-9])?[0-9]{10}$';
   // String regexPattern = r'^(?:[+0][1-9])?[0-9]{10}$';
@@ -164,6 +173,15 @@ bool isPasswordValid(String value) {
 }
 
 String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+
+String mRazorpayTestKey = 'rzp_test_s2QKOArJgFxKfp';
+String mRazorpayLiveKey = 'rzp_test_s2QKOArJgFxKfp';
+String mRazorpayName = 'StartInsights';
+
+//final kFirstDay = DateTime(DateTime.now().year, DateTime.now().month , DateTime.now().day);
+final kFirstDay =
+    DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+final kLastDay = DateTime(2100, 12, 31);
 
 enum ToastStates { success, error, warning }
 

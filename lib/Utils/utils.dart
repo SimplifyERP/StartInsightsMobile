@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:startinsights/Utils/MyColor.dart';
-import 'package:table_calendar/table_calendar.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 
 void showSnackBar({
@@ -162,7 +161,7 @@ class Event {
 /// Example events.
 ///
 /// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
-final kEvents = LinkedHashMap<DateTime, List<Event>>(
+/*final kEvents = LinkedHashMap<DateTime, List<Event>>(
   equals: isSameDay,
   hashCode: getHashCode,
 )..addAll(_kEventSource);
@@ -178,10 +177,12 @@ final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
     ],
   });
 
-int getHashCode(DateTime key) {
-  return key.day * 1000000 + key.month * 10000 + key.year;
-}
+
 
 final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
-final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);*/
+
+int getHashCode(DateTime key) {
+  return key.day * 1000000 + key.month * 10000 + key.year;
+}

@@ -1,10 +1,14 @@
 import 'dart:collection';
 
+import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/ExpertBookingResponse.dart';
+import 'package:startinsights/Network/api_result_handler.dart';
+import 'package:startinsights/Repository/bookanexpert_repository.dart';
 import 'package:startinsights/Screen/ExpertBooking/bloc/expertbooking_bloc.dart';
 import 'package:startinsights/Screen/ExpertBooking/bloc/expertbooking_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
@@ -13,12 +17,13 @@ import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
 import 'package:startinsights/Widgets/sidemenu.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+import '../../../Model/CommonResponse.dart';
 import '../../../Utils/utils.dart';
 
 class ExpertBookingWeb extends StatefulWidget {
-  ExpertBookingWeb({super.key});
+  final String mExpertid;
+  ExpertBookingWeb({super.key, required this.mExpertid});
 
   @override
   State<ExpertBookingWeb> createState() => _ExpertBookingWebState();
@@ -39,22 +44,35 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
   List<String> mStartTime = [];
   List<String> mEndTime = [];
   List<bool> mStatus = [];
+  List<String> mSelectDate = [];
 
-  final kFirstDay = DateTime(
-      DateTime.now().year, DateTime.now().month - 3, DateTime.now().day);
-  final kLastDay = DateTime(2100, 12, 31);
   CalendarFormat _calendarFormat = CalendarFormat.month;
+
+  BookanexpertListRepository apiService = BookanexpertListRepository();
+
+  var expertname = "";
+  var servicedate = "";
+  var starttime = "";
+  var endtime = "";
+  var bookingid = "";
+  var bookingamount = 0;
+  late Razorpay _razorpay;
 
   @override
   void initState() {
     super.initState();
 
     _selectedDay = _focusedDay;
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
   }
 
   @override
   void dispose() {
     super.dispose();
+    _razorpay.clear();
   }
 
   Widget build(BuildContext context) {
@@ -235,10 +253,11 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
                                                                         width:
                                                                             15,
                                                                       ),
-                                                                      Expanded(
-                                                                        flex:
-                                                                            2, // takes 30% of available width
-                                                                        child: Container(
+                                                                      const Expanded(
+                                                                        flex: 2,
+                                                                        child: Text(
+                                                                            "") // takes 30% of available width
+                                                                        /*child: Container(
                                                                             height: 80,
                                                                             child: Padding(
                                                                                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -252,7 +271,8 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
                                                                                       throw 'Could not launch ${mBookAnExpertList[0].linkedinId}' ?? "";
                                                                                     }
                                                                                   },
-                                                                                ))),
+                                                                                )))*/
+                                                                        ,
                                                                       ),
                                                                     ],
                                                                   ),
@@ -525,15 +545,9 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
                                                               children: [
                                                                 TableCalendar(
                                                                   firstDay:
-                                                                      DateTime.utc(
-                                                                          2021,
-                                                                          1,
-                                                                          1),
+                                                                      kFirstDay,
                                                                   lastDay:
-                                                                      DateTime.utc(
-                                                                          2025,
-                                                                          12,
-                                                                          31),
+                                                                      kLastDay,
                                                                   focusedDay:
                                                                       _focusedDay,
                                                                   eventLoader:
@@ -591,20 +605,28 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
                                                                           .clear();
                                                                       mStatus
                                                                           .clear();
+                                                                      mSelectDate
+                                                                          .clear();
                                                                       for (var i =
                                                                               0;
                                                                           i < mBookAnExpertList[0].booking!.length;
                                                                           i++) {
                                                                         if (mBookAnExpertList[0].booking![i].date! ==
-                                                                            DateFormat("dd-MM-yyyy").format(selectedDay)) {
+                                                                                DateFormat("dd-MM-yyyy").format(selectedDay) &&
+                                                                            !mBookAnExpertList[0].booking![i].status!) {
                                                                           mStartTime.add(mBookAnExpertList[0]
                                                                               .booking![i]
                                                                               .startTime!);
                                                                           mEndTime.add(mBookAnExpertList[0]
                                                                               .booking![i]
                                                                               .endTime!);
-                                                                          mStatus
-                                                                              .add(false);
+                                                                          mStatus.add(mBookAnExpertList[0]
+                                                                              .booking![i]
+                                                                              .status!);
+
+                                                                          mSelectDate.add(mBookAnExpertList[0]
+                                                                              .booking![i]
+                                                                              .date!);
                                                                         }
                                                                       }
 
@@ -672,7 +694,15 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
                                                                                 child: ListTile(
                                                                                     title: Text("${changeTimeFormat1(mStartTimeList ?? "")} - ${changeTimeFormat1(mEndTimeList ?? "")}", textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'ManropeRegular', fontSize: 14, color: mBlackColor)),
                                                                                     onTap: () {
-                                                                                      ErrorToast(context: context, text: mStartTimeList);
+                                                                                      Loading(mLoaderGif).start(context);
+                                                                                      expertname = mBookAnExpertList[0].expertName ?? "";
+                                                                                      servicedate = mSelectDate[index];
+                                                                                      starttime = changeTimeFormat2(mStartTimeList);
+                                                                                      endtime = changeTimeFormat2(mEndTimeList);
+                                                                                      bookingid = widget.mExpertid;
+                                                                                      bookingamount = mBookAnExpertList[0].price ?? 0;
+
+                                                                                      openCheckout(mBookAnExpertList[0].price);
                                                                                     }))
                                                                           ],
                                                                         );
@@ -757,6 +787,79 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
             },
           )),
     );
+  }
+
+  void openCheckout(int? pricing) async {
+    var mTotalPrice = (pricing ?? 0) * 100;
+    var options = {
+      'key': mRazorpayTestKey,
+      'amount': mTotalPrice,
+      'name': mRazorpayName,
+      'description': 'Expert Booking',
+      'retry': {'enabled': true, 'max_count': 1},
+      'send_sms_hash': true,
+      'prefill': {'contact': '8888888888', 'email': 'test@razorpay.com'},
+      // 'external': {
+      //   'wallets': ['paytm']
+      // }
+    };
+
+    try {
+      _razorpay.open(options);
+      Loading.stop();
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    // Fluttertoast.showToast(
+    //     msg: "SUCCESS: ${response.paymentId!}",
+    //     toastLength: Toast.LENGTH_SHORT);
+    //Loading.stop();
+    Loading(mLoaderGif).start(context);
+
+    apiService
+        .mExpertBookingpayment(
+            expertname,
+            servicedate,
+            starttime,
+            endtime,
+            bookingid,
+            "jagadeesan.a1104@gmail.com",
+            response.paymentId!,
+            bookingamount.toString())
+        .then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        Loading.stop();
+        if (CommonResponse.fromJson(value.data)!.message!.status ?? false) {
+          Navigator.pushReplacementNamed(context, dashboardRoute);
+        } else {
+          ErrorToast(
+              context: context,
+              text:
+                  CommonResponse.fromJson(value.data)!.message!.message ?? "");
+        }
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    // Fluttertoast.showToast(
+    //     msg: "ERROR: ${response.code} - ${response.message!}",
+    //     toastLength: Toast.LENGTH_SHORT);
+    Loading.stop();
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    // Fluttertoast.showToast(
+    //     msg: "EXTERNAL_WALLET: ${response.walletName!}",
+    //     toastLength: Toast.LENGTH_SHORT);
+    Loading.stop();
   }
 }
 

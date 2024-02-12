@@ -33,3 +33,9 @@ const String pitchcraftservicedetailsAPI =
 
 const String investmentdealsdetailsAPI =
     '$baseUrl/method/startinsights.website_api.investment_deals.investment_deals_details';
+
+const String createservicelistAPI =
+    '$baseUrl/method/startinsights.website_api.service_list.create_service_list';
+
+const String makepitchcraftpaymentAPI =
+    '$baseUrl/method/startinsights.website_api.pitch_craft.make_pitch_craft_payment';

@@ -63,7 +63,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              errorMessage,
+              "Select Video to play",
               style: const TextStyle(color: Colors.white),
             ),
           ),

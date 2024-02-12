@@ -19,4 +19,21 @@ class PitchcraftListRepo {
       'name': name,
     });
   }
+
+  Future<ApiResults> Pitchcraftservicepayment(
+    String userId,
+    String pitchcraftid,
+    String date,
+    String paymentid,
+    String amount,
+  ) async {
+    return await sl<MyDio>()
+        .postData(endPoint: makepitchcraftpaymentAPI, data: {
+      'pitch_craft_id': pitchcraftid,
+      'user': userId,
+      'date': date,
+      'payment_id': paymentid,
+      'amount': amount,
+    });
+  }
 }

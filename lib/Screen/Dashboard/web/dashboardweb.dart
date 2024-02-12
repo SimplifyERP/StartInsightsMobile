@@ -30,7 +30,7 @@ class _DashboardWebState extends State<DashboardWeb> {
   @override
   void initState() {
     super.initState();
-    loadPrefs();
+    // loadPrefs();
   }
 
   loadPrefs() async {

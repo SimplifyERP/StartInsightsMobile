@@ -122,22 +122,26 @@ class Booking {
   String? date;
   String? startTime;
   String? endTime;
+  bool? status;
 
   Booking({
     this.date,
     this.startTime,
     this.endTime,
+    this.status,
   });
 
   factory Booking.fromJson(Map<String, dynamic> json) => Booking(
         date: json["date"],
         startTime: json["start_time"],
         endTime: json["end_time"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "date": date,
         "start_time": startTime,
         "end_time": endTime,
+        "status": status,
       };
 }

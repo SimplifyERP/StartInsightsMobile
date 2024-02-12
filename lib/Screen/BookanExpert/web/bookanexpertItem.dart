@@ -4,7 +4,6 @@ import 'package:startinsights/Model/BookanexpertlistResponse.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/primary_button.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class BookanExpertItem extends StatelessWidget {
   final BookAnExpertList mBookAnExpertList;
@@ -112,9 +111,10 @@ class BookanExpertItem extends StatelessWidget {
                     const SizedBox(
                       width: 15,
                     ),
-                    Expanded(
-                      flex: 2, // takes 30% of available width
-                      child: Container(
+                    const Expanded(
+                      flex: 2,
+                      child: Text("") // takes 30% of available width
+                      /*child: Container(
                           height: 80,
                           child: Padding(
                               padding:
@@ -134,7 +134,8 @@ class BookanExpertItem extends StatelessWidget {
                                         "";
                                   }
                                 },
-                              ))),
+                              )))*/
+                      ,
                     ),
                   ],
                 ),

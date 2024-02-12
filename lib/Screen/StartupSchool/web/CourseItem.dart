@@ -43,6 +43,19 @@ class CourseItem extends StatelessWidget {
                 Image.network(mCoursesList.image ?? "",
                     height: 150, fit: BoxFit.fill),
 
+                /*   Image.network(
+                  'https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.fill,
+                  scale: 1,
+                ),*/
+
+                /*Image.network(
+                    'http://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
+                    height: 150,
+                    fit: BoxFit.fill),*/
+
                 //  Image(
                 //   height: 150,
                 //   fit: BoxFit.fill,
