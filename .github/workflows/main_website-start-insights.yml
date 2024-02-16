@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - startinsightsweb
+name: Build and deploy Node.js app to Azure Web App - Website-Start-Insights
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: '18.x'
 
       - name: npm install, build, and test
         run: |
@@ -57,15 +57,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6D7CEAB46067434DA570D504F53D3C9F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FE391AB398794F3F9FA38256058DD4BD }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_41F4E3F992FC458F8D203ED9F2397704 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C7B28B9B2FDB44EC9D0858F334625523 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_217B22AE4E704D36AAA3F0AA9E545DDC }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6C0B50720C9E42DCA54C4F576056D5F4 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'startinsightsweb'
+          app-name: 'Website-Start-Insights'
           slot-name: 'Production'
           package: .
           
