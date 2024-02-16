@@ -8,6 +8,7 @@ import 'package:startinsights/Screen/Dashboard/bloc/dashboard_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/pref_manager.dart';
+import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
 import 'package:startinsights/Widgets/sidemenu.dart';
 
@@ -25,12 +26,13 @@ class _DashboardWebState extends State<DashboardWeb> {
   List<UserType>? mUserTypeDataList;
   List<UserType> getUserType = <UserType>[];
 
-  String mUserName = "Padhu NPN";
+  String mUserName = ""; //Padhu NPN
 
   @override
   void initState() {
     super.initState();
-    // loadPrefs();
+    loadPrefs();
+    sl<StorageService>().setBool(StorageServiceConstant.MLOGINSTATUS, true);
   }
 
   loadPrefs() async {
@@ -57,7 +59,14 @@ class _DashboardWebState extends State<DashboardWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "TExt", mUserImage: "", mFrom: 1),
+          appBar: Appbar(
+            mText: "TExt",
+            mUserImage: "",
+            mFrom: 1,
+            onPressed: () {
+              OnProfileload(context);
+            },
+          ),
           body: BlocConsumer<DashboardBloc, DashboardStatus>(
             listener: (context, state) {
               if (state is GetDashboardInfoSuccessState) {}
@@ -173,7 +182,7 @@ class _DashboardWebState extends State<DashboardWeb> {
                                                             height: 5,
                                                           ),
                                                           Text(
-                                                            "Lorem Ipsum Content",
+                                                            "",
                                                             style: const TextStyle(
                                                                 fontFamily:
                                                                     'ManropeSemiBold',

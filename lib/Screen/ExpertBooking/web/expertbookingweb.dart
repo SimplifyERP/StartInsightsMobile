@@ -79,7 +79,7 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
     mExpertBookingBloc = ExpertBookingBloc(mContext: context);
 
     void OnLoadNext() {
-      Navigator.pushReplacementNamed(context, dashboardRoute);
+      Navigator.pushReplacementNamed(context, bookinganexpertRoute);
     }
 
     final ScrollController controller = ScrollController();
@@ -96,7 +96,7 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "", mUserImage: "", mFrom: 7),
+          appBar: Appbar(mText: "", mUserImage: "", mFrom: 7, onPressed: () {}),
           body: BlocConsumer<ExpertBookingBloc, ExpertBookingStatus>(
             listener: (context, state) {},
             builder: (context, state) {

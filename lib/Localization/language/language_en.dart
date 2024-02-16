@@ -98,4 +98,5 @@ class LanguageEn extends Languages {
   String get minvestmentdetails => "Investment Details";
   String get mPreview => "Preview";
   String get mPurchase => "Purchase";
+  String get mDownloadcerificate => "Download course certificate";
 }

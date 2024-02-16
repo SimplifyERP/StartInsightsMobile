@@ -1,6 +1,7 @@
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/PitchCraftServiceDetailsResponse.dart';
 import 'package:startinsights/Model/PitchcraftlistResponse.dart';
@@ -58,7 +59,8 @@ class _PitchcraftmyserviceState extends State<PitchcraftmyserviceWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "TExt", mUserImage: "", mFrom: 6),
+          appBar:
+              Appbar(mText: "TExt", mUserImage: "", mFrom: 6, onPressed: () {}),
           body: BlocConsumer<PitchcraftlistBloc, PitchcraftlistStatus>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -208,10 +210,14 @@ class _PitchcraftmyserviceState extends State<PitchcraftmyserviceWeb> {
                                                                             20,
                                                                       ),
                                                                       Align(
-                                                                          alignment: Alignment
-                                                                              .centerLeft,
+                                                                          alignment:
+                                                                              Alignment.centerLeft,
                                                                           child: ((mgetPitchCraftList.pitchCraftImage ?? "").isNotEmpty)
-                                                                              ? Image.network(mgetPitchCraftList.pitchCraftImage!, width: 60, height: 60, fit: BoxFit.fill)
+                                                                              ? ImageNetwork(
+                                                                                  image: mgetPitchCraftList.pitchCraftImage!,
+                                                                                  height: 60,
+                                                                                  width: 60,
+                                                                                )
                                                                               : Image.asset('assets/avathar.png', width: 60, height: 60, fit: BoxFit.fill)),
                                                                       const SizedBox(
                                                                         width:
@@ -371,314 +377,255 @@ class _PitchcraftmyserviceState extends State<PitchcraftmyserviceWeb> {
   }
 
   void OnLoadDialog(PitchCraftServiceDetail mPitchCraftServiceDetail) {
-    showGeneralDialog(
+    showDialog(
         context: context,
         barrierDismissible: false,
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        barrierColor: Colors.transparent,
-        transitionDuration: const Duration(milliseconds: 200),
-        pageBuilder: (BuildContext buildContext, Animation animation,
-            Animation secondaryAnimation) {
-          return Scaffold(
-            body: Center(
-                child: SingleChildScrollView(
-                    child: Container(
-              width: MediaQuery.of(context).size.width - 10,
-              padding: EdgeInsets.fromLTRB(30, 5, 5, 10),
-              color: Colors.white,
-              child: Column(children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start, // set your alignment
-                  children: <Widget>[
-                    Container(
-                      height: 40,
-                      child: Row(children: [
-                        const Expanded(
-                          flex: 9,
-                          child: Text(""),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pop(buildContext);
-                              },
-                              child: Image.asset(
-                                'assets/ic_close.png',
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                      ]),
-                    ),
-                    Row(
+        //context: _scaffoldKey.currentContext,
+        builder: (mContext) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.only(left: 25, right: 10),
+            //  title: Center(child: Text("Information")),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            content: SizedBox(
+              width: MediaQuery.of(mContext).size.width / 2,
+              child: SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(mContext).size.width - 10,
+                  padding: EdgeInsets.fromLTRB(30, 5, 5, 10),
+                  color: Colors.white,
+                  child: Column(children: <Widget>[
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment:
-                          CrossAxisAlignment.center, // set your alignment
+                          CrossAxisAlignment.start, // set your alignment
                       children: <Widget>[
-                        Expanded(
-                            flex: 8,
-                            child: Row(
-                              children: [
-                                Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: ((mPitchCraftServiceDetail
-                                                    .pitchCraftImage ??
-                                                "")
-                                            .isNotEmpty)
-                                        ? Image.network(
-                                            mPitchCraftServiceDetail
-                                                .pitchCraftImage!,
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.fill)
-                                        : Image.asset('assets/avathar.png',
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.fill)),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    mPitchCraftServiceDetail.serviceName ?? "",
-                                    style: const TextStyle(
-                                        fontFamily: 'ManropeSemiBold',
-                                        fontSize: 20,
-                                        color: mBlackColor),
+                        Container(
+                          height: 40,
+                          child: Row(children: [
+                            const Expanded(
+                              flex: 9,
+                              child: Text(""),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pop(mContext);
+                                  },
+                                  child: Image.asset(
+                                    'assets/ic_closecross.png',
+                                    height: 30,
                                   ),
                                 ),
-                              ],
-                            )),
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                              height: 40,
-                              width: MediaQuery.of(context).size.width / 2,
-                              child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: RichText(
-                                    text: TextSpan(
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text:
-                                                "${Languages.of(context)!.rupess} ${mPitchCraftServiceDetail.pricing}" ??
-                                                    "",
-                                            style: const TextStyle(
-                                                fontFamily: 'ManropeBold',
-                                                fontSize: 24,
-                                                color: mBtnColor)),
-                                        TextSpan(
-                                            text:
-                                                Languages.of(context)!.mService,
-                                            style: const TextStyle(
-                                                fontFamily: 'ManropeRegular',
-                                                fontSize: 14,
-                                                color: kTextGrayColor)),
-                                      ],
-                                    ),
-                                  ))),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          Languages.of(context)!.mBenefits,
-                          style: const TextStyle(
-                              fontFamily: 'ManropeBold',
-                              fontSize: 20,
-                              color: kTextColorTwo),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          mPitchCraftServiceDetail.benefits ?? "",
-                          style: const TextStyle(
-                              fontFamily: 'ManropeRegular',
-                              fontSize: 16,
-                              color: kTextColorTwo),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          Languages.of(context)!.mDescription,
-                          style: const TextStyle(
-                              fontFamily: 'ManropeBold',
-                              fontSize: 20,
-                              color: kTextColorTwo),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          mPitchCraftServiceDetail.description ?? "",
-                          style: const TextStyle(
-                              fontFamily: 'ManropeRegular',
-                              fontSize: 16,
-                              color: kTextColorTwo),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          Languages.of(context)!.mDeliverables,
-                          style: const TextStyle(
-                              fontFamily: 'ManropeBold',
-                              fontSize: 20,
-                              color: kTextColorTwo),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          mPitchCraftServiceDetail.deliverables ?? "",
-                          style: const TextStyle(
-                              fontFamily: 'ManropeRegular',
-                              fontSize: 16,
-                              color: kTextColorTwo),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          Languages.of(context)!.mdocumentsrequired,
-                          style: const TextStyle(
-                              fontFamily: 'ManropeBold',
-                              fontSize: 20,
-                              color: kTextColorTwo),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        ListView.builder(
-                          itemCount: mPitchCraftServiceDetail
-                              .documentsRequired!.length,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, position) {
-                            return Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Text(
-                                "${position + 1}. ${mPitchCraftServiceDetail.documentsRequired![position].documents}" ??
-                                    "",
-                                style: const TextStyle(
-                                    fontFamily: 'ManropeRegular',
-                                    fontSize: 16,
-                                    color: kTextColorTwo),
                               ),
-                            );
-                          },
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                          ]),
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        /* Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment:
                               CrossAxisAlignment.center, // set your alignment
                           children: <Widget>[
-                            Container(
-                                height: 40,
-                                width: 200,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: mBtnColor,
-                                      width: 1,
-                                    )),
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: InkWell(
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: PrimaryButton(
-                                            mButtonname:
-                                                Languages.of(context)!.mCancel,
-                                            onpressed: () {},
-                                            mSelectcolor: mWhiteColor,
-                                            mTextColor: mBtnColor,
-                                            mFontSize: 16,
-                                            mHeigth: 40),
-                                      ),
-                                    ))),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Container(
-                                height: 40,
-                                width: 200,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: mBtnColor,
-                                    border: Border.all(
-                                      color: mBtnColor,
-                                      width: 1,
-                                    )),
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: InkWell(
-                                      child: Align(
+                            Expanded(
+                                flex: 7,
+                                child: Row(
+                                  children: [
+                                    Align(
                                         alignment: Alignment.centerLeft,
-                                        child: PrimaryButton(
-                                            mButtonname: Languages.of(context)!
-                                                .mGetStarted,
-                                            onpressed: () {},
-                                            mSelectcolor: mBtnColor,
-                                            mTextColor: mWhiteColor,
-                                            mFontSize: 16,
-                                            mHeigth: 40),
+                                        child: ((mPitchCraftServiceDetail
+                                                        .pitchCraftImage ??
+                                                    "")
+                                                .isNotEmpty)
+                                            ? ImageNetwork(
+                                                image: mPitchCraftServiceDetail
+                                                    .pitchCraftImage!,
+                                                height: 40,
+                                                width: 40,
+                                              )
+                                            : Image.asset('assets/avathar.png',
+                                                width: 40,
+                                                height: 40,
+                                                fit: BoxFit.fill)),
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        mPitchCraftServiceDetail.serviceName ??
+                                            "",
+                                        style: const TextStyle(
+                                            fontFamily: 'ManropeSemiBold',
+                                            fontSize: 20,
+                                            color: mBlackColor),
                                       ),
-                                    )))
+                                    ),
+                                  ],
+                                )),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                  height: 40,
+                                  width: MediaQuery.of(mContext).size.width / 2,
+                                  child: Padding(
+                                      padding:
+                                          const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                                text:
+                                                    "${Languages.of(context)!.rupess} ${mPitchCraftServiceDetail.pricing}" ??
+                                                        "",
+                                                style: const TextStyle(
+                                                    fontFamily: 'ManropeBold',
+                                                    fontSize: 24,
+                                                    color: mBtnColor)),
+                                            TextSpan(
+                                                text: Languages.of(context)!
+                                                    .mService,
+                                                style: const TextStyle(
+                                                    fontFamily:
+                                                        'ManropeRegular',
+                                                    fontSize: 14,
+                                                    color: kTextGrayColor)),
+                                          ],
+                                        ),
+                                      ))),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              Languages.of(context)!.mBenefits,
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeBold',
+                                  fontSize: 20,
+                                  color: kTextColorTwo),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              mPitchCraftServiceDetail.benefits ?? "",
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeRegular',
+                                  fontSize: 16,
+                                  color: kTextColorTwo),
+                            )
                           ],
                         ),
                         SizedBox(
                           height: 20,
-                        ),*/
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              Languages.of(context)!.mDescription,
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeBold',
+                                  fontSize: 20,
+                                  color: kTextColorTwo),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              mPitchCraftServiceDetail.description ?? "",
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeRegular',
+                                  fontSize: 16,
+                                  color: kTextColorTwo),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              Languages.of(context)!.mDeliverables,
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeBold',
+                                  fontSize: 20,
+                                  color: kTextColorTwo),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              mPitchCraftServiceDetail.deliverables ?? "",
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeRegular',
+                                  fontSize: 16,
+                                  color: kTextColorTwo),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              Languages.of(context)!.mdocumentsrequired,
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeBold',
+                                  fontSize: 20,
+                                  color: kTextColorTwo),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ListView.builder(
+                              itemCount: mPitchCraftServiceDetail
+                                  .documentsRequired!.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, position) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Text(
+                                    "${position + 1}. ${mPitchCraftServiceDetail.documentsRequired![position].documents}" ??
+                                        "",
+                                    style: const TextStyle(
+                                        fontFamily: 'ManropeRegular',
+                                        fontSize: 16,
+                                        color: kTextColorTwo),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
+                        )
                       ],
-                    )
-                  ],
+                    ),
+                  ]),
                 ),
-              ]),
-            ))),
+              ),
+            ),
           );
         });
   }

@@ -22,8 +22,8 @@ class MyCoursesBloc extends Bloc<MyCoursesEvent, MyCoursesStatus> {
   void getCoursesListData(String CoursesId) async {
     if (await checkNetworkStatus()) {
       Loading(mLoaderGif).start(mContext);
-      ApiResults apiResults =
-          await CoursesDetailsRepository().getCoursesDetails(CoursesId);
+      ApiResults apiResults = await CoursesDetailsRepository()
+          .getCoursesDetails(CoursesId, "jagadeesan.a1104@gmail.com");
       if (apiResults is ApiSuccess) {
         mCoursesDetailsList =
             CoursesDetailsResponse.fromJson(apiResults.data).message!.course!;

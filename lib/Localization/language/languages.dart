@@ -102,4 +102,5 @@ abstract class Languages {
   String get minvestmentdetails;
   String get mPreview;
   String get mPurchase;
+  String get mDownloadcerificate;
 }

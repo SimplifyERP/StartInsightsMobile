@@ -186,3 +186,86 @@ final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);*/
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
 }
+
+void OnProfileload(BuildContext context) {
+  showDialog<void>(
+    barrierDismissible: true,
+    context: context,
+    builder: (BuildContext context) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          const SizedBox(
+            height: 60,
+          ),
+          Container(
+            padding: EdgeInsets.all(10),
+            margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.white,
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 1.0,
+                  ),
+                ]),
+            height: 250,
+            width: 150,
+            child: const Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    sidemenuImage(menuicon: 'assets/ic_chat.png'),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    SidemenuText(menuname: "Logout")
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
+      );
+    },
+  );
+}
+
+class sidemenuImage extends StatelessWidget {
+  const sidemenuImage({
+    super.key,
+    required this.menuicon,
+  });
+  final String menuicon;
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      menuicon,
+      height: 25,
+    );
+  }
+}
+
+class SidemenuText extends StatelessWidget {
+  const SidemenuText({
+    super.key,
+    required this.menuname,
+  });
+
+  final String menuname;
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTextStyle(
+      style: const TextStyle(
+          fontFamily: 'TimesNormal',
+          fontWeight: FontWeight.normal,
+          fontSize: 16.0,
+          color: Colors.black),
+      child: Text(menuname),
+    );
+  }
+}

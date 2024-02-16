@@ -58,6 +58,7 @@ class BookAnExpertList {
   String? expertName;
   String? designation;
   String? linkedinId;
+  String? attachimage;
   int? price;
   String? description;
 
@@ -66,6 +67,7 @@ class BookAnExpertList {
     this.expertName,
     this.designation,
     this.linkedinId,
+    this.attachimage,
     this.price,
     this.description,
   });
@@ -76,6 +78,7 @@ class BookAnExpertList {
         expertName: json["expert_name"],
         designation: json["designation"],
         linkedinId: json["linkedin_id"],
+        attachimage: json["attach_image"],
         price: json["price"],
         description: json["description"],
       );
@@ -85,6 +88,7 @@ class BookAnExpertList {
         "expert_name": expertName,
         "designation": designation,
         "linkedin_id": linkedinId,
+        "attach_image": attachimage,
         "price": price,
         "description": description,
       };

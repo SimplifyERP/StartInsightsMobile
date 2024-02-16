@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,10 +9,8 @@ import 'package:sizer/sizer.dart';
 import 'package:startinsights/Localization/localizations_delegate.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Route/route.dart';
-import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
-import 'package:startinsights/Screen/Dashboard/web/dashboardweb.dart';
-import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
-import 'package:startinsights/Screen/Login/web/loginweb.dart';
+import 'package:startinsights/Screen/SplashScreen/bloc/splash_bloc.dart';
+import 'package:startinsights/Screen/SplashScreen/splash_screen.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/theme.dart';
 
@@ -34,6 +34,8 @@ void main() {
       );
 
   init();
+
+  document.onContextMenu.listen((event) => event.preventDefault());
 
   runApp(MaterialApp(
     home: MyApp(),
@@ -71,33 +73,36 @@ class _MyAppState extends State<MyApp> {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.lightTheme,
-            onGenerateRoute: Routes.onGenerateRoute,
-            locale: const Locale('en'),
-            supportedLocales: const [
-              Locale('en', ''),
-              // Locale('ar', ''),
-              // Locale('hi', '')
-            ],
-            localizationsDelegates: const [
-              AppLocalizationsDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            //SizerUtil.deviceType == DeviceType.mobile
-            home: mIsLogin
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          onGenerateRoute: Routes.onGenerateRoute,
+          locale: const Locale('en'),
+          supportedLocales: const [
+            Locale('en', ''),
+            // Locale('ar', ''),
+            // Locale('hi', '')
+          ],
+          localizationsDelegates: const [
+            AppLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+
+          home:
+              BlocProvider(create: (_) => SplashBloc(), child: SplashScreen()),
+          //SizerUtil.deviceType == DeviceType.mobile
+          /*home: mIsLogin
                 ? BlocProvider(
                     create: (_) =>
                         LoginBloc(mContext: context)..getMasterData(),
                     child: LoginWeb())
                 : BlocProvider(
                     create: (_) => DashboardBloc(mContext: context),
-                    child: DashboardWeb())
-            // create: (_) => AngleDashboardBloc(mContext: context),
-            // child: AngleDashboardWeb()),
-            );
+                    child: DashboardWeb())*/
+          // create: (_) => AngleDashboardBloc(mContext: context),
+          // child: AngleDashboardWeb()),
+        );
       },
     );
   }

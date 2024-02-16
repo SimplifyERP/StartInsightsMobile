@@ -1,6 +1,7 @@
 const String mToken = 'token f3d40080905efdd:a9969f40877e947';
 
-const String baseUrl = 'http://52.151.253.79/api';
+//const String baseUrl = 'https://52.151.253.79/api';
+const String baseUrl = 'https://startinsights.ai/api';
 const String masterAPI =
     '$baseUrl/method/startinsights.website_api.masters.get_masters';
 
@@ -39,3 +40,9 @@ const String createservicelistAPI =
 
 const String makepitchcraftpaymentAPI =
     '$baseUrl/method/startinsights.website_api.pitch_craft.make_pitch_craft_payment';
+
+const String lmsprogresAPI =
+    '$baseUrl/method/startinsights.website_api.lms_course.create_lms_progress';
+
+const String lmscertificateAPI =
+    '$baseUrl/method/startinsights.website_api.lms_certificate.lms_certificate';

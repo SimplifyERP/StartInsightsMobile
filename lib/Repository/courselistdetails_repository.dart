@@ -6,8 +6,30 @@ import 'package:startinsights/Network/my_dio.dart';
 class CoursesDetailsRepository {
   Future<ApiResults> getCoursesDetails(
     String CoursesId,
+    String userId,
   ) async {
-    return await sl<MyDio>()
-        .postData(endPoint: coursesdetailsAPI, data: {'course_id': CoursesId});
+    return await sl<MyDio>().postData(
+        endPoint: coursesdetailsAPI,
+        data: {'course_id': CoursesId, 'user_id': userId});
+  }
+
+  Future<ApiResults> getCoursesVideoProgress(
+    String mLessonid,
+    String userId,
+  ) async {
+    return await sl<MyDio>().postData(endPoint: lmsprogresAPI, data: {
+      'lesson_id': mLessonid,
+      'status': 'Complete',
+      'user_id': userId
+    });
+  }
+
+  Future<ApiResults> getLmsCertificate(
+    String course,
+    String userId,
+  ) async {
+    return await sl<MyDio>().postData(
+        endPoint: lmscertificateAPI,
+        data: {'course': course, 'member': userId});
   }
 }

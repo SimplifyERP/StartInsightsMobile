@@ -6,13 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Model/CoursesListResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
-import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Repository/courselist_repository.dart';
 import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_event.dart';
 import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_state.dart';
-import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
-import 'package:startinsights/Utils/pref_manager.dart';
 import 'package:startinsights/Utils/screens.dart';
 
 class StartupSchoolBloc extends Bloc<StartupSchoolEvent, StartupSchoolStatus> {
@@ -26,8 +23,6 @@ class StartupSchoolBloc extends Bloc<StartupSchoolEvent, StartupSchoolStatus> {
   }
 
   void getCoursesListData() async {
-    sl<StorageService>().setBool(StorageServiceConstant.MLOGINSTATUS, true);
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('counter', true);
 

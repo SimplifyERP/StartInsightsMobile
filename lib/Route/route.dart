@@ -48,7 +48,8 @@ class Routes {
           builder: (context) => MultiBlocProvider(
             providers: [
               BlocProvider<LoginBloc>(
-                create: (context) => LoginBloc(mContext: context),
+                create: (context) =>
+                    LoginBloc(mContext: context)..getMasterData(),
               )
             ],
             child: LoginWeb(),

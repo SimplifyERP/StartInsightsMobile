@@ -1,16 +1,24 @@
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CoursesDetailsResponse.dart';
+import 'package:startinsights/Network/api_result_handler.dart';
+import 'package:startinsights/Repository/courselistdetails_repository.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_bloc.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
+import 'package:startinsights/Widgets/primary_button.dart';
 import 'package:startinsights/Widgets/sidemenu.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../../Model/CommonResponse.dart';
 
 class MyCoursesWeb extends StatefulWidget {
   final String mCourseid;
@@ -30,10 +38,16 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
   bool checkedValue = false;
   List<Course> mCoursesDetailsList = [];
   String mDescriptionText = "";
-//  late YoutubePlayerController _controller;
-  // late VideoPlayerController _controller;
   late ChewieController _chewieController;
-  double _aspectRatio = 16 / 9;
+
+  List<String> mLessonName = [];
+  List<bool> mLessonStatus = [];
+
+  bool showcertificate = false;
+  bool showVideoview = false;
+
+  final CoursesDetailsRepository _apiService1 = CoursesDetailsRepository();
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +65,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
     //     setState(() {});
     //   });
     // _controller.value.isInitialized;
-
+//http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
     _chewieController = ChewieController(
       videoPlayerController: VideoPlayerController.networkUrl(Uri.parse("")),
       aspectRatio: 16 / 9,
@@ -59,12 +73,12 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
       autoPlay: true,
       looping: true,
       errorBuilder: (context, errorMessage) {
-        return Center(
+        return const Center(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Text(
               "Select Video to play",
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         );
@@ -94,7 +108,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
     mMyCoursesBloc = MyCoursesBloc(mContext: context);
 
     void OnLoadNext() {
-      Navigator.pushReplacementNamed(context, dashboardRoute);
+      Navigator.pushReplacementNamed(context, startupSchoolRoute);
     }
 
     final ScrollController controller = ScrollController();
@@ -102,7 +116,6 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
     return WillPopScope(
       onWillPop: () {
         //trigger leaving and use own data
-        //Navigator.pop(context, false);
 
         OnLoadNext();
         //we need to return a future
@@ -110,7 +123,8 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "TExt", mUserImage: "", mFrom: 6),
+          appBar:
+              Appbar(mText: "TExt", mUserImage: "", mFrom: 6, onPressed: () {}),
           body: BlocConsumer<MyCoursesBloc, MyCoursesStatus>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -118,17 +132,36 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                 mCoursesDetailsList = state.mCoursesDetails;
 
                 mDescriptionText = mCoursesDetailsList![0].description ?? "";
+
                 // mCoursesDetailsList![0].description!
-                /*for (var i = 0;
-                    i < (mCoursesDetailsList![0].description ?? []).length;
+
+                for (var i = 0;
+                    i < mCoursesDetailsList![0].chapters!.length;
                     i++) {
-                  mDescriptionText =
-                      "$mDescriptionText${mCoursesDetailsList![0].description![i]}\n\n";
-                }*/
+                  for (var j = 0;
+                      j < mCoursesDetailsList![0].chapters![i].lessons!.length;
+                      j++) {
+                    mLessonName.add(mCoursesDetailsList![0]
+                            .chapters![i]
+                            .lessons![j]
+                            .lessonName ??
+                        "");
+                    mLessonStatus.add(mCoursesDetailsList![0]
+                            .chapters![i]
+                            .lessons![j]
+                            .status ??
+                        false);
+                  }
+                }
+
+                if (mLessonStatus.isNotEmpty) {
+                  showVideoview = true;
+                  showcertificate = mLessonStatus.every((e) => true);
+                }
 
                 return SafeArea(
                   child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     child: Container(
                       color: Colors.white,
                       margin: const EdgeInsets.only(top: 0, left: 0, right: 0),
@@ -343,6 +376,26 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                                                     //https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4
                                                                                                     var mVideoId = (mLessonsList.body ?? "").replaceAll('%3A', ':');
 
+                                                                                                    _apiService1.getCoursesVideoProgress(mLessonsList.lessonName ?? "", "jagadeesan.a1104@gmail.com").then((value) async {
+                                                                                                      print(value);
+
+                                                                                                      if (value is ApiSuccess) {
+                                                                                                        if (CommonResponse.fromJson(value.data)!.message!.status ?? false) {
+                                                                                                          for (var j = 0; j < mLessonName.length; j++) {
+                                                                                                            if (mLessonName[j] == (mLessonsList.lessonName ?? "")) {
+                                                                                                              mLessonStatus[j] = true;
+                                                                                                            }
+                                                                                                          }
+
+                                                                                                          setState(() {
+                                                                                                            showcertificate = mLessonStatus.every((e) => true);
+                                                                                                          });
+                                                                                                        } else {
+                                                                                                          ErrorToast(context: context, text: CommonResponse.fromJson(value.data)!.message!.message ?? "");
+                                                                                                        }
+                                                                                                      } else if (value is ApiFailure) {}
+                                                                                                    });
+
                                                                                                     _chewieController = ChewieController(
                                                                                                       videoPlayerController: VideoPlayerController.networkUrl(Uri.parse(mVideoId)),
                                                                                                       //  aspectRatio: 16 / 9,
@@ -355,7 +408,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                                                             padding: const EdgeInsets.all(8.0),
                                                                                                             child: Text(
                                                                                                               errorMessage,
-                                                                                                              style: TextStyle(color: Colors.white),
+                                                                                                              style: const TextStyle(color: Colors.white),
                                                                                                             ),
                                                                                                           ),
                                                                                                         );
@@ -384,7 +437,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
 
                                                                               //MyCourseItem(mChapterList: mgetCoursesDetails);
                                                                             }),
-                                                                  )
+                                                                  ),
                                                                 ]),
                                                           )
                                                         ],
@@ -414,109 +467,116 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                           SizedBox(
                                                             height: 100,
                                                           ),
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .topLeft,
-                                                            child: Container(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(5),
-                                                              margin:
-                                                                  const EdgeInsets
+                                                          Visibility(
+                                                              visible:
+                                                                  showVideoview,
+                                                              child: Align(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .topLeft,
+                                                                child:
+                                                                    Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          5),
+                                                                  margin: const EdgeInsets
                                                                       .fromLTRB(
                                                                       10,
                                                                       10,
                                                                       10,
                                                                       0),
-                                                              child: Text(
-                                                                  Languages.of(
-                                                                          context)!
-                                                                      .mPreview,
-                                                                  style: const TextStyle(
-                                                                      fontFamily:
-                                                                          'ManropeSemiBold',
-                                                                      fontSize:
-                                                                          16,
-                                                                      color:
-                                                                          mBlackColor)),
-                                                            ),
-                                                          ),
-                                                          Center(
-                                                            child: Container(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(5),
-                                                              margin: EdgeInsets
-                                                                  .fromLTRB(
-                                                                      10,
-                                                                      10,
-                                                                      10,
-                                                                      0),
-                                                              color:
-                                                                  Colors.white,
-                                                              height: 300,
-                                                              width:
-                                                                  MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width,
-                                                              child: Scaffold(
-                                                                  body:
-                                                                      AspectRatio(
-                                                                aspectRatio:
-                                                                    16 / 9,
-                                                                child: Chewie(
-                                                                  controller:
-                                                                      _chewieController,
+                                                                  child: Text(
+                                                                      Languages.of(
+                                                                              context)!
+                                                                          .mPreview,
+                                                                      style: const TextStyle(
+                                                                          fontFamily:
+                                                                              'ManropeSemiBold',
+                                                                          fontSize:
+                                                                              16,
+                                                                          color:
+                                                                              mBlackColor)),
                                                                 ),
-                                                              )
-                                                                  // Chewie(
-                                                                  //   controller:
-                                                                  //       _chewieController,
-                                                                  // ),
-                                                                  // Center(
-                                                                  //     child: _controller
-                                                                  //             .value
-                                                                  //             .isInitialized
-                                                                  //         ? AspectRatio(
-                                                                  //             aspectRatio: _controller.value.aspectRatio,
-                                                                  //             child: VideoPlayer(_controller),
-                                                                  //           )
-                                                                  //         : Container(
-                                                                  //             color: Colors.white,
-                                                                  //           )
-                                                                  //
-                                                                  //     // VideoPlayer(
-                                                                  //     //     _controller),
-                                                                  //     ),
-                                                                  // floatingActionButton:
-                                                                  //     Visibility(
-                                                                  //   visible: _controller
-                                                                  //           .value
-                                                                  //           .isInitialized
-                                                                  //       ? true
-                                                                  //       : false,
-                                                                  //   child:
-                                                                  //       FloatingActionButton(
-                                                                  //     onPressed:
-                                                                  //         () {
-                                                                  //       setState(
-                                                                  //           () {
-                                                                  //         _controller.value.isPlaying
-                                                                  //             ? _controller.pause()
-                                                                  //             : _controller.play();
-                                                                  //       });
-                                                                  //     },
-                                                                  //     child:
-                                                                  //         Icon(
-                                                                  //       _controller.value.isPlaying
-                                                                  //           ? Icons.pause
-                                                                  //           : Icons.play_arrow,
-                                                                  //     ),
-                                                                  //   ),
-                                                                  // )
+                                                              )),
+                                                          Visibility(
+                                                            visible:
+                                                                showVideoview,
+                                                            child: Center(
+                                                              child: Container(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(5),
+                                                                margin: EdgeInsets
+                                                                    .fromLTRB(
+                                                                        10,
+                                                                        10,
+                                                                        10,
+                                                                        0),
+                                                                color: Colors
+                                                                    .white,
+                                                                height: 300,
+                                                                width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                child: Scaffold(
+                                                                    body:
+                                                                        AspectRatio(
+                                                                  aspectRatio:
+                                                                      16 / 9,
+                                                                  child: Chewie(
+                                                                    controller:
+                                                                        _chewieController,
                                                                   ),
-                                                              /*YoutubePlayerBuilder(
+                                                                )
+                                                                    // Chewie(
+                                                                    //   controller:
+                                                                    //       _chewieController,
+                                                                    // ),
+                                                                    // Center(
+                                                                    //     child: _controller
+                                                                    //             .value
+                                                                    //             .isInitialized
+                                                                    //         ? AspectRatio(
+                                                                    //             aspectRatio: _controller.value.aspectRatio,
+                                                                    //             child: VideoPlayer(_controller),
+                                                                    //           )
+                                                                    //         : Container(
+                                                                    //             color: Colors.white,
+                                                                    //           )
+                                                                    //
+                                                                    //     // VideoPlayer(
+                                                                    //     //     _controller),
+                                                                    //     ),
+                                                                    // floatingActionButton:
+                                                                    //     Visibility(
+                                                                    //   visible: _controller
+                                                                    //           .value
+                                                                    //           .isInitialized
+                                                                    //       ? true
+                                                                    //       : false,
+                                                                    //   child:
+                                                                    //       FloatingActionButton(
+                                                                    //     onPressed:
+                                                                    //         () {
+                                                                    //       setState(
+                                                                    //           () {
+                                                                    //         _controller.value.isPlaying
+                                                                    //             ? _controller.pause()
+                                                                    //             : _controller.play();
+                                                                    //       });
+                                                                    //     },
+                                                                    //     child:
+                                                                    //         Icon(
+                                                                    //       _controller.value.isPlaying
+                                                                    //           ? Icons.pause
+                                                                    //           : Icons.play_arrow,
+                                                                    //     ),
+                                                                    //   ),
+                                                                    // )
+                                                                    ),
+                                                                /*YoutubePlayerBuilder(
                                                               player:
                                                                   YoutubePlayer(
                                                                 controller:
@@ -548,8 +608,65 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                       player) =>
                                                                   player,
                                                             )*/
+                                                              ),
                                                             ),
-                                                          )
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Visibility(
+                                                              visible:
+                                                                  showcertificate,
+                                                              child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
+                                                                  child:
+                                                                      Container(
+                                                                    width: 300,
+                                                                    child:
+                                                                        Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .centerLeft,
+                                                                      child: PrimaryButton(
+                                                                          mButtonname: Languages.of(context)!.mDownloadcerificate,
+                                                                          onpressed: () {
+                                                                            /*   html.AnchorElement
+                                                                                anchorElement =
+                                                                                html.AnchorElement(href: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+                                                                            anchorElement.download =
+                                                                                "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+                                                                            anchorElement.click();
+                                                                            anchorElement.remove();*/
+
+                                                                            html.window.open('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+                                                                                'new tab');
+
+                                                                            // _apiService1.getLmsCertificate(widget.mCourseid, "jagadeesan.a1104@gmail.com").then((value) async {
+                                                                            //   print(value);
+                                                                            //
+                                                                            //   if (value is ApiSuccess) {
+                                                                            //     if (CertificateResponse.fromJson(value.data)!.message!.status ?? false) {
+                                                                            //       setState(() {
+                                                                            //         showcertificate = mLessonStatus.every((e) => true);
+                                                                            //       });
+                                                                            //     } else {
+                                                                            //       ErrorToast(context: context, text: CommonResponse.fromJson(value.data)!.message!.message ?? "");
+                                                                            //     }
+                                                                            //   } else if (value is ApiFailure) {}
+                                                                            // });
+                                                                          },
+                                                                          mSelectcolor: mBtnColor,
+                                                                          mTextColor: mWhiteColor,
+                                                                          mFontSize: 16,
+                                                                          mHeigth: 40),
+                                                                    ),
+                                                                  )))
                                                         ],
                                                       ),
                                                     ),

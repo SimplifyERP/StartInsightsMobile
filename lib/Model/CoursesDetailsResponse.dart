@@ -123,19 +123,22 @@ class Chapter {
 class Lesson {
   String? lessonName;
   String? body;
-
+  bool? status;
   Lesson({
     this.lessonName,
     this.body,
+    this.status,
   });
 
   factory Lesson.fromJson(Map<String, dynamic> json) => Lesson(
         lessonName: json["lesson_name"],
+        status: json["status"],
         body: json["body"],
       );
 
   Map<String, dynamic> toJson() => {
         "lesson_name": lessonName,
+        "status": status,
         "body": body,
       };
 }

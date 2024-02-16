@@ -58,7 +58,8 @@ class _StartupSchoolWebState extends State<StartupSchoolWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "TExt", mUserImage: "", mFrom: 6),
+          appBar:
+              Appbar(mText: "TExt", mUserImage: "", mFrom: 6, onPressed: () {}),
           body: BlocConsumer<StartupSchoolBloc, StartupSchoolStatus>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -144,75 +145,80 @@ class _StartupSchoolWebState extends State<StartupSchoolWeb> {
                                                   ),
                                                 ),
                                               ),
-                                              Align(
-                                                alignment: Alignment.topRight,
-                                                child: Container(
-                                                  width: 400,
-                                                  height: 40,
-                                                  margin:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 0, 20, 0),
-                                                  child: SearchBar(
-                                                    padding:
-                                                        MaterialStateProperty
-                                                            .all(
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 10,
-                                                                    right: 10)),
-                                                    //controller: _textEditingController,
-                                                    elevation:
-                                                        MaterialStateProperty
-                                                            .all(1.0),
-                                                    side: MaterialStateProperty
-                                                        .all(const BorderSide(
-                                                            color: kGray)),
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all(Colors.white),
-                                                    hintText:
-                                                        Languages.of(context)!
-                                                            .mSave,
-                                                    shape: MaterialStateProperty
-                                                        .all(
-                                                            const ContinuousRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20)),
-                                                      // side: BorderSide(color: Colors.pinkAccent),
-                                                    )),
-                                                    hintStyle:
-                                                        MaterialStateProperty
-                                                            .all(
-                                                                const TextStyle(
-                                                      color: kTextBorder,
-                                                      fontSize: 16,
-                                                      fontFamily:
-                                                          'OpenSansRegular',
-                                                    )),
-                                                    textStyle:
-                                                        MaterialStateProperty
-                                                            .all(
-                                                                const TextStyle(
-                                                      fontSize: 16,
-                                                      fontFamily:
-                                                          'OpenSansRegular',
-                                                      color: mBlackColor,
-                                                    )),
-                                                    onChanged: (String value) {
-                                                      print('value: $value');
-                                                      // filterSearchResults(value);
-                                                    },
-                                                    onTap: () {
-                                                      print('tapped');
-                                                      // The code below only works with SearchAnchor
-                                                      // _searchController.openView();
-                                                    },
-                                                    leading: const Icon(
-                                                        Icons.search,
-                                                        size: 20,
-                                                        color: kTextBorder),
+                                              Visibility(
+                                                visible: false,
+                                                child: Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: Container(
+                                                    width: 400,
+                                                    height: 40,
+                                                    margin: const EdgeInsets
+                                                        .fromLTRB(0, 0, 20, 0),
+                                                    child: SearchBar(
+                                                      padding:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 10,
+                                                                      right:
+                                                                          10)),
+                                                      //controller: _textEditingController,
+                                                      elevation:
+                                                          MaterialStateProperty
+                                                              .all(1.0),
+                                                      side: MaterialStateProperty
+                                                          .all(const BorderSide(
+                                                              color: kGray)),
+                                                      backgroundColor:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                                  Colors.white),
+                                                      hintText:
+                                                          Languages.of(context)!
+                                                              .mSave,
+                                                      shape: MaterialStateProperty
+                                                          .all(
+                                                              const ContinuousRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    20)),
+                                                        // side: BorderSide(color: Colors.pinkAccent),
+                                                      )),
+                                                      hintStyle:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                                  const TextStyle(
+                                                        color: kTextBorder,
+                                                        fontSize: 16,
+                                                        fontFamily:
+                                                            'OpenSansRegular',
+                                                      )),
+                                                      textStyle:
+                                                          MaterialStateProperty
+                                                              .all(
+                                                                  const TextStyle(
+                                                        fontSize: 16,
+                                                        fontFamily:
+                                                            'OpenSansRegular',
+                                                        color: mBlackColor,
+                                                      )),
+                                                      onChanged:
+                                                          (String value) {
+                                                        print('value: $value');
+                                                        // filterSearchResults(value);
+                                                      },
+                                                      onTap: () {
+                                                        print('tapped');
+                                                        // The code below only works with SearchAnchor
+                                                        // _searchController.openView();
+                                                      },
+                                                      leading: const Icon(
+                                                          Icons.search,
+                                                          size: 20,
+                                                          color: kTextBorder),
+                                                    ),
                                                   ),
                                                 ),
                                               ),

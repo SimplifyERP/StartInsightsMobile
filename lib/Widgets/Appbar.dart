@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_network/image_network.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
@@ -9,10 +10,12 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
     required this.mText,
     required this.mUserImage,
     required this.mFrom,
+    required this.onPressed,
   });
   final String mText;
   String mUserImage = "";
   int mFrom = 0;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -126,20 +129,37 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
                         const SizedBox(
                           width: 30,
                         ),
-                        CircleAvatar(
-                          radius: 20.0,
-                          backgroundImage: const ExactAssetImage(
-                              'assets/avathar.png',
-                              scale: 30),
-                          child: ClipOval(
-                            child: (mUserImage.isNotEmpty)
-                                ? Image.network(mUserImage,
-                                    width: 30, height: 30, fit: BoxFit.fill)
-                                : Image.asset('assets/avathar.png',
-                                    width: 30, height: 30, fit: BoxFit.fill),
+                        Container(
+                          child: InkWell(
+                            onTap: onPressed,
+                            child: Row(children: [
+                              CircleAvatar(
+                                radius: 20.0,
+                                backgroundImage: const ExactAssetImage(
+                                    'assets/avathar.png',
+                                    scale: 30),
+                                child: ClipOval(
+                                  child: (mUserImage.isNotEmpty)
+                                      ? ImageNetwork(
+                                          image: mUserImage,
+                                          height: 30,
+                                          width: 30,
+                                        )
+                                      : Image.asset('assets/avathar.png',
+                                          width: 30,
+                                          height: 30,
+                                          fit: BoxFit.fill),
+                                ),
+                              ),
+                              const Icon(Icons.arrow_drop_down_outlined,
+                                  size: 30)
+                            ]),
+                            //     () {
+                            //   onPressed:
+                            //   onPressed;
+                            // },
                           ),
                         ),
-                        const Icon(Icons.arrow_drop_down_outlined, size: 30),
                         Container(
                           width: 30,
                         ),
@@ -171,7 +191,7 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
           color: kBorderColor,
           height: 2,
           width: MediaQuery.of(context).size.width,
-        )
+        ),
       ],
     );
 

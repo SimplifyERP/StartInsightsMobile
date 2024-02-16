@@ -54,7 +54,8 @@ class _BookanexpertWebState extends State<BookanexpertWeb> {
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "TExt", mUserImage: "", mFrom: 7),
+          appBar:
+              Appbar(mText: "TExt", mUserImage: "", mFrom: 7, onPressed: () {}),
           body: BlocConsumer<BookanExpertBloc, BookanExpertStatus>(
             listener: (context, state) {},
             builder: (context, state) {

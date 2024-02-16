@@ -24,10 +24,24 @@ class MyDio {
     Map<String, dynamic>? queryParameters,
     String? token,
   }) async {
+    // dio.options.headers = {
+    //   "Content-Type": "application/json",
+    //   "Authorization": mToken,
+    //   // "Access-Control-Allow-Origin": "*",
+    // };
+
     dio.options.headers = {
-      "Content-Type": "application/json",
+      "Accept": "application/json",
       "Authorization": mToken,
-      // "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,PUT,PATCH,POST,DELETE",
+      // "Access-Control-Allow-Headers":
+      //     "Origin, X-Requested-With, Content-Type, Accept",
+      "Access-Control-Allow-Credentials":
+          "true", // Required for cookies, authorization headers with HTTPS
+      "Access-Control-Allow-Headers":
+          "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+      "Access-Control-Allow-Methods": "POST, OPTIONS"
     };
     try {
       var response = await dio.get(endPoint, queryParameters: queryParameters);
@@ -71,13 +85,10 @@ class MyDio {
       "Authorization": mToken,
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET,PUT,PATCH,POST,DELETE",
-      // "Access-Control-Allow-Headers":
-      //     "Origin, X-Requested-With, Content-Type, Accept",
-      "Access-Control-Allow-Credentials":
-          "true", // Required for cookies, authorization headers with HTTPS
+      "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Headers":
           "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-      "Access-Control-Allow-Methods": "POST, OPTIONS"
+      "Access-Control-Allow-Methods": "POST, OPTIONS,GET, HEAD"
     };
 
     try {

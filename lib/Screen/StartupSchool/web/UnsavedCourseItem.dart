@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_network/image_network.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CoursesListResponse.dart';
 import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_bloc.dart';
@@ -40,8 +41,11 @@ class UnSavedCourseItem extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               margin: const EdgeInsets.fromLTRB(10, 1, 1, 1),
               child: Column(children: <Widget>[
-                Image.network(mCoursesList.image ?? "",
-                    height: 150, fit: BoxFit.fill),
+                ImageNetwork(
+                  image: mCoursesList.image ?? "",
+                  height: 150,
+                  width: 300,
+                ),
 
                 //  Image(
                 //   height: 150,

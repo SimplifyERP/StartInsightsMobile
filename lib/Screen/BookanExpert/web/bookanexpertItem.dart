@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_network/image_network.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/BookanexpertlistResponse.dart';
 import 'package:startinsights/Utils/MyColor.dart';
@@ -52,19 +53,21 @@ class BookanExpertItem extends StatelessWidget {
                                 child: Align(
                                   alignment: Alignment.center,
                                   child: CircleAvatar(
-                                    radius: 40.0,
-                                    backgroundImage: const ExactAssetImage(
-                                        'assets/avathar.png',
-                                        scale: 80),
+                                    radius: 30.0,
+                                    backgroundColor: Colors.white,
                                     child: ClipOval(
-                                      child: (mUserImage.isNotEmpty)
-                                          ? Image.network(mUserImage,
-                                              width: 80,
-                                              height: 60,
-                                              fit: BoxFit.fill)
+                                      child: (mBookAnExpertList
+                                              .attachimage!.isNotEmpty)
+                                          ? ImageNetwork(
+                                              image: mBookAnExpertList
+                                                      .attachimage ??
+                                                  "",
+                                              height: 80,
+                                              width: 100,
+                                            )
                                           : Image.asset('assets/avathar.png',
                                               width: 80,
-                                              height: 60,
+                                              height: 100,
                                               fit: BoxFit.fill),
                                     ),
                                   ),

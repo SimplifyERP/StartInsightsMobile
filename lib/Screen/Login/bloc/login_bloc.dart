@@ -32,7 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginStatus> {
 
   void getMasterData() async {
     if (await checkNetworkStatus()) {
-      showLoading(mContext);
+      // showLoading(mContext);
       ApiResults apiResults = await MasterRepository().getMasterData("");
       if (apiResults is ApiSuccess) {
         mMastersDataList =
@@ -48,11 +48,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginStatus> {
         mMastersDataList = MastersData.fromJson(valueMap);
 
         emit(GetLoginInfoSuccessState(mMastersDataList));
-        hideLoading(mContext);
+        // hideLoading(mContext);
       } else if (apiResults is ApiFailure) {
         emit(GetLoginInfoFailState());
         //  Loading.stop();
-        hideLoading(mContext);
+        // hideLoading(mContext);
       }
     } else {
       emit(NointernetState());

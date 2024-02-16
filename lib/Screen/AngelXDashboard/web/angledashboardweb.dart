@@ -57,7 +57,8 @@ class _AngleDashboardWebState extends State<AngleDashboardWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "TExt", mUserImage: "", mFrom: 1),
+          appBar:
+              Appbar(mText: "TExt", mUserImage: "", mFrom: 1, onPressed: () {}),
           body: BlocConsumer<AngleDashboardBloc, AngleDashboardStatus>(
             listener: (context, state) {
               if (state is GetAngleDashboardInfoSuccessState) {}
@@ -173,7 +174,7 @@ class _AngleDashboardWebState extends State<AngleDashboardWeb> {
                                                             height: 5,
                                                           ),
                                                           Text(
-                                                            "Lorem Ipsum Content",
+                                                            "",
                                                             style: const TextStyle(
                                                                 fontFamily:
                                                                     'ManropeSemiBold',

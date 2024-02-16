@@ -192,7 +192,7 @@ const String mAndroidMapKey = 'AIzaSyC3YjVtveQqk7Qr7sG5D1rUAAwsRapEcLE';
 const String miOSMapKey = 'AIzaSyAl86jRqzZt54vmiXaJiEusRTAKkKmbAeo';
 
 //String httpSC = 'http:';
-Image mLoaderGif = Image.asset('assets/loader.gif');
+Image mLoaderGif = Image.asset('assets/ic_loader.gif');
 
 DateFormat mFirstFormat = DateFormat('dd-MM-yyyy');
 DateFormat mDisplayFirstFormat = DateFormat('dd MMM yyyy');

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/InvestmentdealsdetailsResponse.dart';
 import 'package:startinsights/Repository/pitchcraftlist_repo.dart';
@@ -53,7 +54,8 @@ class _InvestmentDealsState extends State<InvestmentDealsWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "TExt", mUserImage: "", mFrom: 6),
+          appBar:
+              Appbar(mText: "TExt", mUserImage: "", mFrom: 6, onPressed: () {}),
           body: BlocConsumer<InvestmentDealsBloc, InvestmentDealsStatus>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -176,15 +178,14 @@ class _InvestmentDealsState extends State<InvestmentDealsWeb> {
                                                                             .center,
                                                                     child: ((mgetPitchCraftList.companyLogo ?? "")
                                                                             .isNotEmpty)
-                                                                        ? Image.network(
-                                                                            mgetPitchCraftList
-                                                                                .companyLogo!,
-                                                                            width:
-                                                                                100,
+                                                                        ? ImageNetwork(
+                                                                            image:
+                                                                                mgetPitchCraftList.companyLogo!,
                                                                             height:
                                                                                 100,
-                                                                            fit: BoxFit
-                                                                                .fill)
+                                                                            width:
+                                                                                100,
+                                                                          )
                                                                         : Image.asset(
                                                                             'assets/avathar.png',
                                                                             width:
@@ -266,100 +267,123 @@ class _InvestmentDealsState extends State<InvestmentDealsWeb> {
   }
 
   void OnLoadDialog(InvestmentDeal mInvestmentDeal) {
-    showGeneralDialog(
+    showDialog(
         context: context,
         barrierDismissible: false,
-        barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        barrierColor: Colors.transparent,
-        transitionDuration: const Duration(milliseconds: 200),
-        pageBuilder: (BuildContext buildContext, Animation animation,
-            Animation secondaryAnimation) {
-          return Scaffold(
-            body: Center(
-                child: SingleChildScrollView(
-                    child: Container(
-              width: MediaQuery.of(context).size.width - 10,
-              padding: const EdgeInsets.fromLTRB(30, 5, 5, 10),
-              color: Colors.white,
-              child: Column(children: <Widget>[
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start, // set your alignment
-                  children: <Widget>[
-                    Container(
-                      height: 40,
-                      child: Row(children: [
-                        const Expanded(
-                          flex: 9,
-                          child: Text(""),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pop(buildContext);
-                              },
-                              child: Image.asset(
-                                'assets/ic_close.png',
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                      ]),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: ((mInvestmentDeal.companyLogo ?? "")
-                                        .isNotEmpty)
-                                    ? Image.network(
-                                        mInvestmentDeal.companyLogo!,
-                                        width: 40,
-                                        height: 40,
-                                        fit: BoxFit.fill)
-                                    : Image.asset('assets/avathar.png',
-                                        width: 40,
-                                        height: 40,
-                                        fit: BoxFit.fill)),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                mInvestmentDeal.legalName ?? "",
-                                style: const TextStyle(
-                                    fontFamily: 'ManropeSemiBold',
-                                    fontSize: 20,
-                                    color: mBlackColor),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
+        //context: _scaffoldKey.currentContext,
+        builder: (mContext) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.only(left: 25, right: 10),
+            //  title: Center(child: Text("Information")),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(5))),
+            content: SizedBox(
+              width: MediaQuery.of(mContext).size.width / 2,
+              child: SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(mContext).size.width - 10,
+                  padding: const EdgeInsets.fromLTRB(30, 5, 5, 10),
+                  color: Colors.white,
+                  child: Column(children: <Widget>[
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start, // set your alignment
+                      children: <Widget>[
+                        Container(
+                          height: 40,
+                          child: Row(children: [
+                            const Expanded(
+                              flex: 9,
+                              child: Text(""),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pop(mContext);
+                                  },
+                                  child: Image.asset(
+                                    'assets/ic_closecross.png',
+                                    height: 30,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                          ]),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: ((mInvestmentDeal.companyLogo ?? "")
+                                            .isNotEmpty)
+                                        ? ImageNetwork(
+                                            image: mInvestmentDeal.companyLogo!,
+                                            height: 40,
+                                            width: 40,
+                                          )
+                                        : Image.asset('assets/avathar.png',
+                                            width: 40,
+                                            height: 40,
+                                            fit: BoxFit.fill)),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    mInvestmentDeal.legalName ?? "",
+                                    style: const TextStyle(
+                                        fontFamily: 'ManropeSemiBold',
+                                        fontSize: 20,
+                                        color: mBlackColor),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${Languages.of(context)!.mAbout} ${mInvestmentDeal.legalName ?? ""}",
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeBold',
+                                  fontSize: 20,
+                                  color: kTextColorTwo),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              mInvestmentDeal.description ?? "",
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeRegular',
+                                  fontSize: 16,
+                                  color: kTextColorTwo),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         Text(
-                          "${Languages.of(context)!.mAbout} ${mInvestmentDeal.legalName ?? ""}",
+                          Languages.of(context)!.minvestmentdetails,
                           style: const TextStyle(
                               fontFamily: 'ManropeBold',
                               fontSize: 20,
@@ -368,57 +392,38 @@ class _InvestmentDealsState extends State<InvestmentDealsWeb> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text(
-                          mInvestmentDeal.description ?? "",
-                          style: const TextStyle(
-                              fontFamily: 'ManropeRegular',
-                              fontSize: 16,
-                              color: kTextColorTwo),
+                        Column(
+                          children: [
+                            ListView.builder(
+                              itemCount:
+                                  mInvestmentDeal.investmentDetails!.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, position) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Text(
+                                    "${position + 1}. ${mInvestmentDeal.investmentDetails![position].investorName}" ??
+                                        "",
+                                    style: const TextStyle(
+                                        fontFamily: 'ManropeRegular',
+                                        fontSize: 16,
+                                        color: kTextColorTwo),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          ],
                         )
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      Languages.of(context)!.minvestmentdetails,
-                      style: const TextStyle(
-                          fontFamily: 'ManropeBold',
-                          fontSize: 20,
-                          color: kTextColorTwo),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Column(
-                      children: [
-                        ListView.builder(
-                          itemCount: mInvestmentDeal.investmentDetails!.length,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, position) {
-                            return Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Text(
-                                "${position + 1}. ${mInvestmentDeal.investmentDetails![position].investorName}" ??
-                                    "",
-                                style: const TextStyle(
-                                    fontFamily: 'ManropeRegular',
-                                    fontSize: 16,
-                                    color: kTextColorTwo),
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    )
-                  ],
+                  ]),
                 ),
-              ]),
-            ))),
+              ),
+            ),
           );
         });
   }

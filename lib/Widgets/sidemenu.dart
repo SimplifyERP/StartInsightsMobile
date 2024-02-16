@@ -206,7 +206,7 @@ class SideMenu extends StatelessWidget {
                                                   const Icon(
                                                       Icons
                                                           .arrow_drop_down_outlined,
-                                                      size: 30),
+                                                      size: 0),
                                                 ],
                                               )),
                                         ]),
@@ -505,7 +505,10 @@ class SideMenu extends StatelessWidget {
                               child: PrimaryButton(
                                   mButtonname:
                                       Languages.of(context)!.mContactUs,
-                                  onpressed: () {},
+                                  onpressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, loginRoute);
+                                  },
                                   mSelectcolor: mBtnColor,
                                   mTextColor: mWhiteColor,
                                   mFontSize: 16,

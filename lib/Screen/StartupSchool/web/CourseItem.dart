@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_network/image_network.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CoursesListResponse.dart';
 import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_bloc.dart';
@@ -40,16 +41,14 @@ class CourseItem extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
               margin: const EdgeInsets.fromLTRB(10, 1, 1, 1),
               child: Column(children: <Widget>[
-                Image.network(mCoursesList.image ?? "",
-                    height: 150, fit: BoxFit.fill),
+                /* Image.network(mCoursesList.image ?? "",
+                    height: 150, fit: BoxFit.fill),*/
 
-                /*   Image.network(
-                  'https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                  width: 150,
+                ImageNetwork(
+                  image: mCoursesList.image!,
                   height: 150,
-                  fit: BoxFit.fill,
-                  scale: 1,
-                ),*/
+                  width: 300,
+                ),
 
                 /*Image.network(
                     'http://www.google.de/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png',
