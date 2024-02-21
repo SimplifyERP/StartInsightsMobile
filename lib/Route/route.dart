@@ -13,12 +13,16 @@ import 'package:startinsights/Screen/InvestmentDeals/web/investmentdealsweb.dart
 import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
 import 'package:startinsights/Screen/Login/web/loginweb.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_bloc.dart';
-import 'package:startinsights/Screen/MyCourses/web/mycoursesweb.dart';
+import 'package:startinsights/Screen/MyCourses/web/coursesweb.dart';
+import 'package:startinsights/Screen/PitchRoom/bloc/pitchroom_bloc.dart';
+import 'package:startinsights/Screen/PitchRoom/web/pitchroom.dart';
 import 'package:startinsights/Screen/Pitchcraftlist/bloc/pitchcraftlist_bloc.dart';
 import 'package:startinsights/Screen/Pitchcraftlist/web/pitchcraftlistweb.dart';
 import 'package:startinsights/Screen/Pitchcraftlist/web/pitchcraftmyserviceweb.dart';
 import 'package:startinsights/Screen/Register/bloc/register_bloc.dart';
 import 'package:startinsights/Screen/Register/web/registerweb.dart';
+import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_bloc.dart';
+import 'package:startinsights/Screen/StartupDeals/web/startupdeals.dart';
 import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_bloc.dart';
 import 'package:startinsights/Screen/StartupSchool/web/startupschoolweb.dart';
 import 'package:startinsights/Utils/screens.dart';
@@ -91,7 +95,8 @@ class Routes {
                   ..getCoursesListData(args![0]),
               )
             ],
-            child: MyCoursesWeb(mCourseid: args![0]),
+            // child: MyCoursesWeb(mCourseid: args![0]),
+            child: CoursesWeb(mCourseid: args![0]),
           ),
         );
 
@@ -177,6 +182,32 @@ class Routes {
               )
             ],
             child: InvestmentDealsWeb(),
+          ),
+        );
+
+      case startupdealsRoute:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<StartupdealsBloc>(
+                create: (context) => StartupdealsBloc(mContext: context)
+                  ..getStartupDealsListData(),
+              )
+            ],
+            child: StartupDealsWeb(),
+          ),
+        );
+
+      case pichroomRoute:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<PitchroomBloc>(
+                create: (context) =>
+                    PitchroomBloc(mContext: context)..getPitchroomListData(),
+              )
+            ],
+            child: PitchroomWeb(),
           ),
         );
 

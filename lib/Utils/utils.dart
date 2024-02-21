@@ -63,7 +63,7 @@ void ErrorToast({
       text,
       textAlign: TextAlign.center,
       style: const TextStyle(
-          fontSize: 16, color: Colors.white, fontFamily: 'OpenSansMedium'),
+          fontSize: 16, color: Colors.white, fontFamily: 'ManropeRegular'),
     ),
     backgroundColor: Colors.red,
     behavior: SnackBarBehavior.floating,
@@ -84,7 +84,7 @@ void SucessToast({
       text,
       textAlign: TextAlign.center,
       style: const TextStyle(
-          fontSize: 16, color: Colors.white, fontFamily: 'OpenSansMedium'),
+          fontSize: 16, color: Colors.white, fontFamily: 'ManropeRegular'),
     ),
     backgroundColor: Colors.green,
     behavior: SnackBarBehavior.floating,

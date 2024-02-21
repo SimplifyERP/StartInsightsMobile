@@ -11,3 +11,5 @@ const String pitchcraftlistRoute = 'pitchcraftlist';
 const String pitchcraftmyserviceRoute = 'pitchcraftmyservice';
 const String angledashboardRoute = 'angledashboard';
 const String investmentdealsRoute = 'investmentdeals';
+const String startupdealsRoute = 'startupdeals';
+const String pichroomRoute = 'pichroom';

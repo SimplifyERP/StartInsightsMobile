@@ -29,6 +29,7 @@ class AuthFormField extends StatelessWidget {
   final double radius;
   final bool mBorderView;
   final bool mImageView;
+  final bool mIncreshHeight;
 
   const AuthFormField({
     Key? key,
@@ -59,6 +60,7 @@ class AuthFormField extends StatelessWidget {
     this.mreadOnly = false,
     this.mBorderView = true,
     this.mImageView = true,
+    this.mIncreshHeight = false,
   }) : super(key: key);
 
   @override
@@ -80,13 +82,15 @@ class AuthFormField extends StatelessWidget {
         readOnly: mreadOnly,
         obscureText: obscureText,
         style: TextStyle(
-            fontSize: 16, fontFamily: 'OpenSansRegular', color: textColor),
+            fontSize: 16, fontFamily: 'ManropeMedium', color: textColor),
+        textAlignVertical: TextAlignVertical.top,
         decoration: InputDecoration(
             counterText: "",
             labelText: labelText,
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: 'OpenSansRegular', color: kGray),
+                fontSize: 15, fontFamily: 'ManropeMedium', color: kGray),
             hintText: hintText,
+            alignLabelWithHint: true,
             hintStyle: const TextStyle(
               color: kGray,
             ),

@@ -7,7 +7,7 @@ import 'package:startinsights/Utils/pref_manager.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/primary_button.dart';
 
-// MFrom 1-> dashboard  6->startupschool
+// MFrom 1-> dashboard  6->startupschool 8-> Startup deals  9-> Pitch room list
 class SideMenu extends StatelessWidget {
   int mFrom = 0;
   SideMenu({
@@ -22,6 +22,7 @@ class SideMenu extends StatelessWidget {
   }
 
   bool mClickPich = false;
+  double sidemenubtnheight = 40;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,7 +50,7 @@ class SideMenu extends StatelessWidget {
                               child: Container(
                                 alignment: Alignment.center,
                                 width: double.infinity,
-                                height: 50,
+                                height: sidemenubtnheight,
                                 decoration: BoxDecoration(
                                   color:
                                       mFrom == 1 ? Colors.black : Colors.white,
@@ -109,7 +110,7 @@ class SideMenu extends StatelessWidget {
                               child: Container(
                                 alignment: Alignment.center,
                                 width: double.infinity,
-                                height: 50,
+                                height: sidemenubtnheight,
                                 decoration: BoxDecoration(
                                   color:
                                       mFrom == 2 ? Colors.black : Colors.white,
@@ -162,7 +163,79 @@ class SideMenu extends StatelessWidget {
                               child: Container(
                                 alignment: Alignment.center,
                                 width: double.infinity,
-                                height: 50,
+                                height: sidemenubtnheight,
+                                decoration: BoxDecoration(
+                                  color:
+                                      mFrom == 8 ? Colors.black : Colors.white,
+                                  border: Border.all(
+                                    color: mStatusbar,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        sl<StorageService>().setBool(
+                                            StorageServiceConstant.MCLICKPITCH,
+                                            true);
+
+                                        Navigator.pushReplacementNamed(
+                                            context, startupdealsRoute);
+                                      },
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(children: [
+                                          Expanded(
+                                              flex: 2,
+                                              child: mFrom == 8
+                                                  ? const sidemenuImage(
+                                                      menuicon:
+                                                          'assets/ic_startupdeals_white.png')
+                                                  : const sidemenuImage(
+                                                      menuicon:
+                                                          'assets/ic_startupdeals.png')),
+                                          Expanded(
+                                              flex: 8,
+                                              child: Row(
+                                                children: [
+                                                  SidemenuText(
+                                                      menuname:
+                                                          Languages.of(context)!
+                                                              .mStartupDeals,
+                                                      textColor: mFrom == 8
+                                                          ? mWhiteColor
+                                                          : mBlackColor),
+                                                  const SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  const Icon(
+                                                      Icons
+                                                          .arrow_drop_down_outlined,
+                                                      size: 0),
+                                                ],
+                                              )),
+                                        ]),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: double.infinity,
+                                height: sidemenubtnheight,
                                 decoration: BoxDecoration(
                                   color:
                                       mFrom == 3 ? Colors.black : Colors.white,
@@ -232,7 +305,7 @@ class SideMenu extends StatelessWidget {
                                       child: Container(
                                         alignment: Alignment.center,
                                         width: double.infinity,
-                                        height: 50,
+                                        height: sidemenubtnheight,
                                         decoration: BoxDecoration(
                                           color: mFrom == 4
                                               ? Colors.black
@@ -303,7 +376,7 @@ class SideMenu extends StatelessWidget {
                                       child: Container(
                                         alignment: Alignment.center,
                                         width: double.infinity,
-                                        height: 50,
+                                        height: sidemenubtnheight,
                                         decoration: BoxDecoration(
                                           color: mFrom == 5
                                               ? Colors.black
@@ -364,7 +437,7 @@ class SideMenu extends StatelessWidget {
                               child: Container(
                                 alignment: Alignment.center,
                                 width: double.infinity,
-                                height: 50,
+                                height: sidemenubtnheight,
                                 decoration: BoxDecoration(
                                   color:
                                       mFrom == 6 ? Colors.black : Colors.white,
@@ -424,7 +497,7 @@ class SideMenu extends StatelessWidget {
                               child: Container(
                                 alignment: Alignment.center,
                                 width: double.infinity,
-                                height: 50,
+                                height: sidemenubtnheight,
                                 decoration: BoxDecoration(
                                   color:
                                       mFrom == 7 ? Colors.black : Colors.white,
@@ -475,7 +548,64 @@ class SideMenu extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 30,
+                        height: 20,
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: double.infinity,
+                                height: sidemenubtnheight,
+                                decoration: BoxDecoration(
+                                  color:
+                                      mFrom == 9 ? Colors.black : Colors.white,
+                                  border: Border.all(
+                                    color: mStatusbar,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        sl<StorageService>().setBool(
+                                            StorageServiceConstant.MCLICKPITCH,
+                                            false);
+                                        Navigator.pushReplacementNamed(
+                                            context, pichroomRoute);
+                                      },
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(children: [
+                                          Expanded(
+                                              flex: 2,
+                                              child: mFrom == 9
+                                                  ? const sidemenuImage(
+                                                      menuicon:
+                                                          'assets/ic_pitchroomwhite.png')
+                                                  : const sidemenuImage(
+                                                      menuicon:
+                                                          'assets/ic_pitchroom.png')), //ic_schoolwhite
+                                          Expanded(
+                                              flex: 8,
+                                              child: SidemenuText(
+                                                  menuname:
+                                                      Languages.of(context)!
+                                                          .mPitchRoom,
+                                                  textColor: mFrom == 9
+                                                      ? mWhiteColor
+                                                      : mBlackColor)),
+                                        ]),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

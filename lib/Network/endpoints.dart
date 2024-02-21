@@ -46,3 +46,18 @@ const String lmsprogresAPI =
 
 const String lmscertificateAPI =
     '$baseUrl/method/startinsights.website_api.lms_certificate.lms_certificate';
+
+const String getstartupdealAPI =
+    '$baseUrl/method/startinsights.website_api.startup_deals.get_startup_deal';
+
+const String getdealsredeemcodeAPI =
+    '$baseUrl/method/startinsights.website_api.startup_deals.redeem_code';
+
+const String getpitchroomlistAPI =
+    '$baseUrl/method/startinsights.website_api.pitch_room.pitch_room_list';
+
+const String getuserswithroleAPI =
+    '$baseUrl/method/startinsights.website_api.pitch_room.get_users_with_role';
+
+const String createpitchroomAPI =
+    '$baseUrl/method/startinsights.website_api.pitch_room.create_pitch_room';
