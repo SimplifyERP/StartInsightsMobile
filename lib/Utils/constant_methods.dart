@@ -201,3 +201,4 @@ DateFormat mGetyearFormat = DateFormat('yy');
 double mTabelText = 15;
 double mLeaveTabelText = 16;
 double mTabelTitleText = 18;
+double mCaptableTabelText = 14;

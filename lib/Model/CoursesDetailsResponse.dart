@@ -124,21 +124,25 @@ class Lesson {
   String? lessonName;
   String? body;
   bool? status;
+  String? extension;
   Lesson({
     this.lessonName,
     this.body,
     this.status,
+    this.extension,
   });
 
   factory Lesson.fromJson(Map<String, dynamic> json) => Lesson(
         lessonName: json["lesson_name"],
         status: json["status"],
         body: json["body"],
+        extension: json["extension"],
       );
 
   Map<String, dynamic> toJson() => {
         "lesson_name": lessonName,
         "status": status,
         "body": body,
+        "extension": extension,
       };
 }

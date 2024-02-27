@@ -7,7 +7,7 @@ import 'package:startinsights/Utils/pref_manager.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/primary_button.dart';
 
-// MFrom 1-> dashboard  6->startupschool 8-> Startup deals  9-> Pitch room list
+// MFrom 1-> dashboard  6->startupschool 8-> Startup deals  9-> Pitch room list 10->Captable
 class SideMenu extends StatelessWidget {
   int mFrom = 0;
   SideMenu({
@@ -607,6 +607,66 @@ class SideMenu extends StatelessWidget {
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: double.infinity,
+                                height: sidemenubtnheight,
+                                decoration: BoxDecoration(
+                                  color:
+                                      mFrom == 10 ? Colors.black : Colors.white,
+                                  border: Border.all(
+                                    color: mStatusbar,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        sl<StorageService>().setBool(
+                                            StorageServiceConstant.MCLICKPITCH,
+                                            false);
+                                        Navigator.pushReplacementNamed(
+                                            context, captableRoute);
+                                      },
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(children: [
+                                          Expanded(
+                                              flex: 2,
+                                              child: mFrom == 10
+                                                  ? const sidemenuImage(
+                                                      menuicon:
+                                                          'assets/ic_captable_white.png')
+                                                  : const sidemenuImage(
+                                                      menuicon:
+                                                          'assets/ic_captable.png')), //ic_schoolwhite
+                                          Expanded(
+                                              flex: 8,
+                                              child: SidemenuText(
+                                                  menuname:
+                                                      Languages.of(context)!
+                                                          .mCaptable,
+                                                  textColor: mFrom == 10
+                                                      ? mWhiteColor
+                                                      : mBlackColor)),
+                                        ]),
+                                      ),
+                                    )),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -618,7 +678,8 @@ class SideMenu extends StatelessWidget {
                         Align(
                           alignment: Alignment.center,
                           child: Text(
-                            Languages.of(context)!.mHireourteam,
+                            "",
+                            // Languages.of(context)!.mHireourteam,
                             style: const TextStyle(
                                 fontFamily: 'OpenSansBold',
                                 fontSize: 22.0,
@@ -635,10 +696,7 @@ class SideMenu extends StatelessWidget {
                               child: PrimaryButton(
                                   mButtonname:
                                       Languages.of(context)!.mContactUs,
-                                  onpressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, loginRoute);
-                                  },
+                                  onpressed: () {},
                                   mSelectcolor: mBtnColor,
                                   mTextColor: mWhiteColor,
                                   mFontSize: 16,

@@ -7,7 +7,8 @@ class CoursesListRepository {
   Future<ApiResults> getCoursesList(
     String userId,
   ) async {
-    return await sl<MyDio>().postData(endPoint: courseslistAPI, data: {});
+    return await sl<MyDio>()
+        .postData(endPoint: courseslistAPI, data: {'user_id': userId});
   }
 
   Future<ApiResults> SaveCourses(

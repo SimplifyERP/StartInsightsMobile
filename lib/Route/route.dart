@@ -4,6 +4,8 @@ import 'package:startinsights/Screen/AngelXDashboard/bloc/angledashboard_bloc.da
 import 'package:startinsights/Screen/AngelXDashboard/web/angledashboardweb.dart';
 import 'package:startinsights/Screen/BookanExpert/bloc/bookanexpert_bloc.dart';
 import 'package:startinsights/Screen/BookanExpert/web/bookanexpertweb.dart';
+import 'package:startinsights/Screen/Captable/bloc/captable_bloc.dart';
+import 'package:startinsights/Screen/Captable/web/captableweb.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/web/dashboardweb.dart';
 import 'package:startinsights/Screen/ExpertBooking/bloc/expertbooking_bloc.dart';
@@ -19,6 +21,8 @@ import 'package:startinsights/Screen/PitchRoom/web/pitchroom.dart';
 import 'package:startinsights/Screen/Pitchcraftlist/bloc/pitchcraftlist_bloc.dart';
 import 'package:startinsights/Screen/Pitchcraftlist/web/pitchcraftlistweb.dart';
 import 'package:startinsights/Screen/Pitchcraftlist/web/pitchcraftmyserviceweb.dart';
+import 'package:startinsights/Screen/Profile/bloc/profile_bloc.dart';
+import 'package:startinsights/Screen/Profile/web/profileweb.dart';
 import 'package:startinsights/Screen/Register/bloc/register_bloc.dart';
 import 'package:startinsights/Screen/Register/web/registerweb.dart';
 import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_bloc.dart';
@@ -95,7 +99,7 @@ class Routes {
                   ..getCoursesListData(args![0]),
               )
             ],
-            // child: MyCoursesWeb(mCourseid: args![0]),
+            //child: MyCoursesWeb(mCourseid: args![0]),
             child: CoursesWeb(mCourseid: args![0]),
           ),
         );
@@ -208,6 +212,32 @@ class Routes {
               )
             ],
             child: PitchroomWeb(),
+          ),
+        );
+
+      case captableRoute:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<CaptableBloc>(
+                create: (context) =>
+                    CaptableBloc(mContext: context)..getCaptableData(),
+              )
+            ],
+            child: CaptableWeb(),
+          ),
+        );
+
+      case profileRoute:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<ProfileBloc>(
+                create: (context) =>
+                    ProfileBloc(mContext: context), //..getCaptableData(),
+              )
+            ],
+            child: ProfileWeb(),
           ),
         );
 

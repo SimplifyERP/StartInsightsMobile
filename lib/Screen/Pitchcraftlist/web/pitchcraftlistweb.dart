@@ -73,8 +73,20 @@ class _PitchcraftlistState extends State<PitchcraftlistWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar:
-              Appbar(mText: "TExt", mUserImage: "", mFrom: 6, onPressed: () {}),
+          appBar: Appbar(
+            mText: "TExt",
+            mUserImage: "",
+            mFrom: 6,
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, profileRoute);
+              //ErrorToast(context: context, text: "Test");
+            },
+            onPressedLogout: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, loginRoute);
+            },
+          ),
           body: BlocConsumer<PitchcraftlistBloc, PitchcraftlistStatus>(
             listener: (context, state) {},
             builder: (context, state) {

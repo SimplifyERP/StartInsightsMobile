@@ -33,10 +33,14 @@ class _RegisterWebState extends State<RegisterWeb> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmpasswordController =
       TextEditingController();
+  final TextEditingController companynameController = TextEditingController();
+  final TextEditingController linkedinController = TextEditingController();
   late RegisterBloc mRegisterBloc;
   bool checkedValue = false;
 
   var mTypeDropDownValue = "";
+  bool passwordVisible = false;
+  bool confirmpasswordVisible = false;
 
   @override
   void initState() {
@@ -50,6 +54,8 @@ class _RegisterWebState extends State<RegisterWeb> {
     emailController.dispose();
     passwordController.dispose();
     confirmpasswordController.dispose();
+    companynameController.dispose();
+    linkedinController.dispose();
     super.dispose();
   }
 
@@ -95,7 +101,8 @@ class _RegisterWebState extends State<RegisterWeb> {
                                     child: Container(
                                         width: double.infinity,
                                         height:
-                                            MediaQuery.of(context).size.height,
+                                            MediaQuery.of(context).size.height +
+                                                200,
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(0),
@@ -177,458 +184,741 @@ class _RegisterWebState extends State<RegisterWeb> {
                                         ))),
                                 Expanded(
                                     flex: 5,
-                                    child: Container(
-                                        width: double.infinity,
-                                        color: Colors.white,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 2.0,
-                                                  left: 150.0,
-                                                  right: 2.0),
-                                              child: Column(children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        Languages.of(context)!
-                                                            .mAccountRegister,
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              'ManropeBold',
-                                                          fontSize: 24,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: mBlackColor,
-                                                        )),
-                                                  ],
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    RichText(
-                                                      text: TextSpan(
-                                                        children: <TextSpan>[
-                                                          TextSpan(
-                                                              text: Languages.of(
-                                                                      context)!
-                                                                  .mAlreadyaccount,
-                                                              style: const TextStyle(
-                                                                  fontFamily:
-                                                                      'ManropeLight',
-                                                                  fontSize: 24,
-                                                                  color:
-                                                                      mTextOneColor)),
-                                                          const TextSpan(
-                                                              text: " ",
-                                                              style: TextStyle(
-                                                                  fontFamily:
-                                                                      'ManropeLight',
-                                                                  fontSize: 22,
-                                                                  color:
-                                                                      mTextOneColor)),
-                                                          TextSpan(
-                                                              text: Languages.of(
-                                                                      context)!
-                                                                  .mLoginnow,
-                                                              recognizer: TapGestureRecognizer()
-                                                                ..onTap = () =>
-                                                                    Navigator.pushReplacementNamed(
-                                                                        context,
-                                                                        loginRoute),
-                                                              style: const TextStyle(
-                                                                  fontFamily:
-                                                                      'ManropeBold',
-                                                                  fontSize: 22,
-                                                                  color:
-                                                                      mBtnColor)),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  ],
-                                                )
-                                              ]),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10, left: 80, right: 40),
-                                              child: Column(children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: MandatoryText(
-                                                      mText:
+                                    child: SingleChildScrollView(
+                                      child: Container(
+                                          width: double.infinity,
+                                          color: Colors.white,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 2.0,
+                                                    left: 150.0,
+                                                    right: 2.0),
+                                                child: Column(children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
                                                           Languages.of(context)!
-                                                              .mName),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  child: AuthFormField(
-                                                    controller: nameController,
-                                                    textInputAction:
-                                                        TextInputAction.next,
-                                                    keyboardType:
-                                                        TextInputType.text,
-                                                    hintText:
-                                                        Languages.of(context)!
-                                                            .mEnterName,
-                                                    radius: 30,
-                                                    maxLength: 80,
-                                                    labelText:
-                                                        Languages.of(context)!
-                                                            .mEnterName,
-                                                    mBorderView: false,
-                                                    mImageView: true,
+                                                              .mAccountRegister,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontFamily:
+                                                                'ManropeBold',
+                                                            fontSize: 24,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: mBlackColor,
+                                                          )),
+                                                    ],
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: MandatoryText(
-                                                      mText:
-                                                          Languages.of(context)!
-                                                              .mEmailAddress),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  child: AuthFormField(
-                                                    controller: emailController,
-                                                    textInputAction:
-                                                        TextInputAction.next,
-                                                    keyboardType:
-                                                        TextInputType.text,
-                                                    hintText:
-                                                        Languages.of(context)!
-                                                            .mEmailAddresshint,
-                                                    radius: 30,
-                                                    maxLength: 80,
-                                                    labelText:
-                                                        Languages.of(context)!
-                                                            .mEmailAddresshint,
-                                                    mBorderView: false,
-                                                    mImageView: true,
+                                                  const SizedBox(
+                                                    height: 10,
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: MandatoryText(
-                                                      mText:
-                                                          Languages.of(context)!
-                                                              .mMobile),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  child: AuthFormField(
-                                                    controller:
-                                                        mobileController,
-                                                    textInputAction:
-                                                        TextInputAction.next,
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    hintText:
-                                                        Languages.of(context)!
-                                                            .mEnterMobile,
-                                                    radius: 30,
-                                                    maxLength: 10,
-                                                    labelText:
-                                                        Languages.of(context)!
-                                                            .mEnterMobile,
-                                                    mBorderView: false,
-                                                    mImageView: true,
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          children: <TextSpan>[
+                                                            TextSpan(
+                                                                text: Languages.of(
+                                                                        context)!
+                                                                    .mAlreadyaccount,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'ManropeLight',
+                                                                    fontSize:
+                                                                        24,
+                                                                    color:
+                                                                        mTextOneColor)),
+                                                            const TextSpan(
+                                                                text: " ",
+                                                                style: TextStyle(
+                                                                    fontFamily:
+                                                                        'ManropeLight',
+                                                                    fontSize:
+                                                                        22,
+                                                                    color:
+                                                                        mTextOneColor)),
+                                                            TextSpan(
+                                                                text: Languages.of(
+                                                                        context)!
+                                                                    .mLoginnow,
+                                                                recognizer: TapGestureRecognizer()
+                                                                  ..onTap = () =>
+                                                                      Navigator.pushReplacementNamed(
+                                                                          context,
+                                                                          loginRoute),
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'ManropeBold',
+                                                                    fontSize:
+                                                                        22,
+                                                                    color:
+                                                                        mBtnColor)),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  )
+                                                ]),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 10,
+                                                    left: 80,
+                                                    right: 40),
+                                                child: Column(children: [
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: MandatoryText(
+                                                        mText: Languages.of(
+                                                                context)!
+                                                            .mName),
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: MandatoryText(
-                                                      mText:
-                                                          Languages.of(context)!
-                                                              .mType),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  width: double.infinity,
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    border: Border.all(
-                                                      color: kTextBorder,
-                                                      width: 1,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8),
+                                                  const SizedBox(
+                                                    height: 10,
                                                   ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 0, 0, 0),
-                                                    child:
-                                                        DropdownButtonFormField(
-                                                      hint: Text(
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: AuthFormField(
+                                                      controller:
+                                                          nameController,
+                                                      textInputAction:
+                                                          TextInputAction.next,
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      hintText:
                                                           Languages.of(context)!
-                                                              .mSelectType,
-                                                          style: const TextStyle(
-                                                              fontSize: 16,
-                                                              fontFamily:
-                                                                  'OpenSansRegular')),
-                                                      enableFeedback: true,
-
-                                                      icon: const Icon(Icons
-                                                          .arrow_drop_down_outlined),
-                                                      iconSize: 30,
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      // decoration: InputDecoration.collapsed(hintText: ''),
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        border:
-                                                            InputBorder.none,
-
-                                                        contentPadding:
-                                                            EdgeInsets.only(
-                                                                top: 0,
-                                                                bottom: 10,
-                                                                left: 10,
-                                                                right:
-                                                                    10), //this one
-                                                      ),
-                                                      dropdownColor:
-                                                          Colors.white,
-
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                              .all(
-                                                              Radius.circular(
-                                                                  8)),
-                                                      elevation: 2,
-
-                                                      onChanged:
-                                                          (String? newValue) {
-                                                        setState(() {
-                                                          mTypeDropDownValue =
-                                                              newValue!; //on selection, selectedDropDownValue i sUpdated
-                                                        });
-                                                      },
-
-                                                      items: widget.getUserType
-                                                          .map((UserType lang) {
-                                                        return DropdownMenuItem<
-                                                            String>(
-                                                          value: lang.name,
-                                                          child: Text(
-                                                              lang.name!,
-                                                              style: const TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontFamily:
-                                                                      'OpenSansRegular')),
-                                                        );
-                                                      }).toList(),
+                                                              .mEnterName,
+                                                      radius: 30,
+                                                      maxLength: 80,
+                                                      labelText:
+                                                          Languages.of(context)!
+                                                              .mEnterName,
+                                                      mBorderView: false,
+                                                      mImageView: true,
                                                     ),
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: MandatoryText(
-                                                      mText:
-                                                          Languages.of(context)!
-                                                              .mCreatePassword),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  child: AuthFormField(
-                                                    controller:
-                                                        passwordController,
-                                                    textInputAction:
-                                                        TextInputAction.next,
-                                                    obscureText: true,
-                                                    maxLines: 1,
-                                                    keyboardType:
-                                                        TextInputType.text,
-                                                    hintText:
-                                                        Languages.of(context)!
-                                                            .mCreatePassword,
-                                                    radius: 30,
-                                                    maxLength: 80,
-                                                    labelText:
-                                                        Languages.of(context)!
-                                                            .mCreatePassword,
-                                                    mBorderView: false,
-                                                    mImageView: true,
+                                                  const SizedBox(
+                                                    height: 15,
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: MandatoryText(
-                                                      mText: Languages.of(
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: MandatoryText(
+                                                        mText: Languages.of(
+                                                                context)!
+                                                            .mEmailAddress),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: AuthFormField(
+                                                      controller:
+                                                          emailController,
+                                                      textInputAction:
+                                                          TextInputAction.next,
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      hintText: Languages.of(
                                                               context)!
-                                                          .mConfirmPassword),
-                                                ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  child: AuthFormField(
-                                                    controller:
-                                                        confirmpasswordController,
-                                                    obscureText: true,
-                                                    maxLines: 1,
-                                                    textInputAction:
-                                                        TextInputAction.next,
-                                                    keyboardType:
-                                                        TextInputType.text,
-                                                    hintText:
-                                                        Languages.of(context)!
-                                                            .mConfirmPassword,
-                                                    radius: 30,
-                                                    maxLength: 80,
-                                                    labelText:
-                                                        Languages.of(context)!
-                                                            .mConfirmPassword,
-                                                    mBorderView: false,
-                                                    mImageView: true,
+                                                          .mEmailAddresshint,
+                                                      radius: 30,
+                                                      maxLength: 80,
+                                                      labelText: Languages.of(
+                                                              context)!
+                                                          .mEmailAddresshint,
+                                                      mBorderView: false,
+                                                      mImageView: true,
+                                                    ),
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 30,
-                                                ),
-                                              ]),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                width: 300,
-                                                child: PrimaryButton(
-                                                    mButtonname:
-                                                        Languages.of(context)!
-                                                            .mregister,
-                                                    onpressed: () {
-                                                      if (nameController
-                                                          .text.isEmpty) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: Languages.of(
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: MandatoryText(
+                                                        mText: Languages.of(
+                                                                context)!
+                                                            .mMobile),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: AuthFormField(
+                                                      controller:
+                                                          mobileController,
+                                                      textInputAction:
+                                                          TextInputAction.next,
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      hintText:
+                                                          Languages.of(context)!
+                                                              .mEnterMobile,
+                                                      radius: 30,
+                                                      maxLength: 10,
+                                                      labelText:
+                                                          Languages.of(context)!
+                                                              .mEnterMobile,
+                                                      mBorderView: false,
+                                                      mImageView: true,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: MandatoryText(
+                                                        mText: Languages.of(
+                                                                context)!
+                                                            .mType),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    width: double.infinity,
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      border: Border.all(
+                                                        color: kTextBorder,
+                                                        width: 1,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 0, 0, 0),
+                                                      child:
+                                                          DropdownButtonFormField(
+                                                        hint: Text(
+                                                            Languages.of(
                                                                     context)!
-                                                                .mEnterName);
-                                                      } else if (emailController
-                                                          .text.isEmpty) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mVaildEmailAddresshint);
-                                                      } else if (!emailController
-                                                          .text
-                                                          .isValidEmail()) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mVaildEmailAddresshint);
-                                                      } else if (mobileController
-                                                          .text.isEmpty) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mEnterMobile);
-                                                      } else if (!isMobileNumberValid(
-                                                          mobileController
-                                                              .text)) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text:
-                                                                "Not Valid  Mobile");
-                                                      } else if (mTypeDropDownValue
-                                                          .isEmpty) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mSelectType);
-                                                      } else if (passwordController
-                                                          .text.isEmpty) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mEnterPassword);
-                                                      } else if (!isPasswordValid(
-                                                          passwordController
-                                                              .text)) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text:
-                                                                "Not Valid  Password");
-                                                      } else if (confirmpasswordController
-                                                          .text.isEmpty) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mEnterConfirmPassword);
-                                                      } else if (passwordController
-                                                              .text !=
-                                                          confirmpasswordController
-                                                              .text) {
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mConfirmPasswordnotmatch);
-                                                      } else {
-                                                        mRegisterBloc.register(
+                                                                .mSelectType,
+                                                            style: const TextStyle(
+                                                                fontSize: 16,
+                                                                fontFamily:
+                                                                    'OpenSansRegular')),
+                                                        enableFeedback: true,
+
+                                                        icon: const Icon(Icons
+                                                            .arrow_drop_down_outlined),
+                                                        iconSize: 30,
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        // decoration: InputDecoration.collapsed(hintText: ''),
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          border:
+                                                              InputBorder.none,
+
+                                                          contentPadding:
+                                                              EdgeInsets.only(
+                                                                  top: 0,
+                                                                  bottom: 10,
+                                                                  left: 10,
+                                                                  right:
+                                                                      10), //this one
+                                                        ),
+                                                        dropdownColor:
+                                                            Colors.white,
+
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .all(
+                                                                Radius.circular(
+                                                                    8)),
+                                                        elevation: 2,
+
+                                                        onChanged:
+                                                            (String? newValue) {
+                                                          setState(() {
+                                                            mTypeDropDownValue =
+                                                                newValue!; //on selection, selectedDropDownValue i sUpdated
+                                                          });
+                                                        },
+
+                                                        items: widget
+                                                            .getUserType
+                                                            .map((UserType
+                                                                lang) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: lang.name,
+                                                            child: Text(
+                                                                lang.name!,
+                                                                style: const TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontFamily:
+                                                                        'OpenSansRegular')),
+                                                          );
+                                                        }).toList(),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: MandatoryText(
+                                                        mText: Languages.of(
+                                                                context)!
+                                                            .mCreatePassword),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: TextFormField(
+                                                        keyboardType:
+                                                            TextInputType.text,
+                                                        controller:
+                                                            passwordController,
+                                                        obscureText:
+                                                            !passwordVisible,
+                                                        maxLines: 1,
+                                                        maxLength:
+                                                            16, //This will obscure text dynamically
+                                                        decoration:
+                                                            InputDecoration(
+                                                                counterText: "",
+                                                                labelText:
+                                                                    Languages.of(context)!
+                                                                        .mPassword,
+                                                                labelStyle: const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontFamily:
+                                                                        'ManropeMedium',
+                                                                    color:
+                                                                        kGray),
+                                                                hintText: Languages.of(context)!
+                                                                    .mPassword,
+                                                                suffixIcon:
+                                                                    IconButton(
+                                                                  icon: Icon(
+                                                                    // Based on passwordVisible state choose the icon
+                                                                    passwordVisible
+                                                                        ? Icons
+                                                                            .visibility
+                                                                        : Icons
+                                                                            .visibility_off,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .primaryColorDark,
+                                                                  ),
+                                                                  onPressed:
+                                                                      () {
+                                                                    // Update the state i.e. toogle the state of passwordVisible variable
+                                                                    setState(
+                                                                        () {
+                                                                      passwordVisible =
+                                                                          !passwordVisible;
+                                                                    });
+                                                                  },
+                                                                ),
+                                                                alignLabelWithHint:
+                                                                    true,
+                                                                hintStyle:
+                                                                    const TextStyle(
+                                                                  color: kGray,
+                                                                ),
+                                                                isDense:
+                                                                    true, // Added this
+
+                                                                floatingLabelStyle:
+                                                                    const TextStyle(
+                                                                        color: Colors
+                                                                            .blue),
+                                                                // floatingLabelBehavior: FloatingLabelBehavior.never,
+                                                                contentPadding:
+                                                                    const EdgeInsets.fromLTRB(
+                                                                        10,
+                                                                        15,
+                                                                        10,
+                                                                        15),
+                                                                enabledBorder: OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            8),
+                                                                    borderSide: const BorderSide(
+                                                                        color:
+                                                                            kTextBorder,
+                                                                        width: 1)),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide:
+                                                                      const BorderSide(
+                                                                          color:
+                                                                              kTextBorder,
+                                                                          width:
+                                                                              1),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                ),
+                                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 1, color: kTextBorder))))
+
+                                                    /*AuthFormField(
+                                                controller: passwordController,
+                                                obscureText: true,
+                                                maxLines: 1,
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                hintText: Languages.of(context)!
+                                                    .mPassword,
+                                                radius: 30,
+                                                maxLength: 80,
+                                                labelText:
+                                                    Languages.of(context)!
+                                                        .mPassword,
+                                                mBorderView: false,
+                                                mImageView: true,
+                                              )*/
+                                                    ,
+                                                  ),
+                                                  Text(
+                                                      Languages.of(context)!
+                                                          .mpasswordMessage,
+                                                      style: const TextStyle(
+                                                        fontFamily:
+                                                            'ManropeRegular',
+                                                        fontSize: 12,
+                                                        color: kGray,
+                                                      )),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: MandatoryText(
+                                                        mText: Languages.of(
+                                                                context)!
+                                                            .mConfirmPassword),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: TextFormField(
+                                                        keyboardType:
+                                                            TextInputType.text,
+                                                        controller:
+                                                            confirmpasswordController,
+                                                        obscureText:
+                                                            !confirmpasswordVisible,
+                                                        maxLines: 1,
+                                                        maxLength:
+                                                            16, //This will obscure text dynamically
+                                                        decoration:
+                                                            InputDecoration(
+                                                                counterText: "",
+                                                                labelText:
+                                                                    Languages.of(context)!
+                                                                        .mPassword,
+                                                                labelStyle: const TextStyle(
+                                                                    fontSize:
+                                                                        15,
+                                                                    fontFamily:
+                                                                        'ManropeMedium',
+                                                                    color:
+                                                                        kGray),
+                                                                hintText: Languages.of(context)!
+                                                                    .mPassword,
+                                                                suffixIcon:
+                                                                    IconButton(
+                                                                  icon: Icon(
+                                                                    confirmpasswordVisible
+                                                                        ? Icons
+                                                                            .visibility
+                                                                        : Icons
+                                                                            .visibility_off,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .primaryColorDark,
+                                                                  ),
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      confirmpasswordVisible =
+                                                                          !confirmpasswordVisible;
+                                                                    });
+                                                                  },
+                                                                ),
+                                                                alignLabelWithHint:
+                                                                    true,
+                                                                hintStyle:
+                                                                    const TextStyle(
+                                                                  color: kGray,
+                                                                ),
+                                                                isDense:
+                                                                    true, // Added this
+
+                                                                floatingLabelStyle:
+                                                                    const TextStyle(
+                                                                        color: Colors
+                                                                            .blue),
+                                                                // floatingLabelBehavior: FloatingLabelBehavior.never,
+                                                                contentPadding:
+                                                                    const EdgeInsets.fromLTRB(
+                                                                        10,
+                                                                        15,
+                                                                        10,
+                                                                        15),
+                                                                enabledBorder: OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            8),
+                                                                    borderSide: const BorderSide(
+                                                                        color:
+                                                                            kTextBorder,
+                                                                        width: 1)),
+                                                                focusedBorder: OutlineInputBorder(
+                                                                  borderSide:
+                                                                      const BorderSide(
+                                                                          color:
+                                                                              kTextBorder,
+                                                                          width:
+                                                                              1),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                ),
+                                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 1, color: kTextBorder))))
+
+                                                    /*AuthFormField(
+                                                controller: passwordController,
+                                                obscureText: true,
+                                                maxLines: 1,
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                hintText: Languages.of(context)!
+                                                    .mPassword,
+                                                radius: 30,
+                                                maxLength: 80,
+                                                labelText:
+                                                    Languages.of(context)!
+                                                        .mPassword,
+                                                mBorderView: false,
+                                                mImageView: true,
+                                              )*/
+                                                    ,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: MandatoryText(
+                                                        mText: Languages.of(
+                                                                context)!
+                                                            .mcompanyname),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: AuthFormField(
+                                                      controller:
+                                                          companynameController,
+                                                      textInputAction:
+                                                          TextInputAction.next,
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      hintText: Languages.of(
+                                                              context)!
+                                                          .mentercompanyname,
+                                                      radius: 30,
+                                                      maxLength: 80,
+                                                      labelText: Languages.of(
+                                                              context)!
+                                                          .mentercompanyname,
+                                                      mBorderView: false,
+                                                      mImageView: true,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(
+                                                      Languages.of(context)!
+                                                          .mlinkedin,
+                                                      style: const TextStyle(
+                                                          color: mBlackColor,
+                                                          fontFamily:
+                                                              'ManropeRegular',
+                                                          fontSize: 16),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    alignment: Alignment.center,
+                                                    child: AuthFormField(
+                                                      controller:
+                                                          linkedinController,
+                                                      textInputAction:
+                                                          TextInputAction.next,
+                                                      keyboardType:
+                                                          TextInputType.text,
+                                                      hintText:
+                                                          Languages.of(context)!
+                                                              .mlinkedin,
+                                                      radius: 30,
+                                                      maxLength: 80,
+                                                      labelText:
+                                                          Languages.of(context)!
+                                                              .mlinkedin,
+                                                      mBorderView: false,
+                                                      mImageView: true,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 30,
+                                                  ),
+                                                ]),
+                                              ),
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  width: 300,
+                                                  child: PrimaryButton(
+                                                      mButtonname:
+                                                          Languages.of(context)!
+                                                              .mregister,
+                                                      onpressed: () {
+                                                        if (nameController
+                                                            .text.isEmpty) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mEnterName);
+                                                        } else if (emailController
+                                                            .text.isEmpty) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mVaildEmailAddresshint);
+                                                        } else if (!emailController
+                                                            .text
+                                                            .isValidEmail()) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mVaildEmailAddresshint);
+                                                        } else if (mobileController
+                                                            .text.isEmpty) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mEnterMobile);
+                                                        } else if (!isMobileNumberValid(
+                                                            mobileController
+                                                                .text)) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text:
+                                                                  "Not Valid  Mobile");
+                                                        } else if (mTypeDropDownValue
+                                                            .isEmpty) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mSelectType);
+                                                        } else if (passwordController
+                                                            .text.isEmpty) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mEnterPassword);
+                                                        } else if (!isPasswordValid(
+                                                            passwordController
+                                                                .text)) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text:
+                                                                  "Not Valid  Password");
+                                                        } else if (confirmpasswordController
+                                                            .text.isEmpty) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mEnterConfirmPassword);
+                                                        } else if (passwordController
+                                                                .text !=
+                                                            confirmpasswordController
+                                                                .text) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mConfirmPasswordnotmatch);
+                                                        } else if (companynameController
+                                                            .text.isEmpty) {
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mentercompanyname);
+                                                        } else {
+                                                          mRegisterBloc
+                                                              .register(
                                                             firstname:
                                                                 nameController
                                                                     .text,
@@ -643,50 +933,63 @@ class _RegisterWebState extends State<RegisterWeb> {
                                                                     .text,
                                                             usertype:
                                                                 mTypeDropDownValue,
-                                                            logintype:
-                                                                "Normal");
-                                                      }
-                                                    },
-                                                    mSelectcolor: mBtnColor,
-                                                    mTextColor: mWhiteColor),
+                                                            logintype: "Normal",
+                                                            companyname:
+                                                                companynameController
+                                                                    .text,
+                                                            linkedin:
+                                                                linkedinController
+                                                                    .text,
+                                                          );
+                                                        }
+                                                      },
+                                                      mSelectcolor: mBtnColor,
+                                                      mTextColor: mWhiteColor),
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Container(
-                                                margin: const EdgeInsets.only(
-                                                    top: 2.0,
-                                                    left: 60.0,
-                                                    right: 20.0),
-                                                child: const Align(
-                                                  alignment: Alignment.center,
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Dash(
-                                                          direction:
-                                                              Axis.horizontal,
-                                                          dashLength: 3,
-                                                          length: 250,
-                                                          dashColor: kGray),
-                                                      Text(" OR "),
-                                                      Dash(
-                                                          direction:
-                                                              Axis.horizontal,
-                                                          dashLength: 3,
-                                                          length: 250,
-                                                          dashColor: kGray)
-                                                    ],
-                                                  ),
-                                                )),
-                                          ],
-                                        ))),
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              Visibility(
+                                                  visible: false,
+                                                  child: Container(
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              top: 2.0,
+                                                              left: 60.0,
+                                                              right: 20.0),
+                                                      child: const Align(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Dash(
+                                                                direction: Axis
+                                                                    .horizontal,
+                                                                dashLength: 3,
+                                                                length: 250,
+                                                                dashColor:
+                                                                    kGray),
+                                                            Text(" OR "),
+                                                            Dash(
+                                                                direction: Axis
+                                                                    .horizontal,
+                                                                dashLength: 3,
+                                                                length: 250,
+                                                                dashColor:
+                                                                    kGray)
+                                                          ],
+                                                        ),
+                                                      ))),
+                                            ],
+                                          )),
+                                    )),
                               ],
                             )
                           ],

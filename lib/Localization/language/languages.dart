@@ -101,6 +101,7 @@ abstract class Languages {
   String get mFounders;
   String get minvestmentdetails;
   String get mPreview;
+  String get mnoPreview;
   String get mPurchase;
   String get mDownloadcerificate;
   String get mStartupDeals;
@@ -142,4 +143,79 @@ abstract class Languages {
   String get mselectexecutivesummaryfile;
   String get maddpeoples;
   String get mselectroomexpiredate;
+  String get mCaptable;
+  String get mCaptableOverview;
+  String get mCaptableDetails;
+
+  String get mInvestorwise;
+  String get mRoundwise;
+  String get mAddFundingRound;
+
+  String get mInvestorName;
+  String get mTagName;
+  String get mDateofAllotment;
+  String get mInvestedRound;
+  String get mAmountInvested;
+  String get mDistinctiveShareNo;
+  String get mShareCertificate;
+  String get mSharesAllotted;
+  String get mPricePerShare;
+  String get mFullyDilutedShares;
+  String get mClassOfShares;
+  String get mFolioNumber;
+  String get mShareholding;
+  String get mCreationPersonID;
+
+  String get mNameoftheround;
+  String get mRoundType;
+  String get mClosingdateoftheRound;
+  String get mRoundDescription;
+  String get mSelectSecurityPrefix;
+  String get mAmountRaised;
+  String get mPricepershare;
+  String get mPreMoneyValuation;
+  String get mDilutionforthisround;
+
+  String get mtagname;
+  String get mentertagname;
+  String get mselectDateofAllotment;
+  String get menterInvestedRound;
+  String get menterAmountInvested;
+  String get menterDistinctiveShareNo;
+  String get menterSharesAllotted;
+  String get menterPricePerShare;
+  String get menterFullyDilutedShares;
+  String get menterClassOfShares;
+  String get menterFolioNumber;
+  String get menterShareholding;
+  String get mUploadedDocument;
+
+  String get mpitchdeckfiles;
+  String get mexecutivesummaryfiles;
+  String get mprojectionsfiles;
+  String get mshareduser;
+  String get mInvestorOverview;
+  String get mRoundwiseOverview;
+  String get mInvestorCaptableDetails;
+  String get mRoundwiseCaptableDetails;
+  String get mpasswordMessage;
+  String get mLogout;
+  String get mprofile;
+  String get mProfilePicture;
+  String get mUpdateProfileDetails;
+  String get mEmail;
+  String get mLinkedInURL;
+  String get mCompanyName;
+  String get mDesignation;
+  String get mEnterDesignation;
+
+  String get mChangePassword;
+  String get mCurrentPassword;
+  String get mNewPassword;
+  String get mRetypenewPassword;
+  String get mAlreadyRedeemed;
+  String get mlinkedin;
+  String get mcompanyname;
+  String get mentercompanyname;
+  String get mvideomessage;
 }

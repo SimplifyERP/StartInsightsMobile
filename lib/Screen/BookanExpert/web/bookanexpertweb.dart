@@ -54,8 +54,20 @@ class _BookanexpertWebState extends State<BookanexpertWeb> {
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          appBar:
-              Appbar(mText: "TExt", mUserImage: "", mFrom: 7, onPressed: () {}),
+          appBar: Appbar(
+            mText: "TExt",
+            mUserImage: "",
+            mFrom: 7,
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, profileRoute);
+              //ErrorToast(context: context, text: "Test");
+            },
+            onPressedLogout: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, loginRoute);
+            },
+          ),
           body: BlocConsumer<BookanExpertBloc, BookanExpertStatus>(
             listener: (context, state) {},
             builder: (context, state) {

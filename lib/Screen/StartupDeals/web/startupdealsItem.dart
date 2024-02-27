@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_network/image_network.dart';
 import 'package:startinsights/Localization/language/languages.dart';
+import 'package:startinsights/Model/CommonResponse.dart';
 import 'package:startinsights/Model/StartupDealsResponse.dart';
 import 'package:startinsights/Model/StartupRedeemcodeResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
@@ -10,6 +11,7 @@ import 'package:startinsights/Repository/startupdeals_repository.dart';
 import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_bloc.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
+import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/primary_button.dart';
 
@@ -17,10 +19,12 @@ class StartupDealsItem extends StatelessWidget {
   final Datum mDatumList;
   final StartupdealsBloc mStartupdealsBloc;
   final BuildContext context;
+  final String userId;
   StartupDealsItem({
     required this.mDatumList,
     required this.mStartupdealsBloc,
     required this.context,
+    required this.userId,
     super.key,
   });
 
@@ -163,7 +167,7 @@ class StartupDealsItem extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             mDatumList.shortDescription ?? "",
-                            maxLines: 7,
+                            maxLines: 6,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontFamily: 'ManropeRegular',
@@ -181,65 +185,76 @@ class StartupDealsItem extends StatelessWidget {
                           crossAxisAlignment:
                               CrossAxisAlignment.center, // set your alignment
                           children: <Widget>[
-                            Container(
-                                width: 170,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: mCardColorThree),
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Image.asset('assets/ic_recommend.png',
-                                            width: 20,
-                                            height: 20,
-                                            fit: BoxFit.fill),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        Text(
-                                          Languages.of(context)!.mFeatured,
-                                          style: const TextStyle(
-                                              fontFamily: 'ManropeRegular',
-                                              fontSize: 18,
-                                              color: mBlackColor),
-                                        )
-                                      ],
-                                    ))),
+                            Visibility(
+                                visible:
+                                    (((mDatumList.popularService ?? 0) == 1)
+                                        ? true
+                                        : false),
+                                child: Container(
+                                    width: 170,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: mCardColorThree),
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 5, 20, 5),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Image.asset(
+                                                'assets/ic_recommend.png',
+                                                width: 20,
+                                                height: 20,
+                                                fit: BoxFit.fill),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              Languages.of(context)!.mFeatured,
+                                              style: const TextStyle(
+                                                  fontFamily: 'ManropeRegular',
+                                                  fontSize: 18,
+                                                  color: mBlackColor),
+                                            )
+                                          ],
+                                        )))),
                             const SizedBox(
                               width: 15,
                             ),
-                            Container(
-                                width: 170,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: mCardColorThree),
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(20, 5, 20, 5),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Image.asset('assets/ic_popular.png',
-                                            width: 20,
-                                            height: 20,
-                                            fit: BoxFit.fill),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        Text(
-                                          Languages.of(context)!.mPopular,
-                                          style: const TextStyle(
-                                              fontFamily: 'ManropeRegular',
-                                              fontSize: 18,
-                                              color: mBlackColor),
-                                        )
-                                      ],
-                                    ))),
+                            Visibility(
+                                visible:
+                                    (((mDatumList.featureService ?? 0) == 1)
+                                        ? true
+                                        : false),
+                                child: Container(
+                                    width: 170,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        color: mCardColorThree),
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 5, 20, 5),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Image.asset('assets/ic_popular.png',
+                                                width: 20,
+                                                height: 20,
+                                                fit: BoxFit.fill),
+                                            const SizedBox(
+                                              width: 20,
+                                            ),
+                                            Text(
+                                              Languages.of(context)!.mPopular,
+                                              style: const TextStyle(
+                                                  fontFamily: 'ManropeRegular',
+                                                  fontSize: 18,
+                                                  color: mBlackColor),
+                                            )
+                                          ],
+                                        )))),
                           ],
                         )),
                     SizedBox(
@@ -322,7 +337,8 @@ class StartupDealsItem extends StatelessWidget {
 
                                                 _apiService1
                                                     .getStartupDealsRedeem(
-                                                        "", mDatumList.id ?? "")
+                                                        userId,
+                                                        mDatumList.id ?? "")
                                                     .then((value) async {
                                                   print(value);
 
@@ -371,7 +387,36 @@ class StartupDealsItem extends StatelessWidget {
                                       ))),
                             ),
                           ],
-                        ))
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Visibility(
+                            visible: ((mDatumList.redeem_status ?? false))
+                                ? true
+                                : false,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                Languages.of(context)!.mAlreadyRedeemed,
+                                style: const TextStyle(
+                                    fontFamily: 'ManropeSemiBold',
+                                    fontSize: 14,
+                                    color: Colors.red),
+                              ),
+                            )),
+                        SizedBox(
+                          width: 20,
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                   ]),
                 ),
                 // Row(
@@ -429,7 +474,12 @@ class StartupDealsItem extends StatelessWidget {
                                   alignment: Alignment.topRight,
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.pop(mContext);
+                                      //  Navigator.pop(mContext);
+
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pop();
+                                      Navigator.pushReplacementNamed(
+                                          context, startupdealsRoute);
                                     },
                                     child: Image.asset(
                                       'assets/ic_closecross.png',
@@ -488,6 +538,30 @@ class StartupDealsItem extends StatelessWidget {
 
                                   setState(() {
                                     mVisible = true;
+                                  });
+
+                                  Loading(mLoaderGif).start(context);
+
+                                  _apiService1.Redeemstatusupdate(
+                                          userId, mDatumList.id ?? "")
+                                      .then((value) async {
+                                    print(value);
+
+                                    if (value is ApiSuccess) {
+                                      if (CommonResponse.fromJson(value.data)!
+                                              .message!
+                                              .status ??
+                                          false) {
+                                        Loading.stop();
+                                      } else {
+                                        Loading.stop();
+                                        ErrorToast(
+                                            context: context,
+                                            text: "Redeem Code update error");
+                                      }
+                                    } else if (value is ApiFailure) {
+                                      Loading.stop();
+                                    }
                                   });
 
                                   Future.delayed(const Duration(seconds: 2),

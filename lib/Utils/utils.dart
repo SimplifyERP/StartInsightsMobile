@@ -2,7 +2,9 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:startinsights/Screen/Profile/web/profileweb.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/screens.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 
 void showSnackBar({
@@ -112,12 +114,12 @@ void showErrorSnackBar({
               onPressed: onTapFunction,
             ),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: Color.fromARGB(255, 252, 30, 100),
+            backgroundColor: const Color.fromARGB(255, 252, 30, 100),
           )
         : SnackBar(
             content: Text(text),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: Color.fromARGB(255, 252, 30, 100),
+            backgroundColor: const Color.fromARGB(255, 252, 30, 100),
           ),
   );
 }
@@ -187,51 +189,168 @@ int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
 }
 
-void OnProfileload(BuildContext context) {
+void OnProfileload(BuildContext context1) {
   showDialog<void>(
     barrierDismissible: true,
-    context: context,
+    context: context1,
     builder: (BuildContext context) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          const SizedBox(
-            height: 60,
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 1.0,
-                  ),
-                ]),
-            height: 250,
-            width: 150,
-            child: const Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    sidemenuImage(menuicon: 'assets/ic_chat.png'),
-                    SizedBox(
-                      width: 10,
+      return StatefulBuilder(builder: (context1, setState) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            const SizedBox(
+              height: 60,
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.white,
+                      blurRadius: 1.0,
                     ),
-                    SidemenuText(menuname: "Logout")
-                  ],
+                  ]),
+              height: 250,
+              width: 150,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Material(
+                          color: Colors.white,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ProfileWeb()));
+                            },
+                            child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    // Based on passwordVisible state choose the icon
+                                    Icons.account_circle_outlined,
+                                    color: kGray,
+                                    size: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  SidemenuText(menuname: "Profile")
+                                ]),
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Material(
+                          color: Colors.white,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(
+                                  context1, profileRoute);
+                            },
+                            child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    // Based on passwordVisible state choose the icon
+                                    Icons.logout,
+                                    color: kGray,
+                                    size: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  SidemenuText(menuname: "Logout")
+                                ]),
+                          )),
+                    )
+                  ]),
+            )
+          ],
+        );
+      });
+    },
+  );
+
+  /*showDialog(
+    context: context,
+    builder: (context2) {
+      String contentText = "Content of Dialog";
+      return StatefulBuilder(
+        builder: (context1, setState) {
+          return AlertDialog(
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                const SizedBox(
+                  height: 60,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 1.0,
+                        ),
+                      ]),
+                  height: 250,
+                  width: 150,
+                  child: Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, profileRoute);
+                        },
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            SidemenuText(
+                                menuname: "Languages.of(context)!.mprofile")
+                          ],
+                        ),
+                      ),
+                      const Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          sidemenuImage(menuicon: 'assets/ic_chat.png'),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          SidemenuText(menuname: "Logout")
+                        ],
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
-          )
-        ],
+          );
+        },
       );
     },
-  );
+  );*/
 }
 
 class sidemenuImage extends StatelessWidget {
@@ -261,10 +380,7 @@ class SidemenuText extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTextStyle(
       style: const TextStyle(
-          fontFamily: 'TimesNormal',
-          fontWeight: FontWeight.normal,
-          fontSize: 16.0,
-          color: Colors.black),
+          fontFamily: 'ManropeBold', fontSize: 16, color: kGray),
       child: Text(menuname),
     );
   }

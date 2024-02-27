@@ -97,6 +97,7 @@ class LanguageEn extends Languages {
   String get mFounders => "Founders";
   String get minvestmentdetails => "Investment Details";
   String get mPreview => "Preview";
+  String get mnoPreview => "No Preview ";
   String get mPurchase => "Purchase";
   String get mDownloadcerificate => "Download course certificate";
   String get mStartupDeals => "Startup Deals";
@@ -138,4 +139,84 @@ class LanguageEn extends Languages {
   String get mselectexecutivesummaryfile => "Select executive summary files";
   String get maddpeoples => "Choose add people";
   String get mselectroomexpiredate => "Select Expiry Date";
+  String get mCaptable => "Captable";
+  String get mCaptableOverview => "Captable Overview";
+  String get mCaptableDetails => "Captable Details";
+
+  String get mInvestorwise => "Investor-wise";
+  String get mRoundwise => "Round-wise";
+  String get mAddFundingRound => "Add Funding Round";
+
+  String get mInvestorName => "Investor Name";
+  String get mTagName => "Tag Name";
+  String get mDateofAllotment => "Date of Allotment";
+  String get mInvestedRound => "Invested Round";
+  String get mAmountInvested => "Amount Invested";
+  String get mDistinctiveShareNo => "Distinctive Share No";
+  String get mShareCertificate => "Share Certificate";
+  String get mSharesAllotted => "Shares Allotted";
+  String get mPricePerShare => "Price Per Share";
+  String get mFullyDilutedShares => "Fully Diluted Shares";
+  String get mClassOfShares => "Class Of Shares";
+  String get mFolioNumber => "Folio Number";
+  String get mShareholding => "% Shareholding";
+  String get mCreationPersonID => "Creation Person ID";
+
+  String get mNameoftheround => "Name of the round";
+  String get mRoundType => "Round Type";
+  String get mClosingdateoftheRound => "Closing date of the Round";
+  String get mRoundDescription => "Description";
+  String get mSelectSecurityPrefix => "Select Security Prefix";
+  String get mAmountRaised => "Amount Raised";
+  String get mPricepershare => "Price per share";
+  String get mPreMoneyValuation => "Pre-Money Valuation";
+  String get mDilutionforthisround => "Dilution for this round (%)";
+
+  String get mtagname => "Tag Name";
+  String get mentertagname => "Enter Tag Name";
+  String get mselectDateofAllotment => "Select Date of Allotment";
+  String get menterInvestedRound => "Enter Invested Round";
+  String get menterAmountInvested => "Enter Amount Invested";
+  String get menterDistinctiveShareNo => "Enter Distinctive Share No";
+  String get menterSharesAllotted => "Enter Shares Allotted";
+  String get menterPricePerShare => "Enter Price Per Share";
+  String get menterFullyDilutedShares => "Enter Fully Diluted Shares";
+  String get menterClassOfShares => "Enter Class Of Shares";
+  String get menterFolioNumber => "Enter Folio Number";
+  String get menterShareholding => "Enter Shareholding %";
+
+  String get mUploadedDocument => "Uploaded Document";
+
+  String get mpitchdeckfiles => "Pitch deck files";
+  String get mexecutivesummaryfiles => "Executive summary files";
+  String get mprojectionsfiles => "Projections files";
+  String get mshareduser => "Shared User";
+
+  String get mInvestorOverview => "Investor Overview";
+  String get mRoundwiseOverview => "Roundwise Overview";
+  String get mInvestorCaptableDetails => "Investor Captable Details";
+  String get mRoundwiseCaptableDetails => "Roundwise Captable Details";
+  String get mpasswordMessage =>
+      "Must contain atleast 1 uppercase, 1 lowercase, 1 Special character and 1 numeric characters. Minimum 8 characters.";
+
+  String get mLogout => "Logout";
+  String get mprofile => "Profile";
+  String get mProfilePicture => "Profile Picture";
+  String get mUpdateProfileDetails => "Update Profile Details";
+  String get mEmail => "Email";
+  String get mLinkedInURL => "LinkedIn URL";
+  String get mCompanyName => "Company Name";
+  String get mDesignation => "Designation";
+  String get mEnterDesignation => "Enter Designation";
+
+  String get mChangePassword => "Change Password";
+  String get mCurrentPassword => "Current Password";
+  String get mNewPassword => "New Password";
+  String get mRetypenewPassword => "Retype new Password";
+  String get mAlreadyRedeemed => "Already Redeemed";
+  String get mlinkedin => "Linkedin URL";
+  String get mcompanyname => "Company Name";
+  String get mentercompanyname => "Enter Company Name";
+  String get mvideomessage =>
+      "Click left arrow(->) forward 10 second, click right arrow(<-) backward 10 second. Exit full screen double press the ESC button";
 }

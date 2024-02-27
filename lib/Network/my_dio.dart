@@ -84,11 +84,17 @@ class MyDio {
       "Accept": "application/json",
       "Authorization": mToken,
       "Access-Control-Allow-Origin": "*",
+      "content-type": "multipart/form-data",
+      "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Allow-Methods": "GET,PUT,PATCH,POST,DELETE",
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Headers":
-          "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
-      "Access-Control-Allow-Methods": "POST, OPTIONS,GET, HEAD"
+          "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale,pre-flight",
+      "Access-Control-Allow-Methods": "POST, OPTIONS,GET, HEAD",
+
+      /*{Accept: application/json, Authorization: token f3d40080905efdd:a9969f40877e947,
+    Access-Control-Allow-Origin: *,
+    content-type: multipart/form-data; boundary=--dio-boundary-3942469326}*/
     };
 
     try {

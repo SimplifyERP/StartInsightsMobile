@@ -59,6 +59,7 @@ class Datum {
   String? serviceHeadline;
   String? attachImage;
   String? shortDescription;
+  bool? redeem_status;
   int? featureService;
   int? popularService;
   List<Startup>? startup;
@@ -70,6 +71,7 @@ class Datum {
     this.serviceHeadline,
     this.attachImage,
     this.shortDescription,
+    this.redeem_status,
     this.featureService,
     this.popularService,
     this.startup,
@@ -82,6 +84,7 @@ class Datum {
         serviceHeadline: json["service_headline"],
         attachImage: json["attach_image"],
         shortDescription: json["short_description"],
+        redeem_status: json["redeem_status"],
         featureService: json["feature_service"],
         popularService: json["popular_service"],
         startup: json["startup"] == null
@@ -97,6 +100,7 @@ class Datum {
         "service_headline": serviceHeadline,
         "attach_image": attachImage,
         "short_description": shortDescription,
+        "redeem_status": redeem_status,
         "feature_service": featureService,
         "popular_service": popularService,
         "startup": startup == null

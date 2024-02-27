@@ -8,6 +8,7 @@ import 'package:startinsights/Screen/AngelXDashboard/bloc/angledashboard_state.d
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/pref_manager.dart';
+import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
 import 'package:startinsights/Widgets/anglesidemenu.dart';
 
@@ -57,8 +58,20 @@ class _AngleDashboardWebState extends State<AngleDashboardWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar:
-              Appbar(mText: "TExt", mUserImage: "", mFrom: 1, onPressed: () {}),
+          appBar: Appbar(
+            mText: "TExt",
+            mUserImage: "",
+            mFrom: 1,
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, profileRoute);
+              //ErrorToast(context: context, text: "Test");
+            },
+            onPressedLogout: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, loginRoute);
+            },
+          ),
           body: BlocConsumer<AngleDashboardBloc, AngleDashboardStatus>(
             listener: (context, state) {
               if (state is GetAngleDashboardInfoSuccessState) {}

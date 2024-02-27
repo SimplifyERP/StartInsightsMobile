@@ -8,7 +8,7 @@ import 'package:startinsights/Screen/Dashboard/bloc/dashboard_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/pref_manager.dart';
-import 'package:startinsights/Utils/utils.dart';
+import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
 import 'package:startinsights/Widgets/sidemenu.dart';
 
@@ -64,7 +64,15 @@ class _DashboardWebState extends State<DashboardWeb> {
             mUserImage: "",
             mFrom: 1,
             onPressed: () {
-              OnProfileload(context);
+              /* Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AddNewcallSucess()));*/
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, profileRoute);
+              //ErrorToast(context: context, text: "Test");
+            },
+            onPressedLogout: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, loginRoute);
             },
           ),
           body: BlocConsumer<DashboardBloc, DashboardStatus>(

@@ -24,6 +24,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginStatus> {
   final BuildContext mContext;
   MastersData mMastersDataList = MastersData();
   var mGetcheckedValue = false;
+  Userinfo mLoginResponse = Userinfo();
   LoginBloc({
     required this.mContext,
   }) : super(LoginInitialState()) {
@@ -77,31 +78,38 @@ class LoginBloc extends Bloc<LoginEvent, LoginStatus> {
     }
   }
 
-  void handleLoginResponse(json, int? statusCode) {
-    if (LoginResponse.fromJson(json).message!.status == true) {
+  void handleLoginResponse(getjson, int? statusCode) {
+    if (LoginResponse.fromJson(getjson).message!.status == true) {
       sl<StorageService>()
           .setBool(StorageServiceConstant.MLOGINSTATUS, mGetcheckedValue);
       sl<StorageService>().setString(StorageServiceConstant.MUSERNAME,
-          LoginResponse.fromJson(json).message!.userinfo!.fullName!);
+          LoginResponse.fromJson(getjson).message!.userinfo!.fullName!);
+
+      mLoginResponse = LoginResponse.fromJson(getjson)!.message!.userinfo!;
+
+      String mUserInfo = json.encode(getjson);
+
+      sl<StorageService>()
+          .setString(StorageServiceConstant.MUSERINFO, mUserInfo);
 
       sl<StorageService>().setString(StorageServiceConstant.MUSEREMAIL,
-          LoginResponse.fromJson(json).message!.userinfo!.userEmail!);
+          LoginResponse.fromJson(getjson).message!.userinfo!.userEmail!);
 
       sl<StorageService>().setString(StorageServiceConstant.MUSEREIMAGE,
-          LoginResponse.fromJson(json).message!.userinfo!.profileImage!);
+          LoginResponse.fromJson(getjson).message!.userinfo!.profileImage!);
 
       sl<StorageService>().setString(StorageServiceConstant.MUSEREMOBILE,
-          LoginResponse.fromJson(json).message!.userinfo!.phoneNo!);
+          LoginResponse.fromJson(getjson).message!.userinfo!.phoneNo!);
 
       SucessToast(
           context: mContext,
-          text: LoginResponse.fromJson(json).message!.message!);
+          text: LoginResponse.fromJson(getjson).message!.message!);
 
       Navigator.pushReplacementNamed(mContext, dashboardRoute);
     } else {
       SucessToast(
           context: mContext,
-          text: LoginResponse.fromJson(json).message!.message!);
+          text: LoginResponse.fromJson(getjson).message!.message!);
     }
   }
 

@@ -11,6 +11,8 @@ class RegisterRepo {
     String password,
     String usertype,
     String logintype,
+    String companyname,
+    String linkedin,
   ) async {
     // email = 'vivekchamp84@gmail.com';
     // password = 'vivek@123';
@@ -20,7 +22,9 @@ class RegisterRepo {
       'user_type': usertype,
       'first_name': firstname,
       'phone_no': phoneno,
-      'login_type': logintype
+      'login_type': logintype,
+      'linkedin': companyname,
+      'company_name': linkedin
     });
   }
 }

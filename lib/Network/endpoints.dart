@@ -6,7 +6,7 @@ const String masterAPI =
     '$baseUrl/method/startinsights.website_api.masters.get_masters';
 
 const String registerAPI =
-    '$baseUrl/method/startinsights.website_api.login_api.create_user';
+    '$baseUrl/method/startinsights.website_api.register.create_user';
 
 const String loginAPI =
     '$baseUrl/method/startinsights.website_api.login.user_login';
@@ -61,3 +61,12 @@ const String getuserswithroleAPI =
 
 const String createpitchroomAPI =
     '$baseUrl/method/startinsights.website_api.pitch_room.create_pitch_room';
+
+const String getinvestorroundwisegraphAPI =
+    '$baseUrl/method/startinsights.website_api.investor_round_wise_graph.get_investor_round_wise_details';
+
+const String getredeemstatusupdateAPI =
+    '$baseUrl/method/startinsights.website_api.startup_deals.startup_redeem_status_update';
+
+const String updateprofileAPI =
+    '$baseUrl/method/startinsights.website_api.profile.update_profile';

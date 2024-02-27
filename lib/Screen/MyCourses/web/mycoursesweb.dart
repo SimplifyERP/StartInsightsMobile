@@ -4,6 +4,7 @@ import 'dart:html' as html;
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CoursesDetailsResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
@@ -11,6 +12,7 @@ import 'package:startinsights/Repository/courselistdetails_repository.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_bloc.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
@@ -45,6 +47,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
 
   bool showcertificate = false;
   bool showVideoview = false;
+  var userId = "";
 
   final CoursesDetailsRepository _apiService1 = CoursesDetailsRepository();
 
@@ -94,6 +97,13 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
         });
       }
     });
+    loadpref();
+  }
+
+  Future<void> loadpref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    userId = (prefs.getString(StorageServiceConstant.MUSEREMAIL) ?? '');
   }
 
   @override
@@ -123,8 +133,20 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
       },
       child: Scaffold(
           backgroundColor: Colors.white,
-          appBar:
-              Appbar(mText: "TExt", mUserImage: "", mFrom: 6, onPressed: () {}),
+          appBar: Appbar(
+            mText: "TExt",
+            mUserImage: "",
+            mFrom: 6,
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, profileRoute);
+              //ErrorToast(context: context, text: "Test");
+            },
+            onPressedLogout: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, loginRoute);
+            },
+          ),
           body: BlocConsumer<MyCoursesBloc, MyCoursesStatus>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -376,7 +398,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                                                     //https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4
                                                                                                     var mVideoId = (mLessonsList.body ?? "").replaceAll('%3A', ':');
 
-                                                                                                    _apiService1.getCoursesVideoProgress(mLessonsList.lessonName ?? "", "jagadeesan.a1104@gmail.com").then((value) async {
+                                                                                                    _apiService1.getCoursesVideoProgress(mLessonsList.lessonName ?? "", userId).then((value) async {
                                                                                                       print(value);
 
                                                                                                       if (value is ApiSuccess) {
@@ -391,7 +413,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                                                             showcertificate = mLessonStatus.every((e) => true);
                                                                                                           });
                                                                                                         } else {
-                                                                                                          ErrorToast(context: context, text: CommonResponse.fromJson(value.data)!.message!.message ?? "");
+                                                                                                          // ErrorToast(context: context, text: CommonResponse.fromJson(value.data)!.message!.message ?? "");
                                                                                                         }
                                                                                                       } else if (value is ApiFailure) {}
                                                                                                     });
@@ -401,6 +423,21 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                                                                                                       //  aspectRatio: 16 / 9,
                                                                                                       autoInitialize: true,
                                                                                                       autoPlay: true,
+                                                                                                      // playbackSpeeds: ,
+                                                                                                      additionalOptions: (context) {
+                                                                                                        return <OptionItem>[
+                                                                                                          OptionItem(
+                                                                                                            onTap: () => debugPrint('My option works!'),
+                                                                                                            iconData: Icons.chat,
+                                                                                                            title: 'My localized title',
+                                                                                                          ),
+                                                                                                          OptionItem(
+                                                                                                            onTap: () => debugPrint('Another option that works!'),
+                                                                                                            iconData: Icons.chat,
+                                                                                                            title: 'Another localized title',
+                                                                                                          ),
+                                                                                                        ];
+                                                                                                      },
                                                                                                       looping: true,
                                                                                                       errorBuilder: (context, errorMessage) {
                                                                                                         return Center(

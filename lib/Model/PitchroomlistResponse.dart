@@ -57,19 +57,21 @@ class PitchRoomDetail {
   String? id;
   String? roomName;
   String? description;
-  String? document1;
-  String? document2;
-  String? document3;
-  String? document4;
+  String? pitch_deck;
+  String? projections;
+  String? executive_summary;
+  String? shared_user;
+  String? expiryDate;
 
   PitchRoomDetail({
     this.id,
     this.roomName,
     this.description,
-    this.document1,
-    this.document2,
-    this.document3,
-    this.document4,
+    this.pitch_deck,
+    this.projections,
+    this.executive_summary,
+    this.shared_user,
+    this.expiryDate,
   });
 
   factory PitchRoomDetail.fromJson(Map<String, dynamic> json) =>
@@ -77,19 +79,21 @@ class PitchRoomDetail {
         id: json["id"],
         roomName: json["room_name"],
         description: json["description"],
-        document1: json["document_1"],
-        document2: json["document_2"],
-        document3: json["document_3"],
-        document4: json["document_4"],
+        pitch_deck: json["pitch_deck"],
+        projections: json["projections"],
+        executive_summary: json["executive_summary"],
+        shared_user: json["shared_user"],
+        expiryDate: json["expiry_date"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "room_name": roomName,
         "description": description,
-        "document_1": document1,
-        "document_2": document2,
-        "document_3": document3,
-        "document_4": document4,
+        "pitch_deck": pitch_deck,
+        "projections": projections,
+        "executive_summary": executive_summary,
+        "shared_user": shared_user,
+        "expiry_date": expiryDate,
       };
 }

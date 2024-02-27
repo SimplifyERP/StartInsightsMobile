@@ -13,3 +13,5 @@ const String angledashboardRoute = 'angledashboard';
 const String investmentdealsRoute = 'investmentdeals';
 const String startupdealsRoute = 'startupdeals';
 const String pichroomRoute = 'pichroom';
+const String captableRoute = 'captable';
+const String profileRoute = 'profile';

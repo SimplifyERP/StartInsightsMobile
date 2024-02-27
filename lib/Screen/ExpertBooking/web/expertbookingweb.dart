@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:razorpay_web/razorpay_web.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/ExpertBookingResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
@@ -12,6 +13,7 @@ import 'package:startinsights/Repository/bookanexpert_repository.dart';
 import 'package:startinsights/Screen/ExpertBooking/bloc/expertbooking_bloc.dart';
 import 'package:startinsights/Screen/ExpertBooking/bloc/expertbooking_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
@@ -56,6 +58,7 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
   var endtime = "";
   var bookingid = "";
   var bookingamount = 0;
+  var userId = "";
   late Razorpay _razorpay;
 
   @override
@@ -67,6 +70,13 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    loadpref();
+  }
+
+  Future<void> loadpref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    userId = (prefs.getString(StorageServiceConstant.MUSEREMAIL) ?? '');
   }
 
   @override
@@ -96,7 +106,20 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          appBar: Appbar(mText: "", mUserImage: "", mFrom: 7, onPressed: () {}),
+          appBar: Appbar(
+            mText: "",
+            mUserImage: "",
+            mFrom: 7,
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, profileRoute);
+              //ErrorToast(context: context, text: "Test");
+            },
+            onPressedLogout: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, loginRoute);
+            },
+          ),
           body: BlocConsumer<ExpertBookingBloc, ExpertBookingStatus>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -817,18 +840,12 @@ class _ExpertBookingWebState extends State<ExpertBookingWeb> {
     //     msg: "SUCCESS: ${response.paymentId!}",
     //     toastLength: Toast.LENGTH_SHORT);
     //Loading.stop();
+
     Loading(mLoaderGif).start(context);
 
     apiService
-        .mExpertBookingpayment(
-            expertname,
-            servicedate,
-            starttime,
-            endtime,
-            bookingid,
-            "jagadeesan.a1104@gmail.com",
-            response.paymentId!,
-            bookingamount.toString())
+        .mExpertBookingpayment(expertname, servicedate, starttime, endtime,
+            bookingid, userId, response.paymentId!, bookingamount.toString())
         .then((value) async {
       print(value);
 

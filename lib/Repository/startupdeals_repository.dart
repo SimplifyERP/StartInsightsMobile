@@ -7,7 +7,9 @@ class StartupDealsRepository {
   Future<ApiResults> getStartupDealsData(
     String userId,
   ) async {
-    return await sl<MyDio>().postData(endPoint: getstartupdealAPI, data: {});
+    return await sl<MyDio>().postData(endPoint: getstartupdealAPI, data: {
+      'user_id': userId,
+    });
   }
 
   Future<ApiResults> getStartupDealsRedeem(
@@ -16,6 +18,18 @@ class StartupDealsRepository {
   ) async {
     return await sl<MyDio>().postData(endPoint: getdealsredeemcodeAPI, data: {
       'name': DealId,
+      'user_id': userId,
+    });
+  }
+
+  Future<ApiResults> Redeemstatusupdate(
+    String userId,
+    String DealId,
+  ) async {
+    return await sl<MyDio>()
+        .postData(endPoint: getredeemstatusupdateAPI, data: {
+      'user_id': userId,
+      'start_up_deal_id': DealId,
     });
   }
 }

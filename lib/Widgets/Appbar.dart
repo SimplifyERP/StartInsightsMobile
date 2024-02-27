@@ -4,6 +4,8 @@ import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
 
+import '../Utils/utils.dart';
+
 class Appbar extends StatelessWidget implements PreferredSizeWidget {
   Appbar({
     super.key,
@@ -11,11 +13,13 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
     required this.mUserImage,
     required this.mFrom,
     required this.onPressed,
+    required this.onPressedLogout,
   });
   final String mText;
   String mUserImage = "";
   int mFrom = 0;
   final VoidCallback onPressed;
+  final VoidCallback onPressedLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +135,118 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
                         ),
                         Container(
                           child: InkWell(
-                            onTap: onPressed,
+                            // onTap: onPressed,
+                            onTap: () {
+                              showDialog<void>(
+                                barrierDismissible: true,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return StatefulBuilder(
+                                      builder: (context1, setState) {
+                                    return Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: <Widget>[
+                                        const SizedBox(
+                                          height: 60,
+                                        ),
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 0, 10, 0),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: Colors.white,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.white,
+                                                  blurRadius: 1.0,
+                                                ),
+                                              ]),
+                                          height: 250,
+                                          width: 150,
+                                          child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Material(
+                                                      color: Colors.white,
+                                                      child: InkWell(
+                                                        onTap: onPressed,
+                                                        child: const Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Icon(
+                                                                // Based on passwordVisible state choose the icon
+                                                                Icons
+                                                                    .account_circle_outlined,
+                                                                color: kGray,
+                                                                size: 20,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              SidemenuText(
+                                                                  menuname:
+                                                                      "Profile")
+                                                            ]),
+                                                      )),
+                                                ),
+                                                const SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Material(
+                                                      color: Colors.white,
+                                                      child: InkWell(
+                                                        onTap: onPressedLogout,
+                                                        child: const Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Icon(
+                                                                // Based on passwordVisible state choose the icon
+                                                                Icons.logout,
+                                                                color: kGray,
+                                                                size: 20,
+                                                              ),
+                                                              SizedBox(
+                                                                width: 10,
+                                                              ),
+                                                              SidemenuText(
+                                                                  menuname:
+                                                                      "Logout")
+                                                            ]),
+                                                      )),
+                                                )
+                                              ]),
+                                        )
+                                      ],
+                                    );
+                                  });
+                                },
+                              );
+                            },
                             child: Row(children: [
                               CircleAvatar(
                                 radius: 20.0,

@@ -31,7 +31,10 @@ class ExpertBookingBloc extends Bloc<ExpertBookingEvent, ExpertBookingStatus> {
             .message!
             .bookAnExpert!;
 
-        emit(GetExpertBookingInfoSuccessState(mBookAnExpertList));
+        if (ExpertBookingResponse.fromJson(apiResults.data).message!.status ??
+            false) {
+          emit(GetExpertBookingInfoSuccessState(mBookAnExpertList));
+        }
 
         // hideLoading(mContext);
         Loading.stop();

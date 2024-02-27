@@ -9,6 +9,7 @@ import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/courselist_repository.dart';
 import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_event.dart';
 import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_state.dart';
+import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/screens.dart';
 
@@ -24,12 +25,13 @@ class StartupSchoolBloc extends Bloc<StartupSchoolEvent, StartupSchoolStatus> {
 
   void getCoursesListData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('counter', true);
+    final userId = (prefs.getString(StorageServiceConstant.MUSEREMAIL) ?? '');
 
     if (await checkNetworkStatus()) {
       //showLoading(mContext);
       Loading(mLoaderGif).start(mContext);
-      ApiResults apiResults = await CoursesListRepository().getCoursesList("");
+      ApiResults apiResults =
+          await CoursesListRepository().getCoursesList(userId);
       if (apiResults is ApiSuccess) {
         // mCoursesList =
         //     CoursesListResponse.fromJson(apiResults.data).message!.coursesList!;

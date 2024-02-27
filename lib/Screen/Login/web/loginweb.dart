@@ -28,6 +28,7 @@ class _LoginWebState extends State<LoginWeb> {
   bool checkedValue = false;
   List<UserType>? mUserTypeDataList;
   List<UserType> getUserType = <UserType>[];
+  bool passwordVisible = false;
   @override
   void initState() {
     super.initState();
@@ -278,7 +279,84 @@ class _LoginWebState extends State<LoginWeb> {
                                             ),
                                             Container(
                                               alignment: Alignment.center,
-                                              child: AuthFormField(
+                                              child: TextFormField(
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  controller:
+                                                      passwordController,
+                                                  obscureText: !passwordVisible,
+                                                  maxLines: 1,
+                                                  maxLength:
+                                                      16, //This will obscure text dynamically
+                                                  decoration: InputDecoration(
+                                                      counterText: "",
+                                                      labelText:
+                                                          Languages.of(context)!
+                                                              .mPassword,
+                                                      labelStyle: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontFamily:
+                                                              'ManropeMedium',
+                                                          color: kGray),
+                                                      hintText: Languages.of(context)!
+                                                          .mPassword,
+                                                      suffixIcon: IconButton(
+                                                        icon: Icon(
+                                                          // Based on passwordVisible state choose the icon
+                                                          passwordVisible
+                                                              ? Icons.visibility
+                                                              : Icons
+                                                                  .visibility_off,
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .primaryColorDark,
+                                                        ),
+                                                        onPressed: () {
+                                                          // Update the state i.e. toogle the state of passwordVisible variable
+                                                          setState(() {
+                                                            passwordVisible =
+                                                                !passwordVisible;
+                                                          });
+                                                        },
+                                                      ),
+                                                      alignLabelWithHint: true,
+                                                      hintStyle:
+                                                          const TextStyle(
+                                                        color: kGray,
+                                                      ),
+                                                      isDense:
+                                                          true, // Added this
+
+                                                      floatingLabelStyle: const TextStyle(
+                                                          color: Colors.blue),
+                                                      // floatingLabelBehavior: FloatingLabelBehavior.never,
+                                                      contentPadding:
+                                                          const EdgeInsets.fromLTRB(
+                                                              10, 15, 10, 15),
+                                                      enabledBorder: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  8),
+                                                          borderSide: const BorderSide(
+                                                              color:
+                                                                  kTextBorder,
+                                                              width: 1)),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide:
+                                                            const BorderSide(
+                                                                color:
+                                                                    kTextBorder,
+                                                                width: 1),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                      ),
+                                                      border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(5),
+                                                          borderSide: const BorderSide(width: 1, color: kTextBorder))))
+
+                                              /*AuthFormField(
                                                 controller: passwordController,
                                                 obscureText: true,
                                                 maxLines: 1,
@@ -295,7 +373,8 @@ class _LoginWebState extends State<LoginWeb> {
                                                         .mPassword,
                                                 mBorderView: false,
                                                 mImageView: true,
-                                              ),
+                                              )*/
+                                              ,
                                             ),
                                           ]),
                                         ),
@@ -426,35 +505,39 @@ class _LoginWebState extends State<LoginWeb> {
                                         const SizedBox(
                                           height: 40,
                                         ),
-                                        Container(
-                                            margin: const EdgeInsets.only(
-                                                top: 2.0,
-                                                left: 60.0,
-                                                right: 20.0),
-                                            child: const Align(
-                                              alignment: Alignment.center,
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Dash(
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      dashLength: 3,
-                                                      length: 250,
-                                                      dashColor: kGray),
-                                                  Text(" OR "),
-                                                  Dash(
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      dashLength: 3,
-                                                      length: 250,
-                                                      dashColor: kGray)
-                                                ],
-                                              ),
-                                            )),
+                                        Visibility(
+                                            visible: false,
+                                            child: Container(
+                                                margin: const EdgeInsets.only(
+                                                    top: 2.0,
+                                                    left: 60.0,
+                                                    right: 20.0),
+                                                child: const Align(
+                                                  alignment: Alignment.center,
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Dash(
+                                                          direction:
+                                                              Axis.horizontal,
+                                                          dashLength: 3,
+                                                          length: 250,
+                                                          dashColor: kGray),
+                                                      Text(" OR "),
+                                                      Dash(
+                                                          direction:
+                                                              Axis.horizontal,
+                                                          dashLength: 3,
+                                                          length: 250,
+                                                          dashColor: kGray)
+                                                    ],
+                                                  ),
+                                                ))),
                                       ],
                                     ),
                                   ))),

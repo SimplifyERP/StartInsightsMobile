@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:html' as html;
 
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' show Client;
+import 'package:intl/intl.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CommonResponse.dart';
 import 'package:startinsights/Model/GetuserswithroleResponse.dart';
@@ -44,6 +47,8 @@ class _PitchroomState extends State<PitchroomWeb> {
       TextEditingController();
   late PlatformFile objFile;
   List<PlatformFile>? _paths;
+
+  Client client = Client();
 
   String mPitchdeck = "", mProjections = "", mExecutivesummary = "";
   String mPitchdeckExt = "", mProjectionsExt = "", mExecutivesummaryExt = "";
@@ -94,8 +99,20 @@ class _PitchroomState extends State<PitchroomWeb> {
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          appBar:
-              Appbar(mText: "TExt", mUserImage: "", mFrom: 7, onPressed: () {}),
+          appBar: Appbar(
+            mText: "TExt",
+            mUserImage: "",
+            mFrom: 7,
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, profileRoute);
+              //ErrorToast(context: context, text: "Test");
+            },
+            onPressedLogout: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, loginRoute);
+            },
+          ),
           body: BlocConsumer<PitchroomBloc, PitchroomStatus>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -175,12 +192,21 @@ class _PitchroomState extends State<PitchroomWeb> {
                                               (index) {
                                                 final mgetPitchroomList =
                                                     mPitchroomList[index];
-                                                return PitchRoomItem(
+                                                return GestureDetector(
+                                                  child: PitchRoomItem(
                                                     mPitchRoomDetail:
                                                         mgetPitchroomList,
                                                     mPitchroomBloc:
                                                         mPitchroomBloc,
-                                                    context: context);
+                                                    context: context,
+                                                    onPressed: () {
+                                                      OnLoadViewPitchRoom(
+                                                          mPitchroomList[
+                                                              index]);
+                                                    },
+                                                  ),
+                                                  onTap: () {},
+                                                );
                                               },
                                             ),
                                           )),
@@ -300,6 +326,519 @@ class _PitchroomState extends State<PitchroomWeb> {
               return Container();
             },
           )),
+    );
+  }
+
+  void OnLoadViewPitchRoom(PitchRoomDetail mPitchroomList) {
+    showDialog(
+      context: context,
+      builder: (context2) {
+        String contentText = "Content of Dialog";
+        return StatefulBuilder(
+          builder: (context1, setState) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              //  title: Center(child: Text("Information")),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5))),
+
+              content: SizedBox(
+                width: MediaQuery.of(context1).size.width - 20,
+                height: MediaQuery.of(context1).size.height - 10,
+                child: SingleChildScrollView(
+                    child: Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                              flex: 9,
+                              child: Text(
+                                mPitchroomList.roomName ?? "",
+                                style: const TextStyle(
+                                    fontFamily: 'ManropeBold',
+                                    fontSize: 20,
+                                    color: kTextColorTwo),
+                              )),
+                          Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context1);
+                                  },
+                                  child: Image.asset(
+                                    'assets/ic_closecross.png',
+                                    height: 30,
+                                  ),
+                                ),
+                              ))
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                Languages.of(context)!.mRoomName,
+                                style: const TextStyle(
+                                    fontFamily: 'ManropeBold',
+                                    fontSize: 20,
+                                    color: kTextColorTwo),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                mPitchroomList.roomName ?? "",
+                                style: const TextStyle(
+                                    fontFamily: 'ManropeRegular',
+                                    fontSize: 16,
+                                    color: kTextGrayColor),
+                              ),
+                            ),
+                          ]),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                Languages.of(context)!.mDescription,
+                                style: const TextStyle(
+                                    fontFamily: 'ManropeBold',
+                                    fontSize: 20,
+                                    color: kTextColorTwo),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              mPitchroomList.description ?? "",
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeRegular',
+                                  fontSize: 16,
+                                  color: kTextGrayColor),
+                            ),
+                          ]),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                Languages.of(context)!.mUploadedDocument,
+                                style: const TextStyle(
+                                    fontFamily: 'ManropeBold',
+                                    fontSize: 20,
+                                    color: kTextColorTwo),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width:
+                                        MediaQuery.of(context).size.width / 4,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.white,
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            blurRadius: 1.0,
+                                          ),
+                                        ]),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                              Languages.of(context)!
+                                                  .mpitchdeckfiles,
+                                              style: const TextStyle(
+                                                  fontFamily: 'ManropeSemiBold',
+                                                  fontSize: 18,
+                                                  color: mBlackColor)),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          RichText(
+                                            overflow: TextOverflow.ellipsis,
+                                            text: TextSpan(
+                                                style: const TextStyle(
+                                                    fontFamily:
+                                                        'ManropeRegular',
+                                                    fontSize: 14,
+                                                    color:
+                                                        kprogressbarpitchcraft),
+                                                text: ((mPitchroomList
+                                                                .pitch_deck ??
+                                                            "")
+                                                        .isEmpty)
+                                                    ? ""
+                                                    : (mPitchroomList.pitch_deck ??
+                                                                    "")
+                                                                .length >
+                                                            40
+                                                        ? '${(mPitchroomList.pitch_deck ?? "").substring(0, 40)}...'
+                                                        : (mPitchroomList
+                                                                .pitch_deck ??
+                                                            "")),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              if (((mPitchroomList.pitch_deck ??
+                                                      "")
+                                                  .isNotEmpty)) {
+                                                html.window.open(
+                                                    mPitchroomList.pitch_deck ??
+                                                        "",
+                                                    'new tab');
+                                              }
+                                            }, // Handle your callback
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 200,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: kColorTwo,
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                      color: kColorTwo,
+                                                      blurRadius: 1.0,
+                                                    ),
+                                                  ]),
+                                              child: Text(
+                                                  ((mPitchroomList.pitch_deck ??
+                                                              "")
+                                                          .isNotEmpty)
+                                                      ? Languages.of(context)!
+                                                          .mPreview
+                                                      : Languages.of(context)!
+                                                          .mnoPreview,
+                                                  style:
+                                                      const TextStyle(
+                                                          fontFamily:
+                                                              'ManropeSemiBold',
+                                                          fontSize: 16,
+                                                          color: mBlackColor)),
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width:
+                                        MediaQuery.of(context).size.width / 4,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.white,
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            blurRadius: 1.0,
+                                          ),
+                                        ]),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                              Languages.of(context)!
+                                                  .mprojectionsfiles,
+                                              style: const TextStyle(
+                                                  fontFamily: 'ManropeSemiBold',
+                                                  fontSize: 18,
+                                                  color: mBlackColor)),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          RichText(
+                                            overflow: TextOverflow.ellipsis,
+                                            text: TextSpan(
+                                                style: const TextStyle(
+                                                    fontFamily:
+                                                        'ManropeRegular',
+                                                    fontSize: 14,
+                                                    color:
+                                                        kprogressbarpitchcraft),
+                                                text: ((mPitchroomList
+                                                                .projections ??
+                                                            "")
+                                                        .isEmpty)
+                                                    ? ""
+                                                    : (mPitchroomList.projections ??
+                                                                    "")
+                                                                .length >
+                                                            40
+                                                        ? '${(mPitchroomList.projections ?? "").substring(0, 40)}...'
+                                                        : (mPitchroomList
+                                                                .projections ??
+                                                            "")),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          InkWell(
+                                            onTap: () async {
+                                              if (((mPitchroomList
+                                                          .projections ??
+                                                      "")
+                                                  .isNotEmpty)) {
+                                                html.window.open(
+                                                    mPitchroomList
+                                                            .projections ??
+                                                        "",
+                                                    'new tab');
+                                              }
+                                            }, // Handle your callback
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 200,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: kColorTwo,
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                      color: kColorTwo,
+                                                      blurRadius: 1.0,
+                                                    ),
+                                                  ]),
+                                              child: Text(
+                                                  ((mPitchroomList.projections ??
+                                                              "")
+                                                          .isNotEmpty)
+                                                      ? Languages.of(context)!
+                                                          .mPreview
+                                                      : Languages.of(context)!
+                                                          .mnoPreview,
+                                                  style:
+                                                      const TextStyle(
+                                                          fontFamily:
+                                                              'ManropeSemiBold',
+                                                          fontSize: 16,
+                                                          color: mBlackColor)),
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width:
+                                        MediaQuery.of(context).size.width / 4,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color: Colors.white,
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            blurRadius: 1.0,
+                                          ),
+                                        ]),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                              Languages.of(context)!
+                                                  .mexecutivesummaryfiles,
+                                              style: const TextStyle(
+                                                  fontFamily: 'ManropeSemiBold',
+                                                  fontSize: 18,
+                                                  color: mBlackColor)),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          RichText(
+                                            overflow: TextOverflow.ellipsis,
+                                            text: TextSpan(
+                                                style: const TextStyle(
+                                                    fontFamily:
+                                                        'ManropeRegular',
+                                                    fontSize: 14,
+                                                    color:
+                                                        kprogressbarpitchcraft),
+                                                text: ((mPitchroomList
+                                                                .executive_summary ??
+                                                            "")
+                                                        .isEmpty)
+                                                    ? ""
+                                                    : (mPitchroomList.executive_summary ??
+                                                                    "")
+                                                                .length >
+                                                            40
+                                                        ? '${(mPitchroomList.executive_summary ?? "").substring(0, 40)}...'
+                                                        : (mPitchroomList
+                                                                .executive_summary ??
+                                                            "")),
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          InkWell(
+                                            onTap: () async {
+                                              if (((mPitchroomList
+                                                          .executive_summary ??
+                                                      "")
+                                                  .isNotEmpty)) {
+                                                html.window.open(
+                                                    mPitchroomList
+                                                            .executive_summary ??
+                                                        "",
+                                                    'new tab');
+                                              }
+                                            }, // Handle your callback
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              width: 200,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  color: kColorTwo,
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                      color: kColorTwo,
+                                                      blurRadius: 1.0,
+                                                    ),
+                                                  ]),
+                                              child: Text(
+                                                  ((mPitchroomList.executive_summary ??
+                                                              "")
+                                                          .isNotEmpty)
+                                                      ? Languages.of(context)!
+                                                          .mPreview
+                                                      : Languages.of(context)!
+                                                          .mnoPreview,
+                                                  style:
+                                                      const TextStyle(
+                                                          fontFamily:
+                                                              'ManropeSemiBold',
+                                                          fontSize: 16,
+                                                          color: mBlackColor)),
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
+                                ]),
+                          ]),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                Languages.of(context)!.mshareduser,
+                                style: const TextStyle(
+                                    fontFamily: 'ManropeBold',
+                                    fontSize: 20,
+                                    color: kTextColorTwo),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              mPitchroomList.shared_user ?? "",
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeRegular',
+                                  fontSize: 16,
+                                  color: kTextGrayColor),
+                            ),
+                          ]),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                Languages.of(context)!.mexpirydate,
+                                style: const TextStyle(
+                                    fontFamily: 'ManropeBold',
+                                    fontSize: 20,
+                                    color: kTextColorTwo),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              mPitchroomList.expiryDate ?? "",
+                              style: const TextStyle(
+                                  fontFamily: 'ManropeRegular',
+                                  fontSize: 16,
+                                  color: kTextGrayColor),
+                            ),
+                          ]),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
+                  ),
+                )),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -529,15 +1068,17 @@ class _PitchroomState extends State<PitchroomWeb> {
                                           const SizedBox(
                                             height: 10,
                                           ),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              RichText(
-                                                overflow: TextOverflow.ellipsis,
-                                                text: TextSpan(
+                                          Container(
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                RichText(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  text: TextSpan(
                                                     style: const TextStyle(
                                                         fontFamily:
                                                             'ManropeRegular',
@@ -547,9 +1088,14 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                     text: (mPitchdeckFileName
                                                             .isEmpty)
                                                         ? ""
-                                                        : mPitchdeckFileName),
-                                              )
-                                              /* Text(
+                                                        : mPitchdeckFileName
+                                                                    .length >
+                                                                30
+                                                            ? '${mPitchdeckFileName.substring(0, 30)}...'
+                                                            : mPitchdeckFileName,
+                                                  ),
+                                                )
+                                                /* Text(
                                                   (mPitchdeckFileName.isEmpty)
                                                       ? ""
                                                       : mPitchdeckFileName,
@@ -558,27 +1104,29 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                           'ManropeRegular',
                                                       fontSize: 14,
                                                       color: kColorOne))*/
-                                              ,
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    mPitchdeck = "";
-                                                    mPitchdeckExt = "";
-                                                    mPitchdeckFileName = "";
-                                                  });
-                                                },
-                                                child: Icon(Icons.delete_sharp,
-                                                    size: (mPitchdeckFileName
-                                                            .isEmpty)
-                                                        ? 0
-                                                        : 20,
-                                                    color:
-                                                        kprogressbarpitchcraft),
-                                              )
-                                            ],
+                                                ,
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      mPitchdeck = "";
+                                                      mPitchdeckExt = "";
+                                                      mPitchdeckFileName = "";
+                                                    });
+                                                  },
+                                                  child: Icon(
+                                                      Icons.delete_sharp,
+                                                      size: (mPitchdeckFileName
+                                                              .isEmpty)
+                                                          ? 0
+                                                          : 20,
+                                                      color:
+                                                          kprogressbarpitchcraft),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ]),
                                   ),
@@ -665,16 +1213,21 @@ class _PitchroomState extends State<PitchroomWeb> {
                                               RichText(
                                                 overflow: TextOverflow.ellipsis,
                                                 text: TextSpan(
-                                                    style: const TextStyle(
-                                                        fontFamily:
-                                                            'ManropeRegular',
-                                                        fontSize: 14,
-                                                        color:
-                                                            kprogressbarpitchcraft),
-                                                    text: (mProjectionsFileName
-                                                            .isEmpty)
-                                                        ? ""
-                                                        : mProjectionsFileName),
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'ManropeRegular',
+                                                      fontSize: 14,
+                                                      color:
+                                                          kprogressbarpitchcraft),
+                                                  text: (mProjectionsFileName
+                                                          .isEmpty)
+                                                      ? ""
+                                                      : mProjectionsFileName
+                                                                  .length >
+                                                              30
+                                                          ? '${mProjectionsFileName.substring(0, 30)}...'
+                                                          : mProjectionsFileName,
+                                                ),
                                               )
                                               /*Text(
                                                   (mProjectionsFileName.isEmpty)
@@ -687,7 +1240,7 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                       color:
                                                           kprogressbarpitchcraft))*/
                                               ,
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 10,
                                               ),
                                               InkWell(
@@ -802,7 +1355,11 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                     text: (mExecutivesummaryFileName
                                                             .isEmpty)
                                                         ? ""
-                                                        : mExecutivesummaryFileName),
+                                                        : mExecutivesummaryFileName
+                                                                    .length >
+                                                                30
+                                                            ? '${mExecutivesummaryFileName.substring(0, 30)}...'
+                                                            : mExecutivesummaryFileName),
                                               )
                                               /* Text(
                                                   (mExecutivesummaryFileName
@@ -815,7 +1372,7 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                       fontSize: 14,
                                                       color: kColorOne))*/
                                               ,
-                                              SizedBox(
+                                              const SizedBox(
                                                 width: 10,
                                               ),
                                               InkWell(
@@ -1096,108 +1653,136 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                 mButtonname:
                                                     Languages.of(context)!
                                                         .mSubmit,
-                                                onpressed: () {
-                                                  Loading(mLoaderGif)
-                                                      .start(context1);
-
-                                                  _apiService1.CreatePitchroom(
-                                                          "",
-                                                          mRoomnameController
-                                                              .text,
-                                                          mmShortDescriptionController
-                                                              .text,
-                                                          mSelectPeople,
-                                                          mPitchdeck,
-                                                          mPitchdeckExt,
-                                                          mProjections,
-                                                          mProjectionsExt,
-                                                          mExecutivesummary,
-                                                          mExecutivesummaryExt,
-                                                          "21-02-2024")
-                                                      .then((value) async {
-                                                    print(value);
-
-                                                    if (value is ApiSuccess) {
-                                                      Loading.stop();
-
-                                                      if (CommonResponse
-                                                                  .fromJson(value
-                                                                      .data)!
-                                                              .message!
-                                                              .status ??
-                                                          false) {
-                                                        Navigator.pop(context1);
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: CommonResponse
-                                                                        .fromJson(
-                                                                            value.data)!
-                                                                    .message!
-                                                                    .message ??
-                                                                "");
-                                                      } else {
-                                                        Navigator.pop(context1);
-                                                        ErrorToast(
-                                                            context: context,
-                                                            text: CommonResponse
-                                                                        .fromJson(
-                                                                            value.data)!
-                                                                    .message!
-                                                                    .message ??
-                                                                "");
-                                                      }
-                                                    } else if (value
-                                                        is ApiFailure) {
-                                                      Loading.stop();
-                                                    }
-                                                  });
-                                                  // ErrorToast(
-                                                  //     context: context,
-                                                  //     text: "AAA");
-
-                                                  /* if (mRoomnameController
+                                                onpressed: () async {
+                                                  if (mRoomnameController
                                                       .text.isEmpty) {
-                                                    ErrorToast(
-                                                        context: context2,
-                                                        text: Languages.of(
-                                                                context)!
+                                                    showAlertDialog(
+                                                        context1,
+                                                        Languages.of(context)!
                                                             .menterroomname);
                                                   } else if (mmShortDescriptionController
                                                       .text.isEmpty) {
-                                                    ErrorToast(
-                                                        context: context,
-                                                        text: Languages.of(
-                                                                context)!
+                                                    showAlertDialog(
+                                                        context1,
+                                                        Languages.of(context)!
                                                             .menterroomdescription);
                                                   } else if (mPitchdeck
                                                       .isEmpty) {
-                                                    ErrorToast(
-                                                        context: context,
-                                                        text: Languages.of(
-                                                                context)!
+                                                    showAlertDialog(
+                                                        context1,
+                                                        Languages.of(context)!
                                                             .mselectpitchdeckfile);
                                                   } else if (mProjections
                                                       .isEmpty) {
-                                                    ErrorToast(
-                                                        context: context,
-                                                        text: Languages.of(
-                                                                context)!
+                                                    showAlertDialog(
+                                                        context1,
+                                                        Languages.of(context)!
                                                             .mselectprojectionsfile);
                                                   } else if (mExecutivesummary
                                                       .isEmpty) {
-                                                    ErrorToast(
-                                                        context: context,
-                                                        text: Languages.of(
-                                                                context)!
+                                                    showAlertDialog(
+                                                        context1,
+                                                        Languages.of(context)!
                                                             .mselectexecutivesummaryfile);
                                                   } else if (mSelectPeople
                                                       .isEmpty) {
-                                                    ErrorToast(
-                                                        context: context,
-                                                        text: Languages.of(
-                                                                context)!
+                                                    showAlertDialog(
+                                                        context1,
+                                                        Languages.of(context)!
                                                             .maddpeoples);
-                                                  }*/
+                                                  } else {
+                                                    final DateFormat formatter =
+                                                        DateFormat(
+                                                            'dd-MM-yyyy');
+                                                    final String formatted =
+                                                        formatter.format(
+                                                            _selectedDay!);
+
+                                                    Loading(mLoaderGif)
+                                                        .start(context1);
+                                                    _apiService1.CreatePitchroom(
+                                                            "",
+                                                            mRoomnameController
+                                                                .text,
+                                                            mmShortDescriptionController
+                                                                .text,
+                                                            mSelectPeople,
+                                                            mPitchdeck,
+                                                            mPitchdeckExt,
+                                                            mProjections,
+                                                            mProjectionsExt,
+                                                            mExecutivesummary,
+                                                            mExecutivesummaryExt,
+                                                            formatted)
+                                                        .then((value) async {
+                                                      if (value is ApiSuccess) {
+                                                        Loading.stop();
+
+                                                        if (CommonResponse
+                                                                    .fromJson(value
+                                                                        .data)!
+                                                                .message!
+                                                                .status ??
+                                                            false) {
+                                                          Navigator.pop(
+                                                              context1);
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: CommonResponse
+                                                                          .fromJson(
+                                                                              value.data)!
+                                                                      .message!
+                                                                      .message ??
+                                                                  "");
+
+                                                          _apiService1
+                                                              .getPitchroomData(
+                                                            "",
+                                                          )
+                                                              .then(
+                                                                  (value) async {
+                                                            if (value
+                                                                is ApiSuccess) {
+                                                              Loading.stop();
+
+                                                              if (CommonResponse
+                                                                          .fromJson(
+                                                                              value.data)!
+                                                                      .message!
+                                                                      .status ??
+                                                                  false) {
+                                                                setState(
+                                                                  () {
+                                                                    mPitchroomList = PitchroomlistResponse.fromJson(
+                                                                            value.data)
+                                                                        .message!
+                                                                        .pitchRoomDetails!;
+                                                                  },
+                                                                );
+                                                              } else {}
+                                                            } else if (value
+                                                                is ApiFailure) {
+                                                              Loading.stop();
+                                                            }
+                                                          });
+                                                        } else {
+                                                          Navigator.pop(
+                                                              context1);
+                                                          ErrorToast(
+                                                              context: context,
+                                                              text: CommonResponse
+                                                                          .fromJson(
+                                                                              value.data)!
+                                                                      .message!
+                                                                      .message ??
+                                                                  "");
+                                                        }
+                                                      } else if (value
+                                                          is ApiFailure) {
+                                                        Loading.stop();
+                                                      }
+                                                    });
+                                                  }
                                                 },
                                                 mSelectcolor: mBtnColor,
                                                 mTextColor: mWhiteColor,
@@ -1226,7 +1811,7 @@ class _PitchroomState extends State<PitchroomWeb> {
   void pickFiles(
       int mFrom, StateSetter setState1, BuildContext context1) async {
     try {
-      Loading(mLoaderGif).start(context1);
+      // Loading(mLoaderGif).start(context1);
       _paths = (await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowMultiple: false,
@@ -1237,10 +1822,12 @@ class _PitchroomState extends State<PitchroomWeb> {
           ?.files;
     } on PlatformException catch (e) {
       log('Unsupported operation' + e.toString());
+      // Loading.stop();
     } catch (e) {
       log(e.toString());
+      //Loading.stop();
     }
-
+    //Loading.stop();
     // setState1((){});
     setState1(() {
       if (_paths != null) {
@@ -1249,29 +1836,62 @@ class _PitchroomState extends State<PitchroomWeb> {
           var aa = _paths!.first.bytes!;
           var aaa = _paths!.first.bytes!;
           print(_paths!.first.extension);
-          Uint8List _bytes = aaa;
-          String _base64String = base64.encode(_bytes);
-          // print(_base64String);
+
+          //File asa = File(_paths!.first.bytes!, _paths!.first.name);
 
           if (mFrom == 1) {
-            mPitchdeck = base64.encode(_bytes);
+            // mPitchdeck = base64Encode(_paths!.first.bytes!);
+
+            mPitchdeck = base64Encode(_paths!.first.bytes!);
             mPitchdeckExt = _paths!.first.extension!;
             mPitchdeckFileName = _paths!.first.name!;
             mPitchdeckFileName = _paths!.first.name!;
           } else if (mFrom == 2) {
-            mProjections = base64.encode(_bytes);
+            mProjections = base64Encode(_paths!.first.bytes!);
             mProjectionsExt = _paths!.first.extension!;
             mProjectionsFileName = _paths!.first.name!;
           } else if (mFrom == 3) {
-            mExecutivesummary = base64.encode(_bytes);
+            mExecutivesummary = base64Encode(_paths!.first.bytes!);
             mExecutivesummaryExt = _paths!.first.extension!;
             mExecutivesummaryFileName = _paths!.first.name!;
           }
-          Loading.stop();
+          //  Loading.stop();
           // ApiClient.uploadFile(_paths!.first.bytes!, _paths!.first.name);
         }
       }
     });
+  }
+
+  showAlertDialog(BuildContext context, String message) {
+    // set up the button
+    Widget okButton = TextButton(
+      child: const Text("Ok",
+          style: TextStyle(
+              fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor)),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        message,
+        style: const TextStyle(
+            fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor),
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   void OnLoadDialogUser(List<String> mUserList, BuildContext mGetcontext,

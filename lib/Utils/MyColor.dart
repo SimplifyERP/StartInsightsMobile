@@ -31,6 +31,17 @@ Color mCardColorOne = const Color(0xFF276CEC).withOpacity(0.1);
 Color mCardDashboard = const Color(0xFFdfe9fc);
 
 Color mCardColorThree = const Color(0x999FBBFA);
+Color mTabelHeader = const Color(0xffA184C5);
+
+const Color mColorOne = Color(0xff9747FF);
+const Color mColorTwo = Color(0xffFCA997);
+const Color mColorThree = Color(0xffB91293);
+const Color mColorFour = Color(0xffC3E1FF);
+const Color mColorFive = Color(0xffFB4E22);
+const Color mColorSix = Color(0xffF3A8E2);
+const Color mColorSeven = Color(0xffFFD7A3);
+const Color mColorEigth = Color(0xfff8f9fa);
+const Color mTabelColor = Color(0xffA184C5);
 
 // const Color defaultTwitterColor = Color(0xff00acee);
 // Color defaultLightWhite = mPrimaryColor.withOpacity(0.1);

@@ -29,7 +29,21 @@ class PitchroomRepository {
     String executivesummarydoctype,
     String expirydate,
   ) async {
-    return await sl<MyDio>().postData(endPoint: createpitchroomAPI, data: {
+    final map = <String, dynamic>{};
+    map['room_name'] = roomname;
+    map['description'] = description;
+    map['shared_user'] = shareduser;
+    map['pitch_deck'] = pitchdeck;
+    map['pitch_deck_doc_type'] = pitchdeckdoctype;
+    map['projections'] = projections;
+    map['projection_doc_type'] = projectiondoctype;
+    map['executive_summary'] = executivesummary;
+    map['executive_summary_doc_type'] = executivesummarydoctype;
+    map['expiry_date'] = expirydate;
+
+    return await sl<MyDio>().postData(endPoint: createpitchroomAPI, data: map
+
+        /*{
       'room_name': roomname,
       'description': description,
       'shared_user': shareduser,
@@ -40,6 +54,8 @@ class PitchroomRepository {
       'executive_summary': executivesummary,
       'executive_summary_doc_type': executivesummarydoctype,
       'expiry_date': expirydate
-    });
+    }*/
+
+        );
   }
 }

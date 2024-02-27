@@ -6,4 +6,5 @@ class StorageServiceConstant {
   static const String MUSEREMOBILE = 'musermobile';
   static const String MLOGINSTATUS = 'mloginstatus';
   static const String MCLICKPITCH = 'mclickpitch';
+  static const String MUSERINFO = 'muserinfo';
 }

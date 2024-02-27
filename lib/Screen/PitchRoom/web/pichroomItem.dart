@@ -10,10 +10,12 @@ class PitchRoomItem extends StatelessWidget {
   final PitchRoomDetail mPitchRoomDetail;
   final PitchroomBloc mPitchroomBloc;
   final BuildContext context;
+  final VoidCallback onPressed;
   PitchRoomItem({
     required this.mPitchRoomDetail,
     required this.mPitchroomBloc,
     required this.context,
+    required this.onPressed,
     super.key,
   });
 
@@ -106,7 +108,7 @@ class PitchRoomItem extends StatelessWidget {
                                       child: PrimaryButton(
                                           mButtonname:
                                               Languages.of(context)!.mViewRoom,
-                                          onpressed: () {},
+                                          onpressed: onPressed,
                                           mSelectcolor: mWhiteColor,
                                           mTextColor: mBtnColor,
                                           mFontSize: 16,

@@ -73,6 +73,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  charcode:
+    dependency: transitive
+    description:
+      name: charcode
+      sha256: fb98c0f6d12c920a02ee2d998da788bca066ca5f148492b7085ee23372b12306
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.1"
   chewie:
     dependency: "direct main"
     description:
@@ -153,6 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.3"
+  data_table_2:
+    dependency: "direct main"
+    description:
+      name: data_table_2
+      sha256: cec4010dd756bd7d0cc3eb8a30932b8109608132c6c8d643e80ea412d3e51a9c
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.10"
   dbus:
     dependency: transitive
     description:
@@ -365,6 +381,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.2.4"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
   geocoding:
     dependency: "direct main"
     description:
@@ -590,7 +614,7 @@ packages:
     source: hosted
     version: "0.8.9+3"
   image_picker_for_web:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image_picker_for_web
       sha256: e2423c53a68b579a7c37a1eda967b8ae536c3d98518e5db95ca1fe5719a730a3
@@ -869,6 +893,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
+  pod_player:
+    dependency: "direct main"
+    description:
+      name: pod_player
+      sha256: fa8deb5f4f5e705e83b46455d3a0478bb8975f52a0dbc4aff1e13605e689e3c9
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   provider:
     dependency: "direct main"
     description:
@@ -1114,6 +1146,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.2"
+  universal_html:
+    dependency: transitive
+    description:
+      name: universal_html
+      sha256: "56536254004e24d9d8cfdb7dbbf09b74cf8df96729f38a2f5c238163e3d58971"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.4"
   universal_io:
     dependency: transitive
     description:
@@ -1362,6 +1402,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.3.0"
+  youtube_explode_dart:
+    dependency: transitive
+    description:
+      name: youtube_explode_dart
+      sha256: "98fd11b51adbbca76cbdb17f560168f1d7a9835cecceea965f49eb1e5eed155c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   youtube_player_flutter:
     dependency: "direct main"
     description:

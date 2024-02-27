@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/StartupDealsResponse.dart';
 import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_bloc.dart';
 import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_state.dart';
 import 'package:startinsights/Screen/StartupDeals/web/startupdealsItem.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Widgets/Appbar.dart';
 import 'package:startinsights/Widgets/sidemenu.dart';
@@ -23,9 +25,17 @@ class _StartupDealsState extends State<StartupDealsWeb> {
   bool checkedValue = false;
   List<Datum> mStartupDealsList = [];
   String mUserImage = "";
+  String userId = "";
   @override
   void initState() {
     super.initState();
+    Loadpref();
+  }
+
+  Future<void> Loadpref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    userId = (prefs.getString(StorageServiceConstant.MUSEREMAIL) ?? '');
   }
 
   @override
@@ -54,8 +64,20 @@ class _StartupDealsState extends State<StartupDealsWeb> {
       child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          appBar:
-              Appbar(mText: "TExt", mUserImage: "", mFrom: 7, onPressed: () {}),
+          appBar: Appbar(
+            mText: "TExt",
+            mUserImage: "",
+            mFrom: 7,
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, profileRoute);
+              //ErrorToast(context: context, text: "Test");
+            },
+            onPressedLogout: () {
+              Navigator.of(context, rootNavigator: true).pop();
+              Navigator.pushReplacementNamed(context, loginRoute);
+            },
+          ),
           body: BlocConsumer<StartupdealsBloc, StartupdealsStatus>(
             listener: (context, state) {},
             builder: (context, state) {
@@ -136,11 +158,13 @@ class _StartupDealsState extends State<StartupDealsWeb> {
                                                 final mgetStartupDealsList =
                                                     mStartupDealsList[index];
                                                 return StartupDealsItem(
-                                                    mDatumList:
-                                                        mgetStartupDealsList,
-                                                    mStartupdealsBloc:
-                                                        mStartupdealsBloc,
-                                                    context: context);
+                                                  mDatumList:
+                                                      mgetStartupDealsList,
+                                                  mStartupdealsBloc:
+                                                      mStartupdealsBloc,
+                                                  context: context,
+                                                  userId: userId,
+                                                );
                                               },
                                             ),
                                           )),

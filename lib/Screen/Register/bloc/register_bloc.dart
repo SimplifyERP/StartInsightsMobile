@@ -1,14 +1,15 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:bloc/bloc.dart';
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Model/CommonResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/register_repo.dart';
 import 'package:startinsights/Screen/Register/bloc/register_event.dart';
 import 'package:startinsights/Screen/Register/bloc/register_state.dart';
+import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
+import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Utils/utils.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
@@ -25,13 +26,35 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
     required String password,
     required String usertype,
     required String logintype,
+    required String companyname,
+    required String linkedin,
   }) async {
     Loading(mLoaderGif).start(mContext);
-    ApiResults apiResults = await RegisterRepo().createRegisterData(
-        firstname, userid, phoneno, password, usertype, logintype);
+    ApiResults apiResults = await RegisterRepo().createRegisterData(firstname,
+        userid, phoneno, password, usertype, logintype, companyname, linkedin);
     if (apiResults is ApiSuccess) {
       Loading.stop();
       //  handleLoginResponse(apiResults.data, apiResults.statusCode);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString(StorageServiceConstant.MUSERNAME, firstname);
+      await prefs.setString(StorageServiceConstant.MUSEREMAIL, userid);
+      await prefs.setString(StorageServiceConstant.MUSEREIMAGE, "");
+      await prefs.setString(StorageServiceConstant.MUSEREMOBILE, phoneno);
+
+      /*sl<StorageService>()
+          .setString(StorageServiceConstant.MUSERNAME, firstname);
+
+      sl<StorageService>().setString(StorageServiceConstant.MUSEREMAIL, userid);
+
+      sl<StorageService>().setString(StorageServiceConstant.MUSEREIMAGE, "");
+
+      sl<StorageService>()
+          .setString(StorageServiceConstant.MUSEREMOBILE, phoneno);*/
+
+      Navigator.pushReplacementNamed(mContext, dashboardRoute);
+
       SucessToast(
           context: mContext,
           text: CommonResponse.fromJson(apiResults.data).message!.message!);
