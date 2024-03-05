@@ -15,3 +15,4 @@ const String startupdealsRoute = 'startupdeals';
 const String pichroomRoute = 'pichroom';
 const String captableRoute = 'captable';
 const String profileRoute = 'profile';
+const String searchinvestorRoute = 'searchinvestor';

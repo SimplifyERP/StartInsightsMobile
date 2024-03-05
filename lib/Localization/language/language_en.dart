@@ -46,11 +46,9 @@ class LanguageEn extends Languages {
   String get mLivechat => "Live chat";
   String get mUpgrade => "Upgrade";
 
-  String get mDashboard => "Dashboard";
   String get mCommunityFeed => "Community Feed";
   String get mPitchCraft => "Pitch Craft";
   String get mMyServices => "My Services";
-  String get mServices => "Services";
   String get mStartupSchool => "Startup School";
   String get mBookanExpert => "Book an Expert";
   String get mHireourteam => "Hire our team";
@@ -217,6 +215,47 @@ class LanguageEn extends Languages {
   String get mlinkedin => "Linkedin URL";
   String get mcompanyname => "Company Name";
   String get mentercompanyname => "Enter Company Name";
+  String get search => "Search";
+
   String get mvideomessage =>
       "Click left arrow(->) forward 10 second, click right arrow(<-) backward 10 second. Exit full screen double press the ESC button";
+
+  String get mGeography => "Geography";
+  String get minvestors => "investors";
+  String get mChecks => "Checks";
+  String get mStages => "Stages";
+  String get mInvestmentthesis => "Investment thesis";
+  String get mOpenrate => "Open rate";
+
+  String get mHireOurExperts => "Hire Our Experts";
+
+  String get mHireOurExpertsMsg =>
+      "When you enter into any new area of science, you almost always find.";
+  String get mFundraisingExperts => "Fundraising Experts";
+
+  //Sidemenu
+  String get mDashboard => "Dashboard";
+  String get mFundraising => "Fundraising";
+  String get mResources => "Resources";
+  String get mServices => "Services";
+  String get mTools => "Tools";
+  String get mHi => "Hi  ";
+  String get mWelcomeback => "Welcome Back 🥳";
+  String get mRecommendedInvestors => "Recommended Investors for you,";
+  String get mCheckyourFundability => "Check your Fundability";
+  String get mCheckyourScore => "Check your Score";
+  String get mReviewYouPitchDeck => "Review You Pitch Deck";
+  String get mBuildyourPitchroom => "Build your Pitch-room";
+  String get mUploadyourpitchdeckordraganddrophere =>
+      "Upload your pitch deck or drag and drop here!";
+  String get mAcceptsPDFfilesupto => "Accepts PDF files up to 10MB";
+  String get mSearchInvestors => "Search Investors";
+  String get mFundingCRM => "Funding CRM";
+  String get mFundraisinglink => "Dashboard > Fundraising > ";
+  String get msearchhint => "Search investor by any verticals...";
+  String get mSearchResult => "Search Result";
+  String get mRoundsize => "Round size";
+  String get mEarlystage => "Early stage";
+  String get mIndia => "India";
+  String get mInvestorsFound => " Investors Search found";
 }

@@ -47,11 +47,10 @@ abstract class Languages {
   String get mLivechat;
   String get mUpgrade;
 
-  String get mDashboard;
   String get mCommunityFeed;
   String get mPitchCraft;
   String get mMyServices;
-  String get mServices;
+
   String get mStartupSchool;
   String get mBookanExpert;
   String get mHireourteam;
@@ -217,5 +216,44 @@ abstract class Languages {
   String get mlinkedin;
   String get mcompanyname;
   String get mentercompanyname;
+  String get search;
   String get mvideomessage;
+
+  String get mGeography;
+  String get minvestors;
+  String get mChecks;
+  String get mStages;
+  String get mInvestmentthesis;
+  String get mOpenrate;
+
+  String get mHireOurExperts;
+  String get mHireOurExpertsMsg;
+  String get mFundraisingExperts;
+
+  //Sidemenu
+  String get mDashboard;
+  String get mFundraising;
+  String get mResources;
+  String get mServices;
+  String get mTools;
+  String get mHi;
+  String get mWelcomeback;
+  String get mRecommendedInvestors;
+  String get mCheckyourFundability;
+  String get mCheckyourScore;
+  String get mReviewYouPitchDeck;
+  String get mBuildyourPitchroom;
+  String get mUploadyourpitchdeckordraganddrophere;
+  String get mAcceptsPDFfilesupto;
+
+  String get mSearchInvestors;
+  String get mFundingCRM;
+  String get mFundraisinglink;
+  String get msearchhint;
+  String get mSearchResult;
+
+  String get mRoundsize;
+  String get mEarlystage;
+  String get mIndia;
+  String get mInvestorsFound;
 }

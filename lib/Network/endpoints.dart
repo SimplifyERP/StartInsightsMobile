@@ -70,3 +70,6 @@ const String getredeemstatusupdateAPI =
 
 const String updateprofileAPI =
     '$baseUrl/method/startinsights.website_api.profile.update_profile';
+
+const String searchinvestorslistAPI =
+    '$baseUrl/method/startinsights.website_api.search_investors.get_search_investors_list';

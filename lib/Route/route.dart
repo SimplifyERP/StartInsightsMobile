@@ -7,7 +7,6 @@ import 'package:startinsights/Screen/BookanExpert/web/bookanexpertweb.dart';
 import 'package:startinsights/Screen/Captable/bloc/captable_bloc.dart';
 import 'package:startinsights/Screen/Captable/web/captableweb.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
-import 'package:startinsights/Screen/Dashboard/web/dashboardweb.dart';
 import 'package:startinsights/Screen/ExpertBooking/bloc/expertbooking_bloc.dart';
 import 'package:startinsights/Screen/ExpertBooking/web/expertbookingweb.dart';
 import 'package:startinsights/Screen/InvestmentDeals/bloc/investmentdeals_bloc.dart';
@@ -25,11 +24,15 @@ import 'package:startinsights/Screen/Profile/bloc/profile_bloc.dart';
 import 'package:startinsights/Screen/Profile/web/profileweb.dart';
 import 'package:startinsights/Screen/Register/bloc/register_bloc.dart';
 import 'package:startinsights/Screen/Register/web/registerweb.dart';
+import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.dart';
+import 'package:startinsights/Screen/SearchInvestors/web/searchinvestors.dart';
 import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_bloc.dart';
 import 'package:startinsights/Screen/StartupDeals/web/startupdeals.dart';
 import 'package:startinsights/Screen/StartupSchool/bloc/startupschool_bloc.dart';
 import 'package:startinsights/Screen/StartupSchool/web/startupschoolweb.dart';
 import 'package:startinsights/Utils/screens.dart';
+
+import '../Screen/Dashboard/web/dashboard.dart';
 
 class Routes {
   static Route? onGenerateRoute(RouteSettings settings) {
@@ -72,7 +75,8 @@ class Routes {
                 create: (context) => DashboardBloc(mContext: context),
               )
             ],
-            child: DashboardWeb(),
+            //child: DashboardWeb(),
+            child: Dashboard(),
           ),
         );
 
@@ -238,6 +242,19 @@ class Routes {
               )
             ],
             child: ProfileWeb(),
+          ),
+        );
+
+      case searchinvestorRoute:
+        return MaterialPageRoute(
+          builder: (context) => MultiBlocProvider(
+            providers: [
+              BlocProvider<SearchInvestorsBloc>(
+                create: (context) => SearchInvestorsBloc(mContext: context)
+                  ..getSearchinvestorsData(),
+              )
+            ],
+            child: SearchInvestorsWeb(),
           ),
         );
 

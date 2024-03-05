@@ -475,9 +475,11 @@ class _RegisterWebState extends State<RegisterWeb> {
                                                                 lang) {
                                                           return DropdownMenuItem<
                                                               String>(
-                                                            value: lang.name,
+                                                            value: lang
+                                                                .userTypeName,
                                                             child: Text(
-                                                                lang.name!,
+                                                                lang
+                                                                    .userTypeName!,
                                                                 style: const TextStyle(
                                                                     fontSize:
                                                                         16,

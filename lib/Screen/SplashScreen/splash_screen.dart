@@ -1,8 +1,8 @@
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
-import 'package:startinsights/Utils/screens.dart';
 
 import '../../utils/pref_manager.dart';
 import 'bloc/splash_bloc.dart';
@@ -44,12 +44,16 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           // if (state is GetSplashInfoSucessState) {
           if (mIsLogin == null) {
-            Navigator.pushReplacementNamed(context, loginRoute);
+            // Navigator.pushReplacementNamed(context, loginRoute);
+            // Navigator.pushReplacementNamed(context, dashboardRoute);
           } else {
             if (mIsLogin) {
-              Navigator.pushReplacementNamed(context, dashboardRoute);
+              // Navigator.pushReplacementNamed(context, searchinvestorRoute);
+
+              //   Navigator.pushReplacementNamed(context, dashboardRoute);
             } else {
-              Navigator.pushReplacementNamed(context, loginRoute);
+              // Navigator.pushReplacementNamed(context, dashboardRoute);
+              // Navigator.pushReplacementNamed(context, loginRoute);
             }
           }
           //  }
@@ -59,17 +63,28 @@ class _SplashScreenState extends State<SplashScreen> {
             //  Loading(mLoaderGif).start(context);
           } else if (state is GetSplashInfoSucessState) {
             Loading.stop();
-            return const SafeArea(
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(""),
+          }
+
+          return SafeArea(
+            child: Stack(
+              children: [
+                InkWell(
+                  child: const Text(
+                    "Test",
+                    style: TextStyle(fontSize: 30),
                   ),
-                ],
-              ),
-            );
-          } else {}
+                  onTap: () {
+                    GoRouter.of(context).go('/settings/:name');
+                  },
+                ),
+                const Align(
+                  alignment: Alignment.center,
+                  child: Text("sfasasfsaffas"),
+                ),
+              ],
+            ),
+          );
+
           return Container();
         },
       ),

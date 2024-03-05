@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Network/di.dart';
@@ -696,7 +697,10 @@ class SideMenu extends StatelessWidget {
                               child: PrimaryButton(
                                   mButtonname:
                                       Languages.of(context)!.mContactUs,
-                                  onpressed: () {},
+                                  onpressed: () {
+                                    FirebaseAnalytics.instance
+                                        .logEvent(name: 'ContactUs');
+                                  },
                                   mSelectcolor: mBtnColor,
                                   mTextColor: mWhiteColor,
                                   mFontSize: 16,

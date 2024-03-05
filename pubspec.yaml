@@ -32,7 +32,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
-  flutter_svg: ^2.0.7
   intl: any
   google_fonts: ^6.1.0
   email_validator: ^2.1.17
@@ -78,6 +77,12 @@ dependencies:
   data_table_2: ^2.5.10
   pod_player: ^0.2.1
   image_picker_for_web: ^3.0.2
+  firebase_analytics_web: ^0.5.5+12
+  go_router: ^13.2.0
+  url_strategy: ^0.2.0
+  flutter_svg: ^2.0.10+1
+
+ 
 
 
 
@@ -85,6 +90,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  firebase_analytics: ^10.8.0
+  firebase_core: ^2.24.2
 
 dev_dependencies:
   flutter_test:
@@ -148,6 +155,25 @@ flutter:
     - family: ManropeSemiBold
       fonts:
         - asset: fonts/Manrope-SemiBold.ttf
+
+    - family: OpenSauceSansBold
+      fonts:
+        - asset: fonts/OpenSauceSans-Bold.ttf
+    - family: OpenSauceSansExtraBold
+      fonts:
+        - asset: fonts/OpenSauceSans-ExtraBold.ttf
+    - family: OpenSauceSansLight
+      fonts:
+        - asset: fonts/OpenSauceSans-Light.ttf
+    - family: OpenSauceSansMedium
+      fonts:
+        - asset: fonts/OpenSauceSans-Medium.ttf
+    - family: OpenSauceSansRegular
+      fonts:
+        - asset: fonts/OpenSauceSans-Regular.ttf
+    - family: OpenSauceSansSemiBold
+      fonts:
+        - asset: fonts/OpenSauceSans-SemiBold.ttf
 
   # fonts:
   #   - family: Schyler
