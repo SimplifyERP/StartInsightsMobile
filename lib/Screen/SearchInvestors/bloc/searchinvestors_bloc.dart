@@ -14,6 +14,7 @@ class SearchInvestorsBloc
     extends Bloc<SearchInvestorsEvent, SearchInvestorsStatus> {
   final BuildContext mContext;
   List<SearchInvestorsList> mSearchInvestorsList = [];
+  int mGetCount = 0;
 
   SearchInvestorsBloc({
     required this.mContext,
@@ -21,18 +22,28 @@ class SearchInvestorsBloc
     onLoadView();
   }
 
-  void getSearchinvestorsData() async {
+  void getSearchinvestorsData(
+    int PageNo,
+    String country,
+    String fundingstage,
+    String amount,
+  ) async {
     if (await checkNetworkStatus()) {
       Loading(mLoaderGif).start(mContext);
       ApiResults apiResults =
-          await SearchinvestorsRepo().getSearchinvestors("");
+          await SearchinvestorsRepo().getSearchinvestors("", 1, '', '', '');
       if (apiResults is ApiSuccess) {
         mSearchInvestorsList =
             SearchinvestorslistResponse.fromJson(apiResults.data)
                 .message!
                 .searchInvestorsList!;
 
-        emit(GetSearchInvestorsInfoSuccessState(mSearchInvestorsList));
+        mGetCount = SearchinvestorslistResponse.fromJson(apiResults.data)
+            .message!
+            .investorsCount!;
+
+        emit(GetSearchInvestorsInfoSuccessState(
+            mSearchInvestorsList, mGetCount));
 
         // hideLoading(mContext);
         Loading.stop();

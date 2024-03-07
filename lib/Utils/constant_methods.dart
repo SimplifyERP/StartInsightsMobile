@@ -1,13 +1,10 @@
-import 'dart:ui' as ui;
+//import 'dart:ui' as ui;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_network_connectivity/flutter_network_connectivity.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
 import 'package:toast/toast.dart';
 
 void printResponse(String text) {
@@ -58,15 +55,15 @@ extension DateOnlyCompare on DateTime {
   }
 }
 
-Future<Uint8List> getBytesFromAsset(String path, double width) async {
-  ByteData data = await rootBundle.load(path);
-  ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-      targetWidth: width.toInt());
-  ui.FrameInfo fi = await codec.getNextFrame();
-  return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-      .buffer
-      .asUint8List();
-}
+// Future<Uint8List> getBytesFromAsset(String path, double width) async {
+//   ByteData data = await rootBundle.load(path);
+//   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+//       targetWidth: width.toInt());
+//   ui.FrameInfo fi = await codec.getNextFrame();
+//   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+//       .buffer
+//       .asUint8List();
+// }
 
 Future multipartConvertImage({
   required XFile image,
@@ -93,16 +90,16 @@ checkNetworkStatus() async {
   // bool isNetworkConnected =
   //     await FlutterNetworkConnectivity().isNetworkConnectionAvailable();
 
-  bool isNetworkConnected = false;
-  SizerUtil.deviceType == DeviceType.mobile
-      ? isNetworkConnected =
-          await FlutterNetworkConnectivity().isNetworkConnectionAvailable()
-      : isNetworkConnected = true;
-
-  //bool isNetworkConnected = true;
-  if (isNetworkConnected) {
-    print('Mobile network are disabled. Please enable the services');
-  }
+  bool isNetworkConnected = true;
+  // SizerUtil.deviceType == DeviceType.mobile
+  //     ? isNetworkConnected =
+  //         await FlutterNetworkConnectivity().isNetworkConnectionAvailable()
+  //     : isNetworkConnected = true;
+  //
+  // //bool isNetworkConnected = true;
+  // if (isNetworkConnected) {
+  //   print('Mobile network are disabled. Please enable the services');
+  // }
   return isNetworkConnected;
 }
 

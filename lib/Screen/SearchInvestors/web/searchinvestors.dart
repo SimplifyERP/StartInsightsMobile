@@ -1,16 +1,28 @@
+import 'package:custom_gif_loading/custom_gif_loading.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_network/image_network.dart';
+import 'package:startinsights/Libery/numberpaginator/lib/number_paginator.dart';
 import 'package:startinsights/Localization/language/languages.dart';
+import 'package:startinsights/Model/FavouriteResponse.dart';
+import 'package:startinsights/Model/FundingCrmResponse.dart';
 import 'package:startinsights/Model/SearchinvestorslistResponse.dart';
-import 'package:startinsights/Repository/pitchroom_repository.dart';
+import 'package:startinsights/Network/api_result_handler.dart';
+import 'package:startinsights/Repository/SearchinvestorsRepo.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_state.dart';
+import 'package:startinsights/Screen/SearchInvestors/web/fundingcrmlist.dart';
 import 'package:startinsights/Screen/SearchInvestors/web/searchinvestorsitemList.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/screens.dart';
+import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbarnew.dart';
 import 'package:startinsights/Widgets/button.dart';
+import 'package:startinsights/Widgets/deletebutton.dart';
 import 'package:startinsights/Widgets/sidemenunew.dart';
 
 class SearchInvestorsWeb extends StatefulWidget {
@@ -24,7 +36,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   @override
   late SearchInvestorsBloc mSearchInvestorsBloc;
 
-  final PitchroomRepository _apiService1 = PitchroomRepository();
+  final SearchinvestorsRepo apiService1 = SearchinvestorsRepo();
   int selectedIndex = -1; //dont set it to 0
   bool isExpanded = true;
 
@@ -35,10 +47,57 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   List<SearchInvestorsList> mSearchInvestorsList = [];
   bool isScreenFirst = true;
 
+  final List<String> itemsmm = [
+    'Item1',
+    'Item2',
+    'Item3',
+    'Item4',
+  ];
+  String? selectedValue;
+
   ValueNotifier<bool> setnotifier = ValueNotifier(true);
 
   // 1-> Search Investors , 2->Funding CRM
   int mSelectView = 1;
+  int mGetCount = 0;
+  int numPages = 1;
+  int currentPage = 1;
+  int SetcurrentPage = 0;
+
+  final SearchinvestorsRepo apiService = SearchinvestorsRepo();
+
+  late Sortlist mSortlist;
+  int mSortlistCount = 0;
+
+  late Contacted mContacted;
+  int mContactedCount = 0;
+
+  late Pitched mPitched;
+  int mPitchedCount = 0;
+
+  late Diligence mDiligence;
+  int mDiligenceCount = 0;
+
+  late Won mWon;
+  int mWonCount = 0;
+
+  late Lost mLost;
+  int mLostCount = 0;
+
+  int mfundingmaxcount = 0;
+
+  List<Investor> mSortlistList = [];
+  List<Investor> mContactedList = [];
+  List<Investor> mPitchedList = [];
+  List<Investor> mDiligenceList = [];
+  List<Investor> mWonList = [];
+  List<Investor> mLostList = [];
+
+  List<FundingCrmList> mFundingCRMList = [];
+  List<SearchInvestorsList> mFavList = [];
+
+  String mFilterValue = "";
+  String mStatusChange = "";
 
   @override
   void initState() {
@@ -64,6 +123,42 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   }
 
   Widget build(BuildContext context) {
+    List<MenuItem> StagesItems = [
+      MenuItem(
+        text: Languages.of(context)!.mSortlistMenu,
+      ),
+      MenuItem(
+        text: Languages.of(context)!.mContactedMenu,
+      ),
+      MenuItem(
+        text: Languages.of(context)!.mPitchedMenu,
+      ),
+      MenuItem(
+        text: Languages.of(context)!.mDiligenceMenu,
+      ),
+      MenuItem(
+        text: Languages.of(context)!.mWonMenu,
+      ),
+      MenuItem(
+        text: Languages.of(context)!.mLostMenu,
+      ),
+    ];
+
+    List<MenuItem> FilterMenuItems = [
+      MenuItem(
+        text: Languages.of(context)!.mPreseedMenu,
+      ),
+      MenuItem(
+        text: Languages.of(context)!.mSeedMenu,
+      ),
+      MenuItem(
+        text: Languages.of(context)!.mEarlyMenu,
+      ),
+      MenuItem(
+        text: Languages.of(context)!.mGrowthMenu,
+      ),
+    ];
+
     mSearchInvestorsBloc = SearchInvestorsBloc(mContext: context);
 
     void OnLoadNext() {
@@ -80,6 +175,14 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
             .toList();
       });
     }
+
+    var _crossAxisSpacing = 8;
+    var _screenWidth = MediaQuery.of(context).size.width;
+    var _crossAxisCount = 2;
+    var _width = (_screenWidth - ((_crossAxisCount - 1) * _crossAxisSpacing)) /
+        _crossAxisCount;
+    var cellHeight = 900;
+    var _aspectRatio = _width / cellHeight;
 
     return WillPopScope(
       onWillPop: () {
@@ -98,13 +201,13 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
             builder: (context, state) {
               if (state is GetSearchInvestorsInfoSuccessState) {
                 mSearchInvestorsList = state.mSearchInvestorsList;
-
+                mGetCount = state.mSearchInvestorsCount;
                 if (isScreenFirst) {
                   isScreenFirst = false;
                   items = mSearchInvestorsList;
                 }
+                numPages = (mGetCount / 8).ceil();
               }
-
               return SafeArea(
                   child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -142,12 +245,6 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                 mText: "TExt",
                                 mUserImage: "",
                                 mFrom: 2,
-                                onPressed: () {
-                                  //ErrorToast(context: context, text: "Test");
-                                },
-                                onPressedLogout: () {
-                                  setState(() {});
-                                },
                               ),
                               const SizedBox(
                                 height: 20,
@@ -296,6 +393,9 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                 setState(() {
                                                                   mSelectView =
                                                                       2;
+
+                                                                  OnLoadFundingCRM(
+                                                                      "jagadeesan.a1104@gmail.com");
                                                                 });
                                                               },
                                                               child: Container(
@@ -342,21 +442,36 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                 const SizedBox(
                                                   width: 20,
                                                 ),
-                                                const SizedBox(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Image(
-                                                        width: 50,
-                                                        height: 50,
-                                                        image: AssetImage(
-                                                          "assets/new_ic_fav.png",
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                SizedBox(
+                                                  child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          mSelectView = 3;
+
+                                                          OnloadFavList(
+                                                              "jagadeesan.a1104@gmail.com",
+                                                              1);
+                                                        });
+                                                      },
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Image(
+                                                            width: 50,
+                                                            height: 50,
+                                                            image: (mSelectView ==
+                                                                    3)
+                                                                ? const AssetImage(
+                                                                    "assets/new_ic_selfav.png",
+                                                                  )
+                                                                : const AssetImage(
+                                                                    "assets/new_ic_fav.png",
+                                                                  ),
+                                                          ),
+                                                        ],
+                                                      )),
                                                 ),
                                                 Container(
                                                   width: 50,
@@ -450,7 +565,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                               .start,
                                                       children: [
                                                         Expanded(
-                                                          flex: 4,
+                                                          flex: 7,
                                                           child: Container(
                                                               height: 45,
                                                               decoration:
@@ -553,7 +668,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                           width: 20,
                                                         ),
                                                         Expanded(
-                                                          flex: 6,
+                                                          flex: 3,
                                                           child: Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
@@ -563,103 +678,114 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                       .center,
                                                               children: [
                                                                 Container(
-                                                                  width: 120,
-                                                                  child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Text(
-                                                                            Languages.of(context)!
-                                                                                .mIndia,
-                                                                            textAlign: TextAlign
-                                                                                .center,
-                                                                            style: const TextStyle(
-                                                                                fontFamily: 'OpenSauceSansRegular',
-                                                                                fontSize: mSizeThree,
-                                                                                color: mGreyEigth)),
-                                                                      ]),
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 15,
-                                                                ),
-                                                                Container(
-                                                                  width: 2,
-                                                                  height: 20,
-                                                                  color:
-                                                                      mGreyEigth,
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 15,
-                                                                ),
-                                                                Container(
                                                                   width: 150,
-                                                                  child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Text(
-                                                                            Languages.of(context)!
-                                                                                .mEarlystage,
-                                                                            textAlign: TextAlign
-                                                                                .center,
-                                                                            style: const TextStyle(
-                                                                                fontFamily: 'OpenSauceSansRegular',
-                                                                                fontSize: mSizeThree,
-                                                                                color: mGreyEigth)),
-                                                                      ]),
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 15,
-                                                                ),
-                                                                Container(
-                                                                  width: 2,
-                                                                  height: 20,
-                                                                  color:
-                                                                      mGreyEigth,
-                                                                ),
-                                                                const SizedBox(
-                                                                  width: 15,
-                                                                ),
-                                                                Container(
-                                                                  width: 120,
-                                                                  child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Text(
-                                                                            Languages.of(context)!
-                                                                                .mRoundsize,
-                                                                            textAlign: TextAlign
-                                                                                .center,
-                                                                            style: const TextStyle(
-                                                                                fontFamily: 'OpenSauceSansRegular',
-                                                                                fontSize: mSizeThree,
-                                                                                color: mGreyEigth)),
-                                                                        const SizedBox(
+                                                                  height: 45,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            30),
+                                                                    color:
+                                                                        mGreyTwo,
+                                                                    boxShadow: const [
+                                                                      BoxShadow(
+                                                                        color:
+                                                                            mGreyTwo,
+                                                                        blurRadius:
+                                                                            1.0,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  child: Center(
+                                                                    child:
+                                                                        DropdownButtonHideUnderline(
+                                                                      child:
+                                                                          DropdownButton2(
+                                                                        customButton: Row(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
+                                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                                            children: [
+                                                                              Image.asset('assets/new_ic_filter.png', width: 20, height: 20),
+                                                                              const SizedBox(
+                                                                                width: 10,
+                                                                              ),
+                                                                              Text((mFilterValue.isEmpty) ? Languages.of(context)!.mFilter : mFilterValue, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyEigth)),
+                                                                              const SizedBox(
+                                                                                width: 10,
+                                                                              ),
+                                                                              const Icon(Icons.arrow_drop_down_outlined, size: 30)
+                                                                            ]),
+                                                                        items: [
+                                                                          ...FilterMenuItems
+                                                                              .map(
+                                                                            (item) =>
+                                                                                DropdownMenuItem<MenuItem>(
+                                                                              value: item,
+                                                                              child: buildItem(item),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                        onChanged:
+                                                                            (value) {
+                                                                          // onChanged(
+                                                                          //     context,
+                                                                          //     value! as ProfileMenuItem);
+
+                                                                          print(
+                                                                              value!.text);
+                                                                          setState(
+                                                                              () {
+                                                                            mFilterValue =
+                                                                                value!.text;
+                                                                          });
+
+                                                                          // MenuItems.onChanged(
+                                                                          //     context,
+                                                                          //     value! as MenuItem);
+                                                                        },
+                                                                        dropdownStyleData:
+                                                                            DropdownStyleData(
                                                                           width:
-                                                                              10,
+                                                                              160,
+                                                                          padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                              vertical: 6),
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(4),
+                                                                            border:
+                                                                                Border.all(color: mGreyThree, width: 2),
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                          offset: const Offset(
+                                                                              5,
+                                                                              -10),
                                                                         ),
-                                                                        const Icon(
-                                                                            Icons
-                                                                                .arrow_drop_down_outlined,
-                                                                            size:
-                                                                                30)
-                                                                      ]),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  // InkWell(
+                                                                  //     onTap:
+                                                                  //         () {
+                                                                  //       OnLoadDialog(context);
+                                                                  //     },
+                                                                  //     child: Row(
+                                                                  //         mainAxisAlignment: MainAxisAlignment.center,
+                                                                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                                                                  //         children: [
+                                                                  //           Image.asset('assets/new_ic_filter.png', width: 20, height: 20),
+                                                                  //           Text(Languages.of(context)!.mFilter, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyEigth)),
+                                                                  //           const SizedBox(
+                                                                  //             width: 10,
+                                                                  //           ),
+                                                                  //           const Icon(Icons.arrow_drop_down_outlined, size: 30)
+                                                                  //         ])),
                                                                 ),
                                                                 const SizedBox(
-                                                                  width: 30,
+                                                                  width: 15,
                                                                 ),
                                                                 Button(
                                                                     mButtonname:
@@ -707,13 +833,11 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                 .start,
                                                         children: [
                                                           Text(
-                                                              Languages.of(
-                                                                      context)!
-                                                                  .mInvestorsFound,
+                                                              "$mGetCount${Languages.of(context)!.mInvestorsFound}",
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
-                                                              style: TextStyle(
+                                                              style: const TextStyle(
                                                                   fontFamily:
                                                                       'OpenSauceSansBold',
                                                                   fontSize:
@@ -735,6 +859,10 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                 GridView.count(
                                                       crossAxisCount: 4,
                                                       crossAxisSpacing: 10,
+                                                      // childAspectRatio: 0.3,
+                                                      childAspectRatio:
+                                                          _aspectRatio,
+
                                                       mainAxisSpacing: 10,
                                                       shrinkWrap: true,
                                                       children: List.generate(
@@ -743,12 +871,868 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                           final mSearchList =
                                                               items[index];
                                                           return SearchInvestorsItemList(
-                                                              mIndex: index,
-                                                              mSearchInvestorsList:
-                                                                  mSearchList);
+                                                            mIndex: index,
+                                                            mSearchInvestorsList:
+                                                                mSearchList,
+                                                            RemoveFavonpressed:
+                                                                () {},
+                                                            AddFavonpressed:
+                                                                () {
+                                                              OnloadAddFav(
+                                                                  "jagadeesan.a1104@gmail.com",
+                                                                  items[index]
+                                                                      .id);
+                                                            },
+                                                          );
                                                         },
                                                       ),
                                                     )),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Visibility(
+                                                    visible: items.isNotEmpty
+                                                        ? true
+                                                        : false,
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(
+                                                          30, 10, 10, 10),
+                                                      child: NumberPaginator(
+                                                        // by default, the paginator shows numbers as center content
+                                                        numberPages: numPages,
+                                                        initialPage:
+                                                            SetcurrentPage,
+                                                        onPageChange:
+                                                            (int index) {
+                                                          setState(() {
+                                                            currentPage =
+                                                                index + 1;
+
+                                                            SetcurrentPage =
+                                                                index;
+
+                                                            OnloadSearchinvestors(
+                                                                "",
+                                                                currentPage,
+                                                                "",
+                                                                "",
+                                                                "");
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 30,
+                                                  ),
+                                                ]),
+                                          ),
+                                        ],
+                                      )), //
+                                    ),
+                                  )),
+                              Visibility(
+                                  visible: mSelectView == 2 ? true : false,
+                                  child: Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.stretch,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      30, 10, 10, 10),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                        text: Languages.of(
+                                                                context)!
+                                                            .mFundraisinglink,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'OpenSauceSansMedium',
+                                                            fontSize:
+                                                                mSizeThree,
+                                                            color: mGreyTen)),
+                                                    TextSpan(
+                                                        text: Languages.of(
+                                                                context)!
+                                                            .mFundingCRM,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'OpenSauceSansBold',
+                                                            fontSize:
+                                                                mSizeThree,
+                                                            color: mGreyTen)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 15,
+                                            ),
+                                            Container(
+                                              color: mGreyThree,
+                                              height: 1,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                            ),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            Languages.of(
+                                                                    context)!
+                                                                .mSORTLIST,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansBold',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                        Text(
+                                                            mSortlistCount
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                      ],
+                                                    )),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            Languages.of(
+                                                                    context)!
+                                                                .mCONTACTED,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansBold',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                        Text(
+                                                            mContactedCount
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                      ],
+                                                    )),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            Languages.of(
+                                                                    context)!
+                                                                .mPitched,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansBold',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                        Text(
+                                                            mPitchedCount
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                      ],
+                                                    )),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            Languages.of(
+                                                                    context)!
+                                                                .mDILIGENCE,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansBold',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                        Text(
+                                                            mDiligenceCount
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                      ],
+                                                    )),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            Languages.of(
+                                                                    context)!
+                                                                .mWon,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansBold',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                        Text(
+                                                            mWonCount
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                      ],
+                                                    )),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                            Languages.of(
+                                                                    context)!
+                                                                .mLost,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansBold',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                        Text(
+                                                            mLostCount
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                      ],
+                                                    )),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 20,
+                                            ),
+                                            Container(
+                                              color: mGreyThree,
+                                              height: 1,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                            ),
+                                            const SizedBox(
+                                              height: 30,
+                                            ),
+                                            Container(
+                                              height: mfundingmaxcount * 115,
+                                              child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: ListView.builder(
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        controller: controller,
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        itemBuilder:
+                                                            ((context, index) {
+                                                          final mgetCoursesList =
+                                                              mSortlistList[
+                                                                  index];
+                                                          return InkWell(
+                                                            onTap: () {
+                                                              OnLoadViewFundingCRM(
+                                                                  mSortlistList[
+                                                                      index],
+                                                                  StagesItems);
+
+                                                              ErrorToast(
+                                                                  context:
+                                                                      context,
+                                                                  text: index
+                                                                      .toString());
+                                                            },
+                                                            child: FundingCRMList(
+                                                                mIndex: index,
+                                                                mInvestor:
+                                                                    mgetCoursesList),
+                                                          );
+                                                        }),
+                                                        itemCount: mSortlistList
+                                                            .length,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: ListView.builder(
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        controller: controller,
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        itemBuilder:
+                                                            ((context, index) {
+                                                          final mgetCoursesList =
+                                                              mContactedList[
+                                                                  index];
+                                                          return InkWell(
+                                                            onTap: () {
+                                                              OnLoadViewFundingCRM(
+                                                                  mContactedList[
+                                                                      index],
+                                                                  StagesItems);
+
+                                                              ErrorToast(
+                                                                  context:
+                                                                      context,
+                                                                  text: index
+                                                                      .toString());
+                                                            },
+                                                            child: FundingCRMList(
+                                                                mIndex: index,
+                                                                mInvestor:
+                                                                    mgetCoursesList),
+                                                          );
+                                                        }),
+                                                        itemCount:
+                                                            mContactedList
+                                                                .length,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: ListView.builder(
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        controller: controller,
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        itemBuilder:
+                                                            ((context, index) {
+                                                          final mgetCoursesList =
+                                                              mPitchedList[
+                                                                  index];
+                                                          return InkWell(
+                                                            onTap: () {
+                                                              OnLoadViewFundingCRM(
+                                                                  mPitchedList[
+                                                                      index],
+                                                                  StagesItems);
+
+                                                              ErrorToast(
+                                                                  context:
+                                                                      context,
+                                                                  text: index
+                                                                      .toString());
+                                                            },
+                                                            child: FundingCRMList(
+                                                                mIndex: index,
+                                                                mInvestor:
+                                                                    mgetCoursesList),
+                                                          );
+                                                        }),
+                                                        itemCount:
+                                                            mPitchedList.length,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: ListView.builder(
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        controller: controller,
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        itemBuilder:
+                                                            ((context, index) {
+                                                          final mgetCoursesList =
+                                                              mDiligenceList[
+                                                                  index];
+                                                          return InkWell(
+                                                            onTap: () {
+                                                              OnLoadViewFundingCRM(
+                                                                  mDiligenceList[
+                                                                      index],
+                                                                  StagesItems);
+
+                                                              ErrorToast(
+                                                                  context:
+                                                                      context,
+                                                                  text: index
+                                                                      .toString());
+                                                            },
+                                                            child: FundingCRMList(
+                                                                mIndex: index,
+                                                                mInvestor:
+                                                                    mgetCoursesList),
+                                                          );
+                                                        }),
+                                                        itemCount:
+                                                            mDiligenceList
+                                                                .length,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: ListView.builder(
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        controller: controller,
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        itemBuilder:
+                                                            ((context, index) {
+                                                          final mgetCoursesList =
+                                                              mWonList[index];
+                                                          return InkWell(
+                                                            onTap: () {
+                                                              OnLoadViewFundingCRM(
+                                                                  mWonList[
+                                                                      index],
+                                                                  StagesItems);
+
+                                                              ErrorToast(
+                                                                  context:
+                                                                      context,
+                                                                  text: index
+                                                                      .toString());
+                                                            },
+                                                            child: FundingCRMList(
+                                                                mIndex: index,
+                                                                mInvestor:
+                                                                    mgetCoursesList),
+                                                          );
+                                                        }),
+                                                        itemCount:
+                                                            mWonList.length,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 15,
+                                                    ),
+                                                    Expanded(
+                                                      flex: 2,
+                                                      child: ListView.builder(
+                                                        physics:
+                                                            NeverScrollableScrollPhysics(),
+                                                        controller: controller,
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        itemBuilder:
+                                                            ((context, index) {
+                                                          final mgetCoursesList =
+                                                              mLostList[index];
+                                                          return InkWell(
+                                                            onTap: () {
+                                                              OnLoadViewFundingCRM(
+                                                                  mLostList[
+                                                                      index],
+                                                                  StagesItems);
+
+                                                              ErrorToast(
+                                                                  context:
+                                                                      context,
+                                                                  text: index
+                                                                      .toString());
+                                                            },
+                                                            child: FundingCRMList(
+                                                                mIndex: index,
+                                                                mInvestor:
+                                                                    mgetCoursesList),
+                                                          );
+                                                        }),
+                                                        itemCount:
+                                                            mLostList.length,
+                                                      ),
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ]), //
+                                    ),
+                                  )),
+                              Visibility(
+                                  visible: mSelectView == 3 ? true : false,
+                                  child: Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Container(
+                                          child: Column(
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: Colors.white,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.white,
+                                                  blurRadius: 1.0,
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(
+                                                        30, 10, 10, 10),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: <TextSpan>[
+                                                          TextSpan(
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mFundraisinglink,
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      'OpenSauceSansMedium',
+                                                                  fontSize:
+                                                                      mSizeThree,
+                                                                  color:
+                                                                      mGreyTen)),
+                                                          TextSpan(
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mSearchInvestors,
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      'OpenSauceSansBold',
+                                                                  fontSize:
+                                                                      mSizeThree,
+                                                                  color:
+                                                                      mGreyTen)),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Container(
+                                                    color: mGreyThree,
+                                                    height: 1,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(
+                                                        30, 10, 10, 10),
+                                                    child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                              "${mFavList.length} ${Languages.of(context)!.mFavInv}",
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      'OpenSauceSansBold',
+                                                                  fontSize:
+                                                                      mSizeThree,
+                                                                  color:
+                                                                      mRedColorTwo))
+                                                        ]),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(
+                                                        30, 10, 10, 10),
+                                                    child:
+                                                        SingleChildScrollView(
+                                                            child:
+                                                                GridView.count(
+                                                      crossAxisCount: 4,
+                                                      crossAxisSpacing: 10,
+                                                      // childAspectRatio: 0.3,
+                                                      childAspectRatio:
+                                                          _aspectRatio,
+
+                                                      mainAxisSpacing: 10,
+                                                      shrinkWrap: true,
+                                                      children: List.generate(
+                                                        mFavList.length,
+                                                        (index) {
+                                                          final mSearchList =
+                                                              mFavList[index];
+                                                          return SearchInvestorsItemList(
+                                                            mIndex: index,
+                                                            mSearchInvestorsList:
+                                                                mSearchList,
+                                                            RemoveFavonpressed:
+                                                                () {
+                                                              Widget
+                                                                  cancelButton =
+                                                                  TextButton(
+                                                                child: Text(
+                                                                    Languages.of(
+                                                                            context)!
+                                                                        .mCancel,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: const TextStyle(
+                                                                        fontFamily:
+                                                                            'OpenSauceSansRegular',
+                                                                        fontSize:
+                                                                            mSizeThree,
+                                                                        color:
+                                                                            mGreyTen)),
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              );
+                                                              Widget
+                                                                  continueButton =
+                                                                  TextButton(
+                                                                child: Text(
+                                                                    Languages.of(
+                                                                            context)!
+                                                                        .mok,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: const TextStyle(
+                                                                        fontFamily:
+                                                                            'OpenSauceSansRegular',
+                                                                        fontSize:
+                                                                            mSizeThree,
+                                                                        color:
+                                                                            mGreyTen)),
+                                                                onPressed: () {
+                                                                  OnloadChangeFav(
+                                                                      "jagadeesan.a1104@gmail.com",
+                                                                      mFavList[index]
+                                                                              .id ??
+                                                                          "",
+                                                                      0);
+
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              );
+
+                                                              // set up the AlertDialog
+                                                              AlertDialog
+                                                                  alert =
+                                                                  AlertDialog(
+                                                                content: Text(
+                                                                    Languages.of(
+                                                                            context)!
+                                                                        .mFavMsg,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: const TextStyle(
+                                                                        fontFamily:
+                                                                            'OpenSauceSansRegular',
+                                                                        fontSize:
+                                                                            mSizeTen,
+                                                                        color:
+                                                                            mGreyTen)),
+                                                                actions: [
+                                                                  cancelButton,
+                                                                  continueButton,
+                                                                ],
+                                                              );
+
+                                                              // show the dialog
+                                                              showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return alert;
+                                                                },
+                                                              );
+                                                            },
+                                                            AddFavonpressed:
+                                                                () {},
+                                                          );
+                                                        },
+                                                      ),
+                                                    )),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Visibility(
+                                                    visible: mFavList.isNotEmpty
+                                                        ? true
+                                                        : false,
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(
+                                                          30, 10, 10, 10),
+                                                      child: NumberPaginator(
+                                                        // by default, the paginator shows numbers as center content
+                                                        numberPages: numPages,
+                                                        initialPage:
+                                                            SetcurrentPage,
+                                                        onPageChange:
+                                                            (int index) {
+                                                          setState(() {
+                                                            currentPage =
+                                                                index + 1;
+
+                                                            SetcurrentPage =
+                                                                index;
+
+                                                            OnloadFavList(
+                                                                "jagadeesan.a1104@gmail.com",
+                                                                currentPage);
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
                                                   ),
                                                   const SizedBox(
                                                     height: 30,
@@ -765,6 +1749,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                       )
                     ]),
               ));
+
               //  ErrorToast(context: context, text: state.mDashboard.message!);
 
               //} else if (state is GetPunchInOutFailState) {}
@@ -773,4 +1758,1088 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
           )),
     );
   }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Alert!!"),
+          content: Text("You are awesome!"),
+          actions: [
+            MaterialButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void OnLoadViewFundingCRM(Investor mInvestor, List<MenuItem> stagesItems) {
+    /*showDialog(
+      context: context,
+      builder: (context2) {
+        String contentText = "Content of Dialog";
+        return StatefulBuilder(
+          builder: (context1, setState) {
+            return AlertDialog(
+              //  title: Center(child: Text("Information")),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+
+              content: SizedBox(
+                width: MediaQuery.of(context1).size.width / 3 + 50,
+                height: MediaQuery.of(context1).size.height - 100,
+                child: SingleChildScrollView(
+                    child: Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  color: Colors.white,
+                  child: Text("ASAGAK"),
+                )),
+              ),
+            );
+          },
+        );
+      },
+    );*/
+
+    mStatusChange = mInvestor.status ?? "";
+    showGeneralDialog(
+      barrierLabel: "",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      // transitionDuration: Duration(milliseconds: 700),
+      context: context,
+      pageBuilder: (context, anim1, anim2) {
+        return StatefulBuilder(builder: (context1, setState) {
+          return Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: MediaQuery.of(context).size.width / 3,
+              height: MediaQuery.of(context).size.height - 100,
+              padding: const EdgeInsets.only(
+                  left: 10, right: 20, bottom: 10, top: 20),
+              margin: const EdgeInsets.only(left: 12, right: 20),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: mGreyThree, width: 1)),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        flex: 10,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Material(
+                              color: Colors.white,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: InkWell(
+                                    focusColor: Colors.white,
+                                    hoverColor: Colors.white,
+                                    onTap: () {
+                                      Navigator.pop(context1);
+                                    },
+                                    child: SvgPicture.asset(
+                                      'assets/new_ic_close.svg',
+                                      width: 15,
+                                      height: 15,
+                                    )),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundColor: Colors.white,
+                                        child: ClipOval(
+                                          child: (mInvestor.logo!.isNotEmpty)
+                                              ? ImageNetwork(
+                                                  image: mInvestor.logo ?? "",
+                                                  height: 100,
+                                                  width: 100,
+                                                )
+                                              : Image.asset(
+                                                  'assets/avathar.png',
+                                                  width: 100,
+                                                  height: 100,
+                                                  fit: BoxFit.fill),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                      flex: 8,
+                                      child: Text(mInvestor.name ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily: 'OpenSauceSansBold',
+                                              fontSize: mSizeFive,
+                                              color: mGreyTen)))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Container(
+                                color: mGreyFive,
+                                width: MediaQuery.of(context).size.width,
+                                height: 1,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          Languages.of(context)!.mStatus,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansRegular',
+                                              fontSize: mSizeThree,
+                                              color: mGreyEigth)),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                      flex: 7,
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: DropdownButtonHideUnderline(
+                                          child: DropdownButton2(
+                                            customButton: Container(
+                                              height: 32,
+                                              width: 150,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: mYellowFour,
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    color: Colors.white,
+                                                    blurRadius: 1.0,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                        (mStatusChange.isEmpty)
+                                                            ? Languages.of(
+                                                                    context)!
+                                                                .mFilter
+                                                            : mStatusChange,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                            fontFamily:
+                                                                'OpenSauceSansBold',
+                                                            fontSize:
+                                                                mSizeThree,
+                                                            color: mGreyTen)),
+                                                    const Icon(
+                                                      Icons
+                                                          .arrow_drop_down_outlined,
+                                                      size: 30,
+                                                      color: mBlackThree,
+                                                    )
+                                                  ]),
+                                            ),
+                                            items: [
+                                              ...stagesItems.map(
+                                                (item) =>
+                                                    DropdownMenuItem<MenuItem>(
+                                                  value: item,
+                                                  child: buildItem(item),
+                                                ),
+                                              ),
+                                            ],
+                                            onChanged: (value) {
+                                              print(value!.text);
+
+                                              setState(() {
+                                                mStatusChange = value!.text;
+                                              });
+
+                                              // MenuItems.onChanged(
+                                              //     context,
+                                              //     value! as MenuItem);
+                                            },
+                                            dropdownStyleData:
+                                                DropdownStyleData(
+                                              width: 160,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 6),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                border: Border.all(
+                                                    color: mGreyThree,
+                                                    width: 2),
+                                                color: Colors.white,
+                                              ),
+                                              offset: const Offset(5, -10),
+                                            ),
+                                          ),
+                                        ),
+                                      ))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          Languages.of(context)!
+                                              .mContactedPerson,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansRegular',
+                                              fontSize: mSizeThree,
+                                              color: mGreyEigth)),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                      flex: 7,
+                                      child: Text(
+                                          mInvestor.contactedPerson ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansSemiBold',
+                                              fontSize: mSizeThree,
+                                              color: mGreyTen)))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          Languages.of(context)!.mFundingStage,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansRegular',
+                                              fontSize: mSizeThree,
+                                              color: mGreyEigth)),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                      flex: 7,
+                                      child: Text(mInvestor.status ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansSemiBold',
+                                              fontSize: mSizeThree,
+                                              color: mGreyTen)))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          Languages.of(context)!.mDescription,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansRegular',
+                                              fontSize: mSizeThree,
+                                              color: mGreyEigth)),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                      flex: 7,
+                                      child: Text(mInvestor.description ?? "",
+                                          textAlign: TextAlign.left,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 8,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansSemiBold',
+                                              fontSize: mSizeThree,
+                                              height: 1.5,
+                                              color: mGreyTen)))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Container(
+                                color: mGreyFive,
+                                width: MediaQuery.of(context).size.width,
+                                height: 1,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          Languages.of(context)!.mWebsite,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansRegular',
+                                              fontSize: mSizeThree,
+                                              color: mGreyEigth)),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                      flex: 7,
+                                      child: Text(mInvestor.website ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansSemiBold',
+                                              fontSize: mSizeThree,
+                                              color: mGreyTen)))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          Languages.of(context)!.mMailAddress,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansRegular',
+                                              fontSize: mSizeThree,
+                                              color: mGreyEigth)),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                      flex: 7,
+                                      child: Text(mInvestor.mailAddress ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansSemiBold',
+                                              fontSize: mSizeThree,
+                                              color: mGreyTen)))
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                          Languages.of(context)!.mContactNumber,
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansRegular',
+                                              fontSize: mSizeThree,
+                                              color: mGreyEigth)),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                      flex: 7,
+                                      child: Text(mInvestor.contactNo ?? "",
+                                          textAlign: TextAlign.left,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansSemiBold',
+                                              fontSize: mSizeThree,
+                                              color: mGreyTen)))
+                                ],
+                              ),
+                            )
+                          ],
+                        )),
+                    Expanded(
+                        flex: 2,
+                        child: Container(
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Material(
+                                color: Colors.white,
+                                child: Container(
+                                  color: mGreyFive,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 1,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 6,
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: DeleteButton(
+                                            mButtonname:
+                                                Languages.of(context)!.mDelete,
+                                            onpressed: () {},
+                                            mSelectcolor: mBtnColor,
+                                            mTextColor: mWhiteColor,
+                                            mFontSize: 16,
+                                            mWidth: 150,
+                                            mHeigth: 40)),
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Center(
+                                      child: Button(
+                                          mButtonname: Languages.of(context)!
+                                              .mSaveChanges,
+                                          onpressed: () {
+                                            OnupdatefundingCRM(
+                                                "jagadeesan.a1104@gmail.com",
+                                                "mInvestor.typeOfInvestor",
+                                                mStatusChange,
+                                                mInvestor.id ?? "");
+                                          },
+                                          mSelectcolor: mBtnColor,
+                                          mTextColor: mWhiteColor,
+                                          mFontSize: 16,
+                                          mWidth: 130,
+                                          mHeigth: 40),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ))
+                  ]),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  void OnLoadDialog(BuildContext context) {
+    // showDialog<void>(
+    //   barrierDismissible: true,
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return StatefulBuilder(builder: (context1, setState) {
+    //       return Column(
+    //         mainAxisAlignment: MainAxisAlignment.start,
+    //         crossAxisAlignment: CrossAxisAlignment.end,
+    //         children: <Widget>[
+    //           const SizedBox(
+    //             height: 200,
+    //           ),
+    //           Container(
+    //             padding: const EdgeInsets.all(10),
+    //             margin: const EdgeInsets.fromLTRB(0, 20, 20, 0),
+    //             decoration: BoxDecoration(
+    //               borderRadius: BorderRadius.circular(20),
+    //               color: Colors.white,
+    //               border: Border.all(color: mGreyThree, width: 2),
+    //             ),
+    //             height: 220,
+    //             width: 200,
+    //             child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.start,
+    //                 mainAxisAlignment: MainAxisAlignment.start,
+    //                 children: [
+    //                   const SizedBox(
+    //                     height: 10,
+    //                   ),
+    //                   Material(
+    //                     child: InkWell(
+    //                       hoverColor: Colors.white,
+    //                       onTap: () {},
+    //                       child: Row(
+    //                         mainAxisAlignment: MainAxisAlignment.start,
+    //                         crossAxisAlignment: CrossAxisAlignment.center,
+    //                         children: [
+    //                           Image.asset(
+    //                             'assets/new_ic_user.png',
+    //                             width: 20,
+    //                             height: 20,
+    //                           ),
+    //                           const SizedBox(
+    //                             width: 20,
+    //                           ),
+    //                           Text(Languages.of(context)!.mprofile,
+    //                               textAlign: TextAlign.center,
+    //                               style: const TextStyle(
+    //                                   fontFamily: 'OpenSauceSansRegular',
+    //                                   fontSize: mSizeThree,
+    //                                   color: mGreyTen))
+    //                         ],
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   const SizedBox(
+    //                     height: 20,
+    //                   ),
+    //                   Material(
+    //                     child: InkWell(
+    //                       hoverColor: Colors.white,
+    //                       onTap: () {},
+    //                       child: Row(
+    //                         mainAxisAlignment: MainAxisAlignment.start,
+    //                         crossAxisAlignment: CrossAxisAlignment.center,
+    //                         children: [
+    //                           Image.asset(
+    //                             'assets/new_ic_settings.png',
+    //                             width: 20,
+    //                             height: 20,
+    //                           ),
+    //                           const SizedBox(
+    //                             width: 20,
+    //                           ),
+    //                           Text(Languages.of(context)!.mAccountSettings,
+    //                               textAlign: TextAlign.center,
+    //                               style: const TextStyle(
+    //                                   fontFamily: 'OpenSauceSansRegular',
+    //                                   fontSize: mSizeThree,
+    //                                   color: mGreyTen))
+    //                         ],
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   const SizedBox(
+    //                     height: 20,
+    //                   ),
+    //                   Material(
+    //                     child: InkWell(
+    //                       hoverColor: Colors.white,
+    //                       onTap: () {},
+    //                       child: Row(
+    //                         mainAxisAlignment: MainAxisAlignment.start,
+    //                         crossAxisAlignment: CrossAxisAlignment.center,
+    //                         children: [
+    //                           Image.asset(
+    //                             'assets/new_ic_support.png',
+    //                             width: 20,
+    //                             height: 20,
+    //                           ),
+    //                           const SizedBox(
+    //                             width: 20,
+    //                           ),
+    //                           Text(Languages.of(context)!.mCustomerSupport,
+    //                               textAlign: TextAlign.center,
+    //                               style: const TextStyle(
+    //                                   fontFamily: 'OpenSauceSansRegular',
+    //                                   fontSize: mSizeThree,
+    //                                   color: mGreyTen))
+    //                         ],
+    //                       ),
+    //                     ),
+    //                   ),
+    //                   const SizedBox(
+    //                     height: 20,
+    //                   ),
+    //                   Container(
+    //                     width: 180,
+    //                     height: 2,
+    //                     color: mGreyFive,
+    //                   ),
+    //                   const SizedBox(
+    //                     height: 20,
+    //                   ),
+    //                   Material(
+    //                     child: InkWell(
+    //                       hoverColor: Colors.white,
+    //                       onTap: () {},
+    //                       child: Row(
+    //                         mainAxisAlignment: MainAxisAlignment.center,
+    //                         crossAxisAlignment: CrossAxisAlignment.center,
+    //                         children: [
+    //                           const SizedBox(
+    //                             width: 20,
+    //                           ),
+    //                           Image.asset(
+    //                             'assets/new_ic_signout.png',
+    //                             width: 20,
+    //                             height: 20,
+    //                           ),
+    //                           const SizedBox(
+    //                             width: 10,
+    //                           ),
+    //                           Text(Languages.of(context)!.mLogout,
+    //                               textAlign: TextAlign.center,
+    //                               style: const TextStyle(
+    //                                   fontFamily: 'OpenSauceSansRegular',
+    //                                   fontSize: mSizeThree,
+    //                                   color: mRedSix))
+    //                         ],
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ]),
+    //           )
+    //         ],
+    //       );
+    //     });
+    //   },
+    // );
+  }
+
+  void OnloadSearchinvestors(String UserID, int currentPage, String country,
+      String fundingstage, String amount) {
+    Loading(mLoaderGif).start(context);
+
+    apiService1
+        .getSearchinvestors("", currentPage, "", "", "")
+        .then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        if (SearchinvestorslistResponse.fromJson(value.data)!.message!.status ??
+            false) {
+          Loading.stop();
+          setState(() {
+            items.clear();
+            items = SearchinvestorslistResponse.fromJson(value.data)
+                .message!
+                .searchInvestorsList!;
+          });
+        } else {
+          Loading.stop();
+          ErrorToast(context: context, text: "Error");
+        }
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
+
+  void OnloadFavList(String UserId, int currentPage) {
+    Loading(mLoaderGif).start(context);
+    apiService1.getFavList(UserId, currentPage).then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        if (FavouriteResponse.fromJson(value.data)!.message!.status ?? false) {
+          Loading.stop();
+          setState(() {
+            mFavList.clear();
+            mFavList = FavouriteResponse.fromJson(value.data)
+                .message!
+                .searchInvestorsList!;
+          });
+        } else {
+          Loading.stop();
+          ErrorToast(context: context, text: "Error");
+        }
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
+
+  void OnloadChangeFav(String UserId, String InvestorId, int status) {
+    Loading(mLoaderGif).start(context);
+    apiService1.RemoveFavList(UserId, InvestorId, status).then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        if (FavouriteResponse.fromJson(value.data)!.message!.status ?? false) {
+          Loading.stop();
+          setState(() {
+            OnloadFavList("jagadeesan.a1104@gmail.com", 1);
+          });
+        } else {
+          Loading.stop();
+          ErrorToast(context: context, text: "Error");
+        }
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
+
+  void OnupdatefundingCRM(String UserID, String typeofinvestor,
+      String fundingstage, String investorid) {
+    Loading(mLoaderGif).start(context);
+
+    apiService1.UpdateFundingCRM(
+            UserID, fundingstage, investorid, typeofinvestor)
+        .then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        if (SearchinvestorslistResponse.fromJson(value.data)!.message!.status ??
+            false) {
+          Loading.stop();
+          setState(() {
+            OnLoadFundingCRM("jagadeesan.a1104@gmail.com");
+          });
+        } else {
+          Loading.stop();
+          ErrorToast(context: context, text: "Error");
+        }
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
+
+  static Widget buildItem(MenuItem item) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 10,
+        ),
+        Expanded(
+            child: Text(item.text,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                    fontFamily: 'OpenSauceSansRegular',
+                    fontSize: mSizeThree,
+                    color: mGreyNine))),
+      ],
+    );
+  }
+
+  void OnLoadFundingCRM(String UserID) {
+    Loading(mLoaderGif).start(context);
+
+    apiService1.getFundingCrm(UserID).then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        if (FundingCrmResponse.fromJson(value.data)!.message!.status ?? false) {
+          Loading.stop();
+          setState(() {
+            mFundingCRMList = FundingCrmResponse.fromJson(value.data)!
+                .message!
+                .fundingCrmList!;
+
+            mSortlist = mFundingCRMList[0].sortlist!;
+            mSortlistCount = mFundingCRMList[0].sortlist!.sortlistCount!;
+
+            mSortlistList.clear();
+
+            for (int i = 0; i < mSortlist.searchInvestor!.length; i++) {
+              mSortlistList.add(mSortlist.searchInvestor![i]);
+            }
+
+            for (int i = 0; i < mSortlist.userCreatedInvestor!.length; i++) {
+              mSortlistList.add(mSortlist.userCreatedInvestor![i]);
+            }
+
+            mContacted = mFundingCRMList[0].contacted!;
+            mContactedCount = mFundingCRMList[0].contacted!.contactedCount!;
+
+            mContactedList.clear();
+
+            for (int i = 0; i < mContacted.searchInvestor!.length; i++) {
+              mContactedList.add(mContacted.searchInvestor![i]);
+            }
+
+            for (int i = 0; i < mContacted.userCreatedInvestor!.length; i++) {
+              mContactedList.add(mContacted.userCreatedInvestor![i]);
+            }
+
+            mPitched = mFundingCRMList[0].pitched!;
+            mPitchedCount = mFundingCRMList[0].pitched!.pitchedCount!;
+
+            mPitchedList.clear();
+
+            for (int i = 0; i < mPitched.searchInvestor!.length; i++) {
+              mPitchedList.add(mPitched.searchInvestor![i]);
+            }
+
+            for (int i = 0; i < mPitched.userCreatedInvestor!.length; i++) {
+              mPitchedList.add(mPitched.userCreatedInvestor![i]);
+            }
+
+            mDiligence = mFundingCRMList[0].diligence!;
+            mDiligenceCount = mFundingCRMList[0].diligence!.diligenceCount!;
+
+            mDiligenceList.clear();
+
+            for (int i = 0; i < mDiligence.searchInvestor!.length; i++) {
+              mDiligenceList.add(mDiligence.searchInvestor![i]);
+            }
+
+            for (int i = 0; i < mDiligence.userCreatedInvestor!.length; i++) {
+              mDiligenceList.add(mDiligence.userCreatedInvestor![i]);
+            }
+
+            mWon = mFundingCRMList[0].won!;
+            mWonCount = mFundingCRMList[0].won!.wonCount!;
+
+            mWonList.clear();
+
+            for (int i = 0; i < mWon.searchInvestor!.length; i++) {
+              mWonList.add(mWon.searchInvestor![i]);
+            }
+
+            for (int i = 0; i < mWon.userCreatedInvestor!.length; i++) {
+              mWonList.add(mWon.userCreatedInvestor![i]);
+            }
+
+            mLost = mFundingCRMList[0].lost!;
+            mLostCount = mFundingCRMList[0].lost!.lostCount!;
+
+            mLostList.clear();
+
+            for (int i = 0; i < mLost.searchInvestor!.length; i++) {
+              mLostList.add(mLost.searchInvestor![i]);
+            }
+
+            for (int i = 0; i < mLost.userCreatedInvestor!.length; i++) {
+              mLostList.add(mLost.userCreatedInvestor![i]);
+            }
+
+            mfundingmaxcount = FundingCrmResponse.fromJson(value.data)!
+                .message!
+                .fundingMaxCount!;
+          });
+        } else {
+          Loading.stop();
+          ErrorToast(context: context, text: "Error");
+        }
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
+
+  void OnloadAddFav(String userId, String? investorid) {
+    Loading(mLoaderGif).start(context);
+
+    apiService1.AddFavList(userId, investorid ?? "").then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        if (SearchinvestorslistResponse.fromJson(value.data)!.message!.status ??
+            false) {
+          Loading.stop();
+          setState(() {
+            OnloadSearchinvestors(
+                "jagadeesan.a1104@gmail.com", currentPage, "", "", "");
+          });
+        } else {
+          Loading.stop();
+          ErrorToast(context: context, text: "Error");
+        }
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
+
+/*  void onChanged(BuildContext context, ProfileMenuItem item) {
+    if (item.text == Languages.of(context)!.mprofile) {}
+    */ /*switch (item) {
+      case MenuItems.Preseed:
+        print("Like");
+        //Do something
+        break;
+      case MenuItems.Seed:
+        //Do something
+        break;
+      case MenuItems.Early:
+        //Do something
+        break;
+
+      case MenuItems.Growth:
+        //Do something
+        break;
+    }
+  }*/ /*
+  }*/
 }
+
+class MenuItem {
+  const MenuItem({
+    required this.text,
+  });
+
+  final String text;
+}
+
+/*class MenuItems {
+  static const List<MenuItem> firstItems = [
+    Preseed,
+    Seed,
+    Early,
+    Growth,
+  ];
+
+  static const Preseed = MenuItem(text: 'Pre-seed');
+  static const Seed = MenuItem(text: 'Seed');
+  static const Early = MenuItem(text: 'Early');
+  static const Growth = MenuItem(text: 'Growth');
+
+  static Widget buildItem(MenuItem item) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 10,
+        ),
+        Expanded(
+            child: Text(item.text,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                    fontFamily: 'OpenSauceSansRegular',
+                    fontSize: mSizeThree,
+                    color: mGreyNine))
+
+            ),
+      ],
+    );
+  }
+
+  static void onChanged(BuildContext context, ProfileMenuItem item) {
+    switch (item) {
+      case MenuItems.Preseed:
+        print("Like");
+        //Do something
+        break;
+      case MenuItems.Seed:
+        //Do something
+        break;
+      case MenuItems.Early:
+        //Do something
+        break;
+
+      case MenuItems.Growth:
+        //Do something
+        break;
+    }
+  }
+}*/

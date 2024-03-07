@@ -11,6 +11,11 @@ import 'package:startinsights/Localization/localizations_delegate.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/web/dashboard.dart';
+import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
+import 'package:startinsights/Screen/Login/web/login.dart';
+import 'package:startinsights/Screen/Register/bloc/register_bloc.dart';
+import 'package:startinsights/Screen/Register/web/registerfirst.dart';
+import 'package:startinsights/Screen/Register/web/registesecond.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.dart';
 import 'package:startinsights/Screen/SearchInvestors/web/searchinvestors.dart';
 import 'package:startinsights/Utils/MyColor.dart';
@@ -149,7 +154,7 @@ class _MyAppState extends State<MyApp> {
 
                         // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
                         SearchInvestorsBloc(mContext: context)
-                          ..getSearchinvestorsData(),
+                          ..getSearchinvestorsData(1, '', '', ''),
                   )
                 ],
                 child: SearchInvestorsWeb(),
@@ -166,6 +171,65 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ],
           ),
+      GoRoute(
+          name: "Login",
+          path: '/Login',
+          builder: (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<LoginBloc>(
+                    create: (context) =>
+
+                        // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                        LoginBloc(mContext: context), //..getMasterData(),
+                  )
+                ],
+                child: Login(),
+              )
+          // routes: <RouteBase>[
+          //   GoRoute(
+          //     path: 'song/:songId',
+          //     // Display on the root Navigator
+          //     builder: (BuildContext context, GoRouterState state) {
+          //       return SongScreen(
+          //         songId: state.pathParameters['songId']!,
+          //       );
+          //     },
+          //   ),
+          // ],
+          ),
+      GoRoute(
+        name: "Register",
+        path: '/Register',
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider<RegisterBloc>(
+              create: (context) =>
+
+                  // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                  RegisterBloc(mContext: context),
+            )
+          ],
+          child: RegisterFirst(),
+        ),
+        routes: <RouteBase>[
+          GoRoute(
+            name: "RegisterComplet",
+            path: 'RegisterComplet',
+            // Display on the root Navigator
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider<RegisterBloc>(
+                  create: (context) =>
+
+                      // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                      RegisterBloc(mContext: context),
+                )
+              ],
+              child: RegisterSecond(),
+            ),
+          ),
+        ],
+      ),
       /*  GoRoute(
         path: '/search',
         pageBuilder: (context, state) {

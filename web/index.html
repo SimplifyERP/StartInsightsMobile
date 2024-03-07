@@ -40,6 +40,18 @@
   <script src="flutter.js" defer></script>
 </head>
 <body>
+
+<script>
+   onEntrypointLoaded: function(engineInitializer) {
+
+          let config = {
+            renderer: "html",
+          }
+          engineInitializer.initializeEngine(config).then(function(appRunner) {
+            appRunner.runApp();
+          });
+        }
+</script>
 <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js

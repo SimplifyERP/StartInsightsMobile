@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Model/CommonResponse.dart';
+import 'package:startinsights/Model/RegistrationResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/register_repo.dart';
 import 'package:startinsights/Screen/Register/bloc/register_event.dart';
@@ -18,6 +22,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
   RegisterBloc({
     required this.mContext,
   }) : super(RegisterInitialState());
+
+  late UserDetails mUserDetails;
 
   void register({
     required String firstname,
@@ -58,6 +64,79 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
       SucessToast(
           context: mContext,
           text: CommonResponse.fromJson(apiResults.data).message!.message!);
+    } else if (apiResults is ApiFailure) {
+      Loading.stop();
+      ErrorToast(context: mContext, text: "Failure");
+    }
+  }
+
+  void CreateAccount({
+    required String firstname,
+    required String phoneno,
+    required String emailid,
+  }) async {
+    Loading(mLoaderGif).start(mContext);
+    ApiResults apiResults =
+        await RegisterRepo().CreateAccount(firstname, phoneno, emailid);
+    if (apiResults is ApiSuccess) {
+      Loading.stop();
+
+      if (RegistrationResponse.fromJson(apiResults.data).message!.status ==
+          true) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String mUserInfo = json.encode(apiResults.data);
+        await prefs.setString(StorageServiceConstant.MUSERINFO, mUserInfo);
+        GoRouter.of(mContext).go('/Register/RegisterComplet');
+      } else {
+        // ignore: use_build_context_synchronously
+        showErrorSnackBar(
+            context: mContext,
+            text: RegistrationResponse.fromJson(apiResults.data)
+                .message!
+                .message!);
+      }
+    } else if (apiResults is ApiFailure) {
+      Loading.stop();
+      // ignore: use_build_context_synchronously
+      ErrorToast(context: mContext, text: "Failure");
+    }
+  }
+
+  void CreateAccountFinish({
+    required String usertype,
+    required String password,
+  }) async {
+    Loading(mLoaderGif).start(mContext);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> valueMap =
+        json.decode((prefs.getString(StorageServiceConstant.MUSERINFO) ?? ''));
+    mUserDetails =
+        RegistrationResponse.fromJson(valueMap).message!.userDetails!;
+
+    ApiResults apiResults = await RegisterRepo().CreateAccountFinish(
+        mUserDetails.userId ?? "",
+        mUserDetails.mobileNo ?? "",
+        usertype,
+        password);
+    if (apiResults is ApiSuccess) {
+      Loading.stop();
+
+      if (RegistrationResponse.fromJson(apiResults.data).message!.status ==
+          true) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String mUserInfo = json.encode(apiResults.data);
+        await prefs.setString(StorageServiceConstant.MUSERINFO, mUserInfo);
+
+        GoRouter.of(mContext).go('/Dashboard');
+      } else {
+        // ignore: use_build_context_synchronously
+        showErrorSnackBar(
+            context: mContext,
+            text: RegistrationResponse.fromJson(apiResults.data)
+                .message!
+                .message!);
+      }
     } else if (apiResults is ApiFailure) {
       Loading.stop();
       ErrorToast(context: mContext, text: "Failure");

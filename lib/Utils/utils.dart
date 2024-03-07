@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:startinsights/Screen/Profile/web/profileweb.dart';
+import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
@@ -60,19 +61,42 @@ void ErrorToast({
   required BuildContext context,
   required String text,
 }) {
+  // final snackBar = SnackBar(
+  //   content: Text(
+  //     text,
+  //     textAlign: TextAlign.center,
+  //     style: const TextStyle(
+  //         fontSize: 16, color: Colors.white, fontFamily: 'ManropeRegular'),
+  //   ),
+  //   backgroundColor: Colors.red,
+  //   behavior: SnackBarBehavior.floating,
+  //   margin: const EdgeInsets.only(bottom: 40, left: 100, right: 100),
+  //   padding: const EdgeInsets.all(15),
+  //   elevation: 1,
+  //   duration: const Duration(seconds: 2),
+  // );
+
   final snackBar = SnackBar(
-    content: Text(
+    width: 400,
+    content: Center(
+        child: Text(
       text,
       textAlign: TextAlign.center,
       style: const TextStyle(
-          fontSize: 16, color: Colors.white, fontFamily: 'ManropeRegular'),
-    ),
+          fontSize: mSizeThree,
+          color: Colors.white,
+          fontFamily: 'OpenSauceSansRegular'),
+    )),
     backgroundColor: Colors.red,
-    behavior: SnackBarBehavior.floating,
-    margin: const EdgeInsets.only(bottom: 40, left: 100, right: 100),
-    padding: const EdgeInsets.all(15),
     elevation: 1,
     duration: const Duration(seconds: 2),
+    behavior: SnackBarBehavior.floating,
+    padding: const EdgeInsets.all(15),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+    ),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
@@ -81,7 +105,7 @@ void SucessToast({
   required BuildContext context,
   required String text,
 }) {
-  final snackBar = SnackBar(
+  /*final snackBar = SnackBar(
     content: Text(
       text,
       textAlign: TextAlign.center,
@@ -94,6 +118,29 @@ void SucessToast({
     padding: const EdgeInsets.all(15),
     elevation: 1,
     duration: const Duration(seconds: 2),
+  );*/
+
+  final snackBar = SnackBar(
+    width: 400,
+    content: Center(
+        child: Text(
+      text,
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+          fontSize: mSizeThree,
+          color: Colors.white,
+          fontFamily: 'OpenSauceSansRegular'),
+    )),
+    backgroundColor: Colors.green,
+    elevation: 1,
+    duration: const Duration(seconds: 2),
+    behavior: SnackBarBehavior.floating,
+    padding: const EdgeInsets.all(15),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(
+        Radius.circular(10),
+      ),
+    ),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

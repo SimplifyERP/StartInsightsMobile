@@ -26,17 +26,17 @@ class PrimaryButton extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             color: mSelectcolor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(20),
           ),
           constraints: BoxConstraints(maxHeight: mHeigth),
           alignment: Alignment.center,
           child: Text(
             mButtonname,
             style: TextStyle(
-                color: mTextColor,
-                fontFamily: 'ManropeBold',
-                fontSize: mFontSize,
-                fontWeight: FontWeight.bold),
+              color: mTextColor,
+              fontFamily: 'OpenSauceSansRegular',
+              fontSize: mFontSize,
+            ),
           ),
         ));
   }

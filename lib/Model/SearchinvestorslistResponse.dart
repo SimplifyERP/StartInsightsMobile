@@ -30,15 +30,18 @@ class SearchinvestorslistResponse {
 
 class Message {
   bool? status;
+  int? investorsCount;
   List<SearchInvestorsList>? searchInvestorsList;
 
   Message({
     this.status,
+    this.investorsCount,
     this.searchInvestorsList,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
         status: json["status"],
+        investorsCount: json["investors_count"],
         searchInvestorsList: json["search_investors_list"] == null
             ? []
             : List<SearchInvestorsList>.from(json["search_investors_list"]!
@@ -47,6 +50,7 @@ class Message {
 
   Map<String, dynamic> toJson() => {
         "status": status,
+        "investors_count": investorsCount,
         "search_investors_list": searchInvestorsList == null
             ? []
             : List<dynamic>.from(searchInvestorsList!.map((x) => x.toJson())),
@@ -54,8 +58,12 @@ class Message {
 }
 
 class SearchInvestorsList {
+  String? id;
+  String? name;
+  bool? favouritesStatus;
   String? title;
   String? logo;
+  int? investorVerified;
   String? linkedin;
   String? website;
   String? aboutUs;
@@ -68,8 +76,12 @@ class SearchInvestorsList {
   int? maxCheckSize;
 
   SearchInvestorsList({
+    this.id,
+    this.name,
     this.title,
     this.logo,
+    this.investorVerified,
+    this.favouritesStatus,
     this.linkedin,
     this.website,
     this.aboutUs,
@@ -84,8 +96,12 @@ class SearchInvestorsList {
 
   factory SearchInvestorsList.fromJson(Map<String, dynamic> json) =>
       SearchInvestorsList(
+        id: json["id"],
+        name: json["name"],
         title: json["title"],
         logo: json["logo"],
+        investorVerified: json["investor_verified"],
+        favouritesStatus: json["favourites_status"],
         linkedin: json["linkedin"],
         website: json["website"],
         aboutUs: json["about_us"],
@@ -102,8 +118,12 @@ class SearchInvestorsList {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
         "title": title,
         "logo": logo,
+        "investor_verified": investorVerified,
+        "favourites_status": favouritesStatus,
         "linkedin": linkedin,
         "website": website,
         "about_us": aboutUs,

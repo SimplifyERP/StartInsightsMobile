@@ -5,11 +5,11 @@ import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Widgets/expandedview.dart';
 import 'package:startinsights/Widgets/primary_button.dart';
 
-class SearchInvestorsItemList extends StatelessWidget {
+class SearchInvestorsItemListdummy extends StatelessWidget {
   final int mIndex;
   final SearchInvestorsList mSearchInvestorsList;
 
-  SearchInvestorsItemList({
+  SearchInvestorsItemListdummy({
     required this.mIndex,
     required this.mSearchInvestorsList,
     super.key,

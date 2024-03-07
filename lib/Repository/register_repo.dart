@@ -27,4 +27,34 @@ class RegisterRepo {
       'company_name': linkedin
     });
   }
+
+  Future<ApiResults> CreateAccount(
+    String firstname,
+    String phoneno,
+    String emailid,
+  ) async {
+    // email = 'vivekchamp84@gmail.com';
+    // password = 'vivek@123';
+    return await sl<MyDio>().postData(endPoint: createUserAPI, data: {
+      'full_name': firstname,
+      'mobile_no': phoneno,
+      'email_id': emailid
+    });
+  }
+
+  Future<ApiResults> CreateAccountFinish(
+    String userid,
+    String phoneno,
+    String usertype,
+    String password,
+  ) async {
+    // email = 'vivekchamp84@gmail.com';
+    // password = 'vivek@123';
+    return await sl<MyDio>().postData(endPoint: createUserFinishAPI, data: {
+      'user_id': userid,
+      'phone_no': phoneno,
+      'user_type': usertype,
+      'password': password
+    });
+  }
 }

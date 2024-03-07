@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 
 class AuthFormField extends StatelessWidget {
@@ -81,18 +82,22 @@ class AuthFormField extends StatelessWidget {
         onTap: onTap,
         readOnly: mreadOnly,
         obscureText: obscureText,
-        style: TextStyle(
-            fontSize: 16, fontFamily: 'ManropeMedium', color: textColor),
+        style: const TextStyle(
+            fontSize: mSizeThree,
+            fontFamily: 'OpenSauceSansRegular',
+            color: mBlackOne),
         textAlignVertical: TextAlignVertical.top,
         decoration: InputDecoration(
             counterText: "",
             labelText: labelText,
             labelStyle: const TextStyle(
-                fontSize: 15, fontFamily: 'ManropeMedium', color: kGray),
+                fontSize: mSizeTwo,
+                fontFamily: 'OpenSauceSansRegular',
+                color: mGreyEigth),
             hintText: hintText,
             alignLabelWithHint: true,
             hintStyle: const TextStyle(
-              color: kGray,
+              color: mGreyEigth,
             ),
             isDense: true, // Added this
 
@@ -101,13 +106,15 @@ class AuthFormField extends StatelessWidget {
             contentPadding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: kTextBorder, width: 1)),
+                borderSide: const BorderSide(color: mGreyFour, width: 1)),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: kTextBorder, width: 1),
+              borderSide: const BorderSide(color: mGreyFour, width: 1),
               borderRadius: BorderRadius.circular(5),
             ),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
-                borderSide: const BorderSide(width: 1, color: kTextBorder))));
+                borderSide: const BorderSide(width: 1, color: mGreyFour)),
+            fillColor: mLightColorOne,
+            filled: true));
   }
 }

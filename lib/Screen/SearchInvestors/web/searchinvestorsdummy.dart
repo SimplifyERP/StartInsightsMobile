@@ -11,7 +11,7 @@ import 'package:startinsights/Repository/pitchroom_repository.dart';
 import 'package:startinsights/Screen/SearchInvestors/CDM.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_state.dart';
-import 'package:startinsights/Screen/SearchInvestors/web/searchinvestorsitemList.dart';
+import 'package:startinsights/Screen/SearchInvestors/web/searchinvestorsitemListdummy.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/screens.dart';
@@ -580,7 +580,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                 child: ListView.builder(
                                   itemBuilder: ((context, index) {
                                     final mSearchInvestors = items[index];
-                                    return SearchInvestorsItemList(
+                                    return SearchInvestorsItemListdummy(
                                       mSearchInvestorsList: mSearchInvestors,
                                       mIndex: index,
                                     );

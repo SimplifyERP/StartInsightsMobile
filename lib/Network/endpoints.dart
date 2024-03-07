@@ -73,3 +73,26 @@ const String updateprofileAPI =
 
 const String searchinvestorslistAPI =
     '$baseUrl/method/startinsights.website_api.search_investors.get_search_investors_list';
+
+//New API
+
+const String createUserAPI =
+    '$baseUrl/method/startinsights.website_api.register.create_account_against_lead';
+
+const String createUserFinishAPI =
+    '$baseUrl/method/startinsights.website_api.register.create_register_account';
+
+const String FundingCRMAPI =
+    '$baseUrl/method/startinsights.website_api.funding_crm.get_funding_crm';
+
+const String FavouriteAPI =
+    '$baseUrl/method/startinsights.website_api.search_investors.get_favourite_investors';
+
+const String RemoveFavouriteAPI =
+    '$baseUrl/method/startinsights.website_api.search_investors.remove_favourites_investors';
+
+const String AddFavouriteAPI =
+    '$baseUrl/method/startinsights.website_api.search_investors.set_investors_favourites';
+
+const String UpdatefundingcrmAPI =
+    '$baseUrl/method/startinsights.website_api.funding_crm.update_funding_crm';

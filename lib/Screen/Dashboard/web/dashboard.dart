@@ -103,12 +103,6 @@ class _DashboardState extends State<Dashboard> {
                                 mText: "TExt",
                                 mUserImage: "",
                                 mFrom: 1,
-                                onPressed: () {
-                                  //ErrorToast(context: context, text: "Test");
-                                },
-                                onPressedLogout: () {
-                                  setState(() {});
-                                },
                               ),
                               const SizedBox(
                                 height: 20,

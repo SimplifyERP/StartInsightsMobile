@@ -123,6 +123,12 @@ const Color mGreyNine = Color(0xff40464D);
 const Color mGreyTen = Color(0xff202326);
 
 const Color mBlackOne = Color(0xff101010);
+const Color mBlackTwo = Color(0xff282828);
+const Color mBlackThree = Color(0xff343330);
+const Color mLightColorOne = Color(0xffF5F5F5);
+const Color mRedColorOne = Color(0xffDF0000);
+const Color mRedColorTwo = Color(0xffEB5757);
+const Color mBlueColor = Color(0xff0A66C2);
 const Color mgradientOne = Color(0xff0135E3);
 const Color mgradientTwo = Color(0xff5994FF);
 

@@ -251,7 +251,7 @@ class Routes {
             providers: [
               BlocProvider<SearchInvestorsBloc>(
                 create: (context) => SearchInvestorsBloc(mContext: context)
-                  ..getSearchinvestorsData(),
+                  ..getSearchinvestorsData(1, '', '', ''),
               )
             ],
             child: SearchInvestorsWeb(),

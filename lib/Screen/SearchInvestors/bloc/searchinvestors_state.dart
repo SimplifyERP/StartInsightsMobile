@@ -17,5 +17,7 @@ class GetSearchInvestorsInfoFailState extends SearchInvestorsStatus {
 
 class GetSearchInvestorsInfoSuccessState extends SearchInvestorsStatus {
   final List<SearchInvestorsList> mSearchInvestorsList;
-  GetSearchInvestorsInfoSuccessState(this.mSearchInvestorsList);
+  final int mSearchInvestorsCount;
+  GetSearchInvestorsInfoSuccessState(
+      this.mSearchInvestorsList, this.mSearchInvestorsCount);
 }
