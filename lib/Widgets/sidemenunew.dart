@@ -363,97 +363,103 @@ class SideMenuNew extends StatelessWidget {
                       const SizedBox(
                         height: 15,
                       ),
-                      Container(
-                        height: 40,
+                      InkWell(
+                        onTap: () {
+                          GoRouter.of(context).go('/Service');
+                        },
+                        child: Container(
+                          height: 40,
 
-                        alignment: Alignment.centerRight,
-                        decoration: mFrom == 4
-                            ? const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(4),
-                                    bottomRight: Radius.circular(4)),
-                                color: mBlueTwo,
-                                boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.transparent,
-                                      blurRadius: 0,
-                                    ),
-                                  ])
-                            : null, // where to position the child
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                width: 50,
-                              ),
-                              Expanded(
-                                  flex: 9,
-                                  child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        mFrom == 4
-                                            ? const sidemenuImage(
-                                                menuicon:
-                                                    'assets/new_ic_service_sel.png')
-                                            : const sidemenuImage(
-                                                menuicon:
-                                                    'assets/new_ic_service.png'),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        SidemenuTextNew(
-                                            menuname: Languages.of(context)!
-                                                .mServices,
-                                            textColor: mFrom == 4
-                                                ? mBlackColor
-                                                : mGreyEigth,
-                                            isSelect: mFrom == 4 ? true : false,
-                                            fontSize: 17)
-
-                                        //ic_dashboardwhite
-                                      ])),
-                              Expanded(
-                                  flex: 1,
-                                  child: ColoredBox(
-                                    color: Colors.transparent,
+                          alignment: Alignment.centerRight,
+                          decoration: mFrom == 4
+                              ? const BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(10),
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(4),
+                                      bottomRight: Radius.circular(4)),
+                                  color: mBlueTwo,
+                                  boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.transparent,
+                                        blurRadius: 0,
+                                      ),
+                                    ])
+                              : null, // where to position the child
+                          child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 50,
+                                ),
+                                Expanded(
+                                    flex: 9,
                                     child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          width: 5,
-                                          height: 40,
-                                          decoration: mFrom == 4
-                                              ? const BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10)),
-                                                  color: mBlueOne,
-                                                  boxShadow: [
-                                                      BoxShadow(
-                                                        color:
-                                                            Colors.transparent,
-                                                        blurRadius: 0,
-                                                      ),
-                                                    ])
-                                              : null,
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ]),
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          mFrom == 4
+                                              ? const sidemenuImage(
+                                                  menuicon:
+                                                      'assets/new_ic_service_sel.png')
+                                              : const sidemenuImage(
+                                                  menuicon:
+                                                      'assets/new_ic_service.png'),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          SidemenuTextNew(
+                                              menuname: Languages.of(context)!
+                                                  .mServices,
+                                              textColor: mFrom == 4
+                                                  ? mBlackColor
+                                                  : mGreyEigth,
+                                              isSelect:
+                                                  mFrom == 4 ? true : false,
+                                              fontSize: 17)
+
+                                          //ic_dashboardwhite
+                                        ])),
+                                Expanded(
+                                    flex: 1,
+                                    child: ColoredBox(
+                                      color: Colors.transparent,
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            width: 5,
+                                            height: 40,
+                                            decoration: mFrom == 4
+                                                ? const BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            bottomRight: Radius
+                                                                .circular(10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    color: mBlueOne,
+                                                    boxShadow: [
+                                                        BoxShadow(
+                                                          color: Colors
+                                                              .transparent,
+                                                          blurRadius: 0,
+                                                        ),
+                                                      ])
+                                                : null,
+                                          )
+                                        ],
+                                      ),
+                                    )),
+                              ]),
+                        ),
                       ),
                       const SizedBox(
                         height: 15,

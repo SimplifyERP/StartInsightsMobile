@@ -18,6 +18,8 @@ import 'package:startinsights/Screen/Register/web/registerfirst.dart';
 import 'package:startinsights/Screen/Register/web/registesecond.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.dart';
 import 'package:startinsights/Screen/SearchInvestors/web/searchinvestors.dart';
+import 'package:startinsights/Screen/Service/bloc/servicelist_bloc.dart';
+import 'package:startinsights/Screen/Service/web/searchlist.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/theme.dart';
 import 'package:startinsights/firebase_options.dart';
@@ -230,6 +232,33 @@ class _MyAppState extends State<MyApp> {
           ),
         ],
       ),
+      GoRoute(
+          name: "Service",
+          path: '/Service',
+          builder: (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<ServicelistBloc>(
+                    create: (context) =>
+
+                        // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                        ServicelistBloc(mContext: context)
+                          ..getServiceListData(1),
+                  )
+                ],
+                child: SearchList(),
+              )
+          // routes: <RouteBase>[
+          //   GoRoute(
+          //     path: 'song/:songId',
+          //     // Display on the root Navigator
+          //     builder: (BuildContext context, GoRouterState state) {
+          //       return SongScreen(
+          //         songId: state.pathParameters['songId']!,
+          //       );
+          //     },
+          //   ),
+          // ],
+          ),
       /*  GoRoute(
         path: '/search',
         pageBuilder: (context, state) {

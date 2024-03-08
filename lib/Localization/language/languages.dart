@@ -304,4 +304,15 @@ abstract class Languages {
   String get mEarlyMenu;
   String get mGrowthMenu;
   String get mFavInv;
+  String get mservicelink;
+  String get mAddtoService;
+  String get mProcessDocuments;
+  String get mAboutService;
+  String get mmyservicelink;
+  String get mViewUpdates;
+  String get mAllServices;
+  String get mWhoweare;
+  String get mValueadd;
+  String get mFirmtype;
+  String get mSendaDeck;
 }

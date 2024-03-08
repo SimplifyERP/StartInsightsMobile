@@ -306,4 +306,15 @@ class LanguageEn extends Languages {
   String get mEarlyMenu => "Early";
   String get mGrowthMenu => "Growth";
   String get mFavInv => " Favourites Investors";
+  String get mservicelink => "Dashboard >  ";
+  String get mAddtoService => "Add to Service";
+  String get mProcessDocuments => "Process & Documents";
+  String get mAboutService => "About Service";
+  String get mmyservicelink => "Dashboard >  Services > ";
+  String get mViewUpdates => "View Updates";
+  String get mAllServices => "All Services";
+  String get mWhoweare => "Who we are";
+  String get mValueadd => "Value add";
+  String get mFirmtype => "Firm type";
+  String get mSendaDeck => "Send a Deck";
 }

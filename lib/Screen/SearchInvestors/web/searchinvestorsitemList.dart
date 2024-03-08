@@ -6,7 +6,6 @@ import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/SearchinvestorslistResponse.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
-import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/primary_button.dart';
 
 class SearchInvestorsItemList extends StatelessWidget {
@@ -14,12 +13,16 @@ class SearchInvestorsItemList extends StatelessWidget {
   final SearchInvestorsList mSearchInvestorsList;
   final VoidCallback RemoveFavonpressed;
   final VoidCallback AddFavonpressed;
+  final VoidCallback ViewMorepressed;
+  final String mSelectId;
 
   const SearchInvestorsItemList({
     required this.mIndex,
     required this.mSearchInvestorsList,
     required this.RemoveFavonpressed,
     required this.AddFavonpressed,
+    required this.ViewMorepressed,
+    required this.mSelectId,
     super.key,
   });
 
@@ -32,6 +35,9 @@ class SearchInvestorsItemList extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: mGreyTwo,
+          border: (mSelectId == mSearchInvestorsList.id)
+              ? Border.all(color: mBlueOne, width: 1)
+              : null,
           boxShadow: const [
             BoxShadow(
               color: mGreyTwo,
@@ -221,7 +227,7 @@ class SearchInvestorsItemList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(mSearchInvestorsList.title ?? "",
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left,
                             style: const TextStyle(
                                 fontFamily: 'OpenSauceSansBold',
                                 fontSize: mSizeThree,
@@ -230,7 +236,7 @@ class SearchInvestorsItemList extends StatelessWidget {
                           height: 5,
                         ),
                         Text(mSearchInvestorsList.firmType ?? "",
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.left,
                             style: const TextStyle(
                                 fontFamily: 'OpenSauceSansRegular',
                                 fontSize: mSizeTwo,
@@ -262,9 +268,7 @@ class SearchInvestorsItemList extends StatelessWidget {
                           trimMode: TrimMode.Line,
                           trimCollapsedText: 'See more',
                           trimExpandedText: ' show less',
-                          onpressed: () {
-                            ErrorToast(context: context, text: "Testt");
-                          },
+                          onpressed: ViewMorepressed,
                         ),
 
                         /* Text(mSearchInvestorsList.aboutUs ?? "",

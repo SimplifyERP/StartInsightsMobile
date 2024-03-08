@@ -7,7 +7,9 @@ class PitchcraftListRepo {
   Future<ApiResults> getPitchcraftList(
     String userId,
   ) async {
-    return await sl<MyDio>().postData(endPoint: pitchcraftlistAPI, data: {});
+    return await sl<MyDio>().postData(endPoint: pitchcraftlistAPI, data: {
+      'user_id': userId,
+    });
   }
 
   Future<ApiResults> getPitchcraftservicedetails(

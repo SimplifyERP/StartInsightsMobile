@@ -23,6 +23,7 @@ import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbarnew.dart';
 import 'package:startinsights/Widgets/button.dart';
 import 'package:startinsights/Widgets/deletebutton.dart';
+import 'package:startinsights/Widgets/servicebutton.dart';
 import 'package:startinsights/Widgets/sidemenunew.dart';
 
 class SearchInvestorsWeb extends StatefulWidget {
@@ -57,7 +58,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
 
   ValueNotifier<bool> setnotifier = ValueNotifier(true);
 
-  // 1-> Search Investors , 2->Funding CRM
+  // 1-> Search Investors , 2->Funding CRM , 3 -> Fav 4 -> Details view
   int mSelectView = 1;
   int mGetCount = 0;
   int numPages = 1;
@@ -96,8 +97,12 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   List<FundingCrmList> mFundingCRMList = [];
   List<SearchInvestorsList> mFavList = [];
 
+  SearchInvestorsList? mViewSearchInvestorsList;
+
   String mFilterValue = "";
   String mStatusChange = "";
+
+  String mSelectId = "";
 
   @override
   void initState() {
@@ -183,6 +188,9 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
         _crossAxisCount;
     var cellHeight = 900;
     var _aspectRatio = _width / cellHeight;
+
+    var DetailscellHeight = 700;
+    var DetailsaspectRatio = DetailscellHeight / cellHeight;
 
     return WillPopScope(
       onWillPop: () {
@@ -345,21 +353,22 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                 });
                                                               },
                                                               child: Container(
-                                                                decoration:
-                                                                    mSelectView ==
-                                                                            1
-                                                                        ? BoxDecoration(
-                                                                            gradient:
-                                                                                const LinearGradient(
-                                                                              colors: [
-                                                                                mgradientThree,
-                                                                                mgradientFour
-                                                                              ],
-                                                                            ),
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(30),
-                                                                          )
-                                                                        : null,
+                                                                decoration: (mSelectView ==
+                                                                            1 ||
+                                                                        mSelectView ==
+                                                                            4)
+                                                                    ? BoxDecoration(
+                                                                        gradient:
+                                                                            const LinearGradient(
+                                                                          colors: [
+                                                                            mgradientThree,
+                                                                            mgradientFour
+                                                                          ],
+                                                                        ),
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(30),
+                                                                      )
+                                                                    : null,
                                                                 padding:
                                                                     const EdgeInsets
                                                                         .all(5),
@@ -378,7 +387,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                                 'OpenSauceSansMedium',
                                                                             fontSize:
                                                                                 mSizeThree,
-                                                                            color: (mSelectView == 1
+                                                                            color: (mSelectView == 1 || mSelectView == 4
                                                                                 ? Colors.white
                                                                                 : mS1GreenNine)))),
                                                               )),
@@ -862,7 +871,6 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                       // childAspectRatio: 0.3,
                                                       childAspectRatio:
                                                           _aspectRatio,
-
                                                       mainAxisSpacing: 10,
                                                       shrinkWrap: true,
                                                       children: List.generate(
@@ -870,19 +878,51 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                         (index) {
                                                           final mSearchList =
                                                               items[index];
-                                                          return SearchInvestorsItemList(
-                                                            mIndex: index,
-                                                            mSearchInvestorsList:
-                                                                mSearchList,
-                                                            RemoveFavonpressed:
-                                                                () {},
-                                                            AddFavonpressed:
-                                                                () {
-                                                              OnloadAddFav(
-                                                                  "jagadeesan.a1104@gmail.com",
-                                                                  items[index]
-                                                                      .id);
+                                                          return InkWell(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                mSelectView = 4;
+                                                                mViewSearchInvestorsList =
+                                                                    items[
+                                                                        index];
+                                                                mSelectId =
+                                                                    mViewSearchInvestorsList!
+                                                                            .id ??
+                                                                        "";
+                                                              });
                                                             },
+                                                            child:
+                                                                SearchInvestorsItemList(
+                                                              mIndex: index,
+                                                              mSelectId:
+                                                                  mSelectId,
+                                                              mSearchInvestorsList:
+                                                                  mSearchList,
+                                                              RemoveFavonpressed:
+                                                                  () {},
+                                                              ViewMorepressed:
+                                                                  () {
+                                                                setState(() {
+                                                                  mSelectView =
+                                                                      4;
+
+                                                                  mViewSearchInvestorsList =
+                                                                      items[
+                                                                          index];
+                                                                  mSelectId =
+                                                                      mViewSearchInvestorsList!
+                                                                              .id ??
+                                                                          "";
+                                                                });
+                                                              },
+                                                              AddFavonpressed:
+                                                                  () {
+                                                                OnloadAddFav(
+                                                                    "jagadeesan.a1104@gmail.com",
+                                                                    items[index]
+                                                                        .id);
+                                                              },
+                                                            ),
                                                           );
                                                         },
                                                       ),
@@ -1601,6 +1641,8 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                               mFavList[index];
                                                           return SearchInvestorsItemList(
                                                             mIndex: index,
+                                                            mSelectId:
+                                                                mSelectId,
                                                             mSearchInvestorsList:
                                                                 mSearchList,
                                                             RemoveFavonpressed:
@@ -1696,6 +1738,15 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                             },
                                                             AddFavonpressed:
                                                                 () {},
+                                                            ViewMorepressed:
+                                                                () {
+                                                              setState(() {
+                                                                // mSelectView = 4;
+                                                                // mViewSearchInvestorsList =
+                                                                //     items[
+                                                                //         index];
+                                                              });
+                                                            },
                                                           );
                                                         },
                                                       ),
@@ -1743,6 +1794,978 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                       )), //
                                     ),
                                   )),
+                              Visibility(
+                                  visible: mSelectView == 4 ? true : false,
+                                  child: (mViewSearchInvestorsList != null)
+                                      ? Expanded(
+                                          child: SingleChildScrollView(
+                                          child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    20),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    20),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    0),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    0)),
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.white,
+                                                        blurRadius: 1.0,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          30, 20, 10, 10),
+                                                  child: RichText(
+                                                    text: TextSpan(
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                            text: Languages.of(
+                                                                    context)!
+                                                                .mFundraisinglink,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansMedium',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                        TextSpan(
+                                                            text: Languages.of(
+                                                                    context)!
+                                                                .mSearchInvestors,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansBold',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen)),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  color: Colors.white,
+                                                  height: 15,
+                                                ),
+                                                Container(
+                                                  color: Colors.white,
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          30, 10, 10, 10),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 7,
+                                                        child: Container(
+                                                            height: 45,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          30),
+                                                              color: mGreyTwo,
+                                                              boxShadow: const [
+                                                                BoxShadow(
+                                                                  color:
+                                                                      mGreyTwo,
+                                                                  blurRadius:
+                                                                      1.0,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            child: SearchBar(
+                                                              overlayColor:
+                                                                  MaterialStateProperty
+                                                                      .resolveWith(
+                                                                          (states) {
+                                                                // If the button is pressed, return green, otherwise blue
+                                                                if (states.contains(
+                                                                    MaterialState
+                                                                        .hovered)) {
+                                                                  return mGreyTwo;
+                                                                }
+                                                                return mGreyTwo;
+                                                              }),
+                                                              padding: MaterialStateProperty.all(
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 10,
+                                                                      right:
+                                                                          10)),
+                                                              controller:
+                                                                  mSearchEditingController,
+                                                              elevation:
+                                                                  MaterialStateProperty
+                                                                      .all(0),
+                                                              side: MaterialStateProperty.all(
+                                                                  const BorderSide(
+                                                                      color:
+                                                                          mGreyTwo)),
+                                                              backgroundColor:
+                                                                  MaterialStateProperty
+                                                                      .all(
+                                                                          mGreyTwo),
+                                                              hintText: Languages
+                                                                      .of(context)!
+                                                                  .msearchhint,
+                                                              hintStyle:
+                                                                  MaterialStateProperty
+                                                                      .all(
+                                                                          const TextStyle(
+                                                                color:
+                                                                    mGreySeven,
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                              )),
+                                                              textStyle:
+                                                                  MaterialStateProperty
+                                                                      .all(
+                                                                          const TextStyle(
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                                color:
+                                                                    mGreySeven,
+                                                              )),
+                                                              onChanged: (String
+                                                                  value) {
+                                                                print(
+                                                                    'value: $value');
+                                                                filterSearchResults(
+                                                                    value);
+                                                              },
+                                                              onTap: () {
+                                                                print('tapped');
+                                                                // The code below only works with SearchAnchor
+                                                                // _searchController.openView();
+                                                              },
+                                                              leading: const Icon(
+                                                                  Icons.search,
+                                                                  size: 30,
+                                                                  color:
+                                                                      mGreySeven),
+                                                            )),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 20,
+                                                      ),
+                                                      Expanded(
+                                                        flex: 3,
+                                                        child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Container(
+                                                                width: 150,
+                                                                height: 45,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              30),
+                                                                  color:
+                                                                      mGreyTwo,
+                                                                  boxShadow: const [
+                                                                    BoxShadow(
+                                                                      color:
+                                                                          mGreyTwo,
+                                                                      blurRadius:
+                                                                          1.0,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                child: Center(
+                                                                  child:
+                                                                      DropdownButtonHideUnderline(
+                                                                    child:
+                                                                        DropdownButton2(
+                                                                      customButton: Row(
+                                                                          mainAxisAlignment: MainAxisAlignment
+                                                                              .center,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            Image.asset('assets/new_ic_filter.png',
+                                                                                width: 20,
+                                                                                height: 20),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Text((mFilterValue.isEmpty) ? Languages.of(context)!.mFilter : mFilterValue,
+                                                                                textAlign: TextAlign.center,
+                                                                                style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyEigth)),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            const Icon(Icons.arrow_drop_down_outlined,
+                                                                                size: 30)
+                                                                          ]),
+                                                                      items: [
+                                                                        ...FilterMenuItems
+                                                                            .map(
+                                                                          (item) =>
+                                                                              DropdownMenuItem<MenuItem>(
+                                                                            value:
+                                                                                item,
+                                                                            child:
+                                                                                buildItem(item),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                      onChanged:
+                                                                          (value) {
+                                                                        // onChanged(
+                                                                        //     context,
+                                                                        //     value! as ProfileMenuItem);
+
+                                                                        print(value!
+                                                                            .text);
+                                                                        setState(
+                                                                            () {
+                                                                          mFilterValue =
+                                                                              value!.text;
+                                                                        });
+
+                                                                        // MenuItems.onChanged(
+                                                                        //     context,
+                                                                        //     value! as MenuItem);
+                                                                      },
+                                                                      dropdownStyleData:
+                                                                          DropdownStyleData(
+                                                                        width:
+                                                                            160,
+                                                                        padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                            vertical:
+                                                                                6),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(4),
+                                                                          border: Border.all(
+                                                                              color: mGreyThree,
+                                                                              width: 2),
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                        offset: const Offset(
+                                                                            5,
+                                                                            -10),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                // InkWell(
+                                                                //     onTap:
+                                                                //         () {
+                                                                //       OnLoadDialog(context);
+                                                                //     },
+                                                                //     child: Row(
+                                                                //         mainAxisAlignment: MainAxisAlignment.center,
+                                                                //         crossAxisAlignment: CrossAxisAlignment.center,
+                                                                //         children: [
+                                                                //           Image.asset('assets/new_ic_filter.png', width: 20, height: 20),
+                                                                //           Text(Languages.of(context)!.mFilter, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyEigth)),
+                                                                //           const SizedBox(
+                                                                //             width: 10,
+                                                                //           ),
+                                                                //           const Icon(Icons.arrow_drop_down_outlined, size: 30)
+                                                                //         ])),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 15,
+                                                              ),
+                                                              Button(
+                                                                  mButtonname:
+                                                                      Languages.of(
+                                                                              context)!
+                                                                          .mSearchResult,
+                                                                  onpressed:
+                                                                      () {},
+                                                                  mSelectcolor:
+                                                                      mBtnColor,
+                                                                  mTextColor:
+                                                                      mWhiteColor,
+                                                                  mFontSize: 16,
+                                                                  mWidth: 150,
+                                                                  mHeigth: 40)
+                                                            ]),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                  color: Colors.white,
+                                                  height: 15,
+                                                ),
+                                                Container(
+                                                  color: mGreyThree,
+                                                  height: 1,
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                        flex: 5,
+                                                        child: Container(
+                                                          color: mGreyThree,
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  right: 1),
+                                                          child: Container(
+                                                              color:
+                                                                  Colors.white,
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Container(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .fromLTRB(
+                                                                            30,
+                                                                            10,
+                                                                            10,
+                                                                            10),
+                                                                    child: Column(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment
+                                                                                .center,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children: [
+                                                                          Text(
+                                                                              "$mGetCount${Languages.of(context)!.mInvestorsFound}",
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(fontFamily: 'OpenSauceSansBold', fontSize: mSizeThree, color: mGreyTen))
+                                                                        ]),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                  Container(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .fromLTRB(
+                                                                            30,
+                                                                            10,
+                                                                            10,
+                                                                            10),
+                                                                    child: SingleChildScrollView(
+                                                                        child: GridView.count(
+                                                                      crossAxisCount:
+                                                                          2,
+                                                                      crossAxisSpacing:
+                                                                          10,
+                                                                      // childAspectRatio: 0.3,
+                                                                      childAspectRatio:
+                                                                          DetailsaspectRatio,
+
+                                                                      mainAxisSpacing:
+                                                                          10,
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      children:
+                                                                          List.generate(
+                                                                        items
+                                                                            .length,
+                                                                        (index) {
+                                                                          final mSearchList =
+                                                                              items[index];
+                                                                          return InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              setState(() {
+                                                                                mSelectView = 4;
+                                                                                mViewSearchInvestorsList = items[index];
+                                                                                mSelectId = mViewSearchInvestorsList!.id ?? "";
+                                                                              });
+                                                                            },
+                                                                            child:
+                                                                                SearchInvestorsItemList(
+                                                                              mIndex: index,
+                                                                              mSelectId: mSelectId,
+                                                                              mSearchInvestorsList: mSearchList,
+                                                                              RemoveFavonpressed: () {},
+                                                                              ViewMorepressed: () {
+                                                                                setState(() {
+                                                                                  mSelectView = 4;
+                                                                                  mViewSearchInvestorsList = items[index];
+                                                                                  mSelectId = mViewSearchInvestorsList!.id ?? "";
+                                                                                });
+                                                                              },
+                                                                              AddFavonpressed: () {
+                                                                                OnloadAddFav("jagadeesan.a1104@gmail.com", items[index].id);
+                                                                              },
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                      ),
+                                                                    )),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 10,
+                                                                  ),
+                                                                ],
+                                                              )),
+                                                        )),
+                                                    Expanded(
+                                                        flex: 5,
+                                                        child: Container(
+                                                          child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 25,
+                                                                ),
+                                                                Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .topRight,
+                                                                  child: Row(
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .end,
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        InkWell(
+                                                                            onTap:
+                                                                                () {
+                                                                              setState(() {
+                                                                                mSelectView = 1;
+                                                                                mSelectId = "";
+                                                                              });
+                                                                            },
+                                                                            child:
+                                                                                SvgPicture.asset(
+                                                                              'assets/new_ic_roundclose.svg',
+                                                                              width: 25,
+                                                                              height: 25,
+                                                                            )),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              20,
+                                                                        )
+                                                                      ]),
+                                                                ),
+                                                                Container(
+                                                                  margin: const EdgeInsets
+                                                                      .only(
+                                                                      top: 20,
+                                                                      right: 20,
+                                                                      left: 15),
+                                                                  height: 250,
+                                                                  width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  padding: EdgeInsets.only(
+                                                                      left: 20,
+                                                                      top: 10,
+                                                                      right: 20,
+                                                                      bottom:
+                                                                          10),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            20),
+                                                                    color: Colors
+                                                                        .white,
+                                                                    boxShadow: const [
+                                                                      BoxShadow(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        blurRadius:
+                                                                            1.0,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  child: Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        Expanded(
+                                                                            flex:
+                                                                                5,
+                                                                            child:
+                                                                                Row(
+                                                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                                                              mainAxisAlignment: MainAxisAlignment.start,
+                                                                              children: [
+                                                                                Expanded(
+                                                                                    flex: 3,
+                                                                                    child: Column(
+                                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        SizedBox(
+                                                                                            height: 100,
+                                                                                            width: 100,
+                                                                                            child: Stack(children: [
+                                                                                              Align(
+                                                                                                alignment: Alignment.center,
+                                                                                                child: CircleAvatar(
+                                                                                                  radius: 40.0,
+                                                                                                  backgroundColor: Colors.white,
+                                                                                                  child: ClipOval(
+                                                                                                    child: (mViewSearchInvestorsList!.logo!.isNotEmpty)
+                                                                                                        ? ImageNetwork(
+                                                                                                            image: mViewSearchInvestorsList!.logo ?? "",
+                                                                                                            height: 100,
+                                                                                                            width: 100,
+                                                                                                          )
+                                                                                                        : Image.asset('assets/avathar.png', width: 100, height: 100, fit: BoxFit.fill),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                              (mViewSearchInvestorsList!.investorVerified! == 1)
+                                                                                                  ? Align(
+                                                                                                      alignment: Alignment.topRight,
+                                                                                                      child: Image.asset('assets/new_ic_check.png', width: 30, height: 30, fit: BoxFit.fill),
+                                                                                                    )
+                                                                                                  : const Text("")
+                                                                                            ]))
+                                                                                      ],
+                                                                                    )),
+                                                                                Expanded(
+                                                                                    flex: 7,
+                                                                                    child: Container(
+                                                                                        child: SingleChildScrollView(
+                                                                                            child: GridView.count(
+                                                                                      crossAxisCount: 2,
+                                                                                      crossAxisSpacing: 10,
+                                                                                      childAspectRatio: 6,
+                                                                                      mainAxisSpacing: 10,
+                                                                                      shrinkWrap: true,
+                                                                                      children: List.generate(
+                                                                                        mViewSearchInvestorsList!.fundingStagesTable!.length,
+                                                                                        (index) {
+                                                                                          final mSearchList = items[index];
+                                                                                          return Container(
+                                                                                            decoration: BoxDecoration(
+                                                                                              borderRadius: BorderRadius.circular(5),
+                                                                                              color: mGreyTwo,
+                                                                                              boxShadow: const [
+                                                                                                BoxShadow(
+                                                                                                  color: mGreyTwo,
+                                                                                                  blurRadius: 0,
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                            child: Center(child: Text(mViewSearchInvestorsList!.fundingStagesTable![index].fundingStages! ?? "", textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeNine, color: mGreyNine))),
+                                                                                          );
+                                                                                        },
+                                                                                      ),
+                                                                                    ))))
+                                                                              ],
+                                                                            )),
+                                                                        Expanded(
+                                                                            flex:
+                                                                                5,
+                                                                            child:
+                                                                                Column(
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  flex: 6,
+                                                                                  child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                                                    Expanded(
+                                                                                        flex: 7,
+                                                                                        child: Column(
+                                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Text(mViewSearchInvestorsList!.title ?? "", textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansBold', fontSize: mSizeThree, color: mGreyTen)),
+                                                                                            SizedBox(
+                                                                                              height: 10,
+                                                                                            ),
+                                                                                            Text(mViewSearchInvestorsList!.firmType ?? "", textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven))
+                                                                                          ],
+                                                                                        )),
+                                                                                    Expanded(
+                                                                                        flex: 3,
+                                                                                        child: Row(
+                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            SvgPicture.asset(
+                                                                                              'assets/new_ic_linkedin.svg',
+                                                                                              width: 30,
+                                                                                              height: 30,
+                                                                                            ),
+                                                                                            SizedBox(
+                                                                                              width: 10,
+                                                                                            ),
+                                                                                            SvgPicture.asset(
+                                                                                              'assets/new_ic_twitter.svg',
+                                                                                              width: 30,
+                                                                                              height: 30,
+                                                                                            ),
+                                                                                            SizedBox(
+                                                                                              width: 10,
+                                                                                            ),
+                                                                                            SvgPicture.asset(
+                                                                                              'assets/new_ic_web.svg',
+                                                                                              width: 30,
+                                                                                              height: 30,
+                                                                                            )
+                                                                                          ],
+                                                                                        ))
+                                                                                  ]),
+                                                                                ),
+                                                                                Container(
+                                                                                  color: mGreyThree,
+                                                                                  height: 1,
+                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                ),
+                                                                                Expanded(
+                                                                                    flex: 4,
+                                                                                    child: Row(
+                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        Expanded(
+                                                                                          flex: 7,
+                                                                                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                                                            Container(
+                                                                                              height: 25,
+                                                                                              width: 150,
+                                                                                              decoration: BoxDecoration(
+                                                                                                borderRadius: BorderRadius.circular(5),
+                                                                                                color: mGreyTwo,
+                                                                                                boxShadow: const [
+                                                                                                  BoxShadow(
+                                                                                                    color: mGreyTwo,
+                                                                                                    blurRadius: 0,
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                              child: Center(child: Text(mViewSearchInvestorsList!.hq ?? "", textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreyNine))),
+                                                                                            )
+                                                                                          ]),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          flex: 4,
+                                                                                          child: Row(
+                                                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                                            children: [
+                                                                                              Image.asset('assets/new_ic_money_bag.png', width: 20, height: 20, fit: BoxFit.fill),
+                                                                                              const SizedBox(
+                                                                                                width: 5,
+                                                                                              ),
+                                                                                              Center(
+                                                                                                child: Text("${Languages.of(context)!.rupess} ${mViewSearchInvestorsList!.minCheckSize.toString() ?? ""} - ${mViewSearchInvestorsList!.maxCheckSize.toString()}", textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven)),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        )
+                                                                                      ],
+                                                                                    ))
+                                                                              ],
+                                                                            ))
+                                                                      ]),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 20,
+                                                                ),
+                                                                Container(
+                                                                  width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  margin: const EdgeInsets
+                                                                      .only(
+                                                                      top: 20,
+                                                                      right: 20,
+                                                                      left: 15),
+                                                                  padding: EdgeInsets.only(
+                                                                      left: 20,
+                                                                      top: 10,
+                                                                      right: 20,
+                                                                      bottom:
+                                                                          10),
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                20),
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                20),
+                                                                        bottomRight:
+                                                                            Radius.circular(
+                                                                                0),
+                                                                        bottomLeft:
+                                                                            Radius.circular(0)),
+                                                                    color: Colors
+                                                                        .white,
+                                                                    boxShadow: [
+                                                                      BoxShadow(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        blurRadius:
+                                                                            1.0,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  child: Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children: [
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            Languages.of(context)!
+                                                                                .mWhoweare,
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansBold',
+                                                                                fontSize: mSizeThree,
+                                                                                color: mGreyTen)),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            mViewSearchInvestorsList!.aboutUs ??
+                                                                                "",
+                                                                            textAlign: TextAlign
+                                                                                .left,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansRegular',
+                                                                                fontSize: mSizeTwo,
+                                                                                height: 1.5,
+                                                                                color: mGreyEigth)),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Container(
+                                                                          color:
+                                                                              mGreyThree,
+                                                                          height:
+                                                                              1,
+                                                                          width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width,
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            Languages.of(context)!
+                                                                                .mValueadd,
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansBold',
+                                                                                fontSize: mSizeThree,
+                                                                                color: mGreyTen)),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            mViewSearchInvestorsList!.valueAdd ??
+                                                                                "",
+                                                                            textAlign: TextAlign
+                                                                                .left,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansRegular',
+                                                                                fontSize: mSizeTwo,
+                                                                                height: 1.5,
+                                                                                color: mGreyEigth)),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Container(
+                                                                          color:
+                                                                              mGreyThree,
+                                                                          height:
+                                                                              1,
+                                                                          width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width,
+                                                                        ),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            Languages.of(context)!
+                                                                                .mFirmtype,
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansBold',
+                                                                                fontSize: mSizeThree,
+                                                                                color: mGreyTen)),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            mViewSearchInvestorsList!.firmType ??
+                                                                                "",
+                                                                            textAlign: TextAlign
+                                                                                .left,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansRegular',
+                                                                                fontSize: mSizeTwo,
+                                                                                height: 1.5,
+                                                                                color: mGreyEigth)),
+                                                                        const SizedBox(
+                                                                          height:
+                                                                              10,
+                                                                        ),
+                                                                      ]),
+                                                                ),
+                                                                Container(
+                                                                  height: 70,
+                                                                  margin: EdgeInsets
+                                                                      .only(
+                                                                          right:
+                                                                              20),
+                                                                  width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                0),
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                0),
+                                                                        bottomRight:
+                                                                            Radius.circular(
+                                                                                20),
+                                                                        bottomLeft:
+                                                                            Radius.circular(0)),
+                                                                    color:
+                                                                        mGreyThree,
+                                                                    boxShadow: [
+                                                                      BoxShadow(
+                                                                        color:
+                                                                            mGreyThree,
+                                                                        blurRadius:
+                                                                            1.0,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Expanded(
+                                                                            flex:
+                                                                                8,
+                                                                            child:
+                                                                                Align(
+                                                                              alignment: Alignment.center,
+                                                                              child: ServiceButton(mButtonname: Languages.of(context)!.mSendaDeck, mSelectcolor: mBlackTwo, onpressed: () {}, mTextColor: mWhiteColor, mhovercolor: mGreyThree, mFontSize: 16, mWidth: 400, mHeigth: 40),
+                                                                            )),
+                                                                        Expanded(
+                                                                            flex:
+                                                                                2,
+                                                                            child:
+                                                                                Align(
+                                                                              alignment: Alignment.center,
+                                                                              child: InkWell(
+                                                                                  onTap: () {},
+                                                                                  child: SvgPicture.asset(
+                                                                                    'assets/new_ic_details_heart.svg',
+                                                                                    width: 45,
+                                                                                    height: 45,
+                                                                                  )),
+                                                                            ))
+                                                                      ]),
+                                                                )
+                                                              ]),
+                                                        )),
+                                                  ],
+                                                )
+                                              ]),
+                                        ))
+                                      : Text("")),
                             ],
                           ),
                         ),
