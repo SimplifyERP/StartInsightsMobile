@@ -151,17 +151,37 @@ class _RegisterSecondState extends State<RegisterSecond> {
                                                       16, //This will obscure text dynamically
                                                   decoration: InputDecoration(
                                                       counterText: "",
-                                                      labelText:
-                                                          Languages.of(context)!
-                                                              .mPassword,
+                                                      label: RichText(
+                                                        text: TextSpan(
+                                                            text: Languages.of(
+                                                                    context)!
+                                                                .mPassword,
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    mGreyEigth,
+                                                                fontFamily:
+                                                                    'OpenSauceSansRegular',
+                                                                fontSize:
+                                                                    mSizeTwo),
+                                                            children: const [
+                                                              TextSpan(
+                                                                  text: ' *',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .red,
+                                                                      fontFamily:
+                                                                          'OpenSauceSansRegular',
+                                                                      fontSize:
+                                                                          mSizeTwo))
+                                                            ]),
+                                                      ),
                                                       labelStyle: const TextStyle(
                                                           fontSize: 15,
                                                           fontFamily:
                                                               'ManropeMedium',
                                                           color: kGray),
                                                       hintText:
-                                                          Languages.of(context)!
-                                                              .mPassword,
+                                                          "${Languages.of(context)!.mPassword} *",
                                                       suffixIcon: Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
@@ -246,8 +266,10 @@ class _RegisterSecondState extends State<RegisterSecond> {
                                                       isDense:
                                                           true, // Added this
 
-                                                      floatingLabelStyle: const TextStyle(
-                                                          color: Colors.blue),
+                                                      floatingLabelStyle:
+                                                          const TextStyle(
+                                                              color:
+                                                                  Colors.blue),
                                                       // floatingLabelBehavior: FloatingLabelBehavior.never,
                                                       contentPadding:
                                                           const EdgeInsets.fromLTRB(
@@ -258,9 +280,11 @@ class _RegisterSecondState extends State<RegisterSecond> {
                                                                   8),
                                                           borderSide:
                                                               const BorderSide(
-                                                                  color: mGreyFour,
+                                                                  color:
+                                                                      mGreyFour,
                                                                   width: 1)),
-                                                      focusedBorder: OutlineInputBorder(
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
                                                         borderSide:
                                                             const BorderSide(
                                                                 color:
@@ -270,7 +294,10 @@ class _RegisterSecondState extends State<RegisterSecond> {
                                                             BorderRadius
                                                                 .circular(5),
                                                       ),
-                                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(5), borderSide: const BorderSide(width: 1, color: mGreyFour)),
+                                                      border: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(5),
+                                                          borderSide: const BorderSide(width: 1, color: mGreyFour)),
                                                       fillColor: mLightColorOne,
                                                       filled: true)),
                                             ),
@@ -398,7 +425,7 @@ class _RegisterSecondState extends State<RegisterSecond> {
                                               child: Button(
                                                   mButtonname:
                                                       Languages.of(context)!
-                                                          .mContinuetoSignup,
+                                                          .mCreateanAccount,
                                                   onpressed: () {
                                                     if (passwordController
                                                         .text.isEmpty) {
@@ -543,8 +570,11 @@ class _RegisterSecondState extends State<RegisterSecond> {
                                                     ),
                                                     InkWell(
                                                       onTap: () {
-                                                        GoRouter.of(context)
-                                                            .go('/Login');
+                                                        // GoRouter.of(context)
+                                                        //     .go('/Login');
+
+                                                        GoRouter.of(context).go(
+                                                            '/Register/RegisterVerfication');
                                                       },
                                                       child: Text(
                                                           Languages.of(context)!

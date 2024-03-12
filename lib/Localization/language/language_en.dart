@@ -236,7 +236,7 @@ class LanguageEn extends Languages {
   //Sidemenu
   String get mDashboard => "Dashboard";
   String get mFundraising => "Fundraising";
-  String get mResources => "Resources";
+  String get mResources => "Learn";
   String get mServices => "Services";
   String get mTools => "Tools";
   String get mHi => "Hi  ";
@@ -277,7 +277,7 @@ class LanguageEn extends Languages {
   String get mLOGIN => "LOG IN";
   String get mStartups => "Startups";
   String get mInvestors => "Investors";
-  String get mFilter => "Filter";
+  String get mFilter => "Stages";
   String get mAccountSettings => "Account Settings";
   String get mCustomerSupport => "Customer Support";
   String get mScaling => "Scaling";
@@ -295,12 +295,12 @@ class LanguageEn extends Languages {
   String get mSaveChanges => "Save Changes";
   String get mDelete => "Delete";
   String get mFavMsg => "Are you sure want to remove Favourite?";
-  String get mSortlistMenu => "Sortlist";
-  String get mContactedMenu => "Contacted";
-  String get mPitchedMenu => "Pitched";
-  String get mDiligenceMenu => "Diligence";
-  String get mWonMenu => "Won";
-  String get mLostMenu => "Lost";
+  String get mSortlistMenu => "SORTLIST";
+  String get mContactedMenu => "CONTACTED";
+  String get mPitchedMenu => "PITCHED";
+  String get mDiligenceMenu => "DILIGENCE";
+  String get mWonMenu => "WON";
+  String get mLostMenu => "LOST";
   String get mPreseedMenu => "Pre-seed";
   String get mSeedMenu => "Seed";
   String get mEarlyMenu => "Early";
@@ -317,4 +317,23 @@ class LanguageEn extends Languages {
   String get mValueadd => "Value add";
   String get mFirmtype => "Firm type";
   String get mSendaDeck => "Send a Deck";
+  String get mWelcometoStartInsights => "Welcome to Start Insights";
+  String get mVerifyCode => "Verify Code";
+  String get mWelcomemsg =>
+      "Our team will contact you in next 48 Hours and our team will share verify code,.";
+  String get mEnterVerifyCode => "Enter Verify Code";
+  String get mLearntoRaise => "Learn to Raise";
+  String get mViewCourses => "View Courses";
+  String get mEvents => "Events";
+  String get mSearchCourses => "Search Courses";
+  String get mprofileinfo => "Update Profile Information";
+  String get muploadprofile => "Upload Profile Picture";
+  String get mSocialMediaLinks => "Social Media Links";
+  String get mlinkedinurl => "Linked In Url";
+  String get mwebsiteurl => "Website";
+  String get mSaveProfile => "Save Profile";
+  String get mChapters => "Chapters";
+  String get mVideos => "Videos";
+  String get mQuizzes => "Quizzes";
+  String get mViewCourse => "View Course";
 }

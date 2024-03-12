@@ -9,7 +9,7 @@ class CaptableRepository {
   ) async {
     return await sl<MyDio>()
         .postData(endPoint: getinvestorroundwisegraphAPI, data: {
-      'user_id': userId,
+      'user_id': "jagadeesan.a1104@gmail.com",
     });
   }
 }

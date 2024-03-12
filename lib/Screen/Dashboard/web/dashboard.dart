@@ -1,16 +1,23 @@
+import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:startinsights/Localization/language/languages.dart';
+import 'package:startinsights/Model/DashboardResponse.dart';
 import 'package:startinsights/Model/MastersResponse.dart';
 import 'package:startinsights/Network/di.dart';
+import 'package:startinsights/Repository/dashboard_repo.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_state.dart';
+import 'package:startinsights/Screen/Dashboard/web/dashboarditemist.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
+import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/pref_manager.dart';
 import 'package:startinsights/Widgets/Appbarnew.dart';
+import 'package:startinsights/Widgets/auth_form_field.dart';
 import 'package:startinsights/Widgets/button.dart';
+import 'package:startinsights/Widgets/servicebutton.dart';
 import 'package:startinsights/Widgets/sidemenunew.dart';
 
 class Dashboard extends StatefulWidget {
@@ -26,9 +33,20 @@ class _DashboardState extends State<Dashboard> {
   bool checkedValue = false;
   List<UserType>? mUserTypeDataList;
   List<UserType> getUserType = <UserType>[];
+  List<MessageElement> mDashboarddata = [];
 
   String mUserName = ""; //Padhu NPN
   ValueNotifier<bool> setnotifier = ValueNotifier(true);
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController companynameController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController linedINController = TextEditingController();
+  final TextEditingController websiteController = TextEditingController();
+
+  final DashboardRepo _apiService1 = DashboardRepo();
+
   @override
   void initState() {
     super.initState();
@@ -43,6 +61,12 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void dispose() {
+    nameController.dispose();
+    mobileController.dispose();
+    emailController.dispose();
+    companynameController.dispose();
+    linedINController.dispose();
+    websiteController.dispose();
     super.dispose();
   }
 
@@ -66,6 +90,9 @@ class _DashboardState extends State<Dashboard> {
               if (state is GetDashboardInfoSuccessState) {}
             },
             builder: (context, state) {
+              if (state is GetDashboardInfoSuccessState) {
+                mDashboarddata = state.mDashboarddata;
+              }
               return SafeArea(
                   child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -237,926 +264,29 @@ class _DashboardState extends State<Dashboard> {
                                               const SizedBox(
                                                 height: 15,
                                               ),
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceAround,
-                                                children: [
-                                                  Container(
-                                                    height: 260,
-                                                    width: 260,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                      color: mGreyTwo,
-                                                      boxShadow: const [
-                                                        BoxShadow(
-                                                          color: mGreyTwo,
-                                                          blurRadius: 0,
+                                              Container(
+                                                height: 260,
+                                                child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    itemCount:
+                                                        mDashboarddata.length,
+                                                    itemBuilder: (_, index) {
+                                                      final mDashboardList =
+                                                          mDashboarddata[index];
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          OnProfileView();
+                                                        },
+                                                        child:
+                                                            DashboardItemList(
+                                                          mIndex: index,
+                                                          mMessageElement:
+                                                              mDashboardList,
                                                         ),
-                                                      ],
-                                                    ),
-                                                    child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: Container(
-                                                              height: 100,
-                                                              width: double
-                                                                  .infinity,
-                                                              child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      flex: 4,
-                                                                      child: Stack(
-                                                                          children: [
-                                                                            Align(
-                                                                              alignment: Alignment.center,
-                                                                              child: CircleAvatar(
-                                                                                radius: 35.0,
-                                                                                backgroundColor: Colors.white,
-                                                                                child: ClipOval(
-                                                                                  child: Image.asset('assets/avathar.png', fit: BoxFit.fill),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Align(
-                                                                              alignment: Alignment.topRight,
-                                                                              child: Image.asset('assets/new_ic_check.png', width: 30, height: 30, fit: BoxFit.fill),
-                                                                            )
-                                                                          ]),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 20,
-                                                                    ),
-                                                                    Expanded(
-                                                                      flex: 6,
-                                                                      child: Column(
-                                                                          crossAxisAlignment: CrossAxisAlignment
-                                                                              .end,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                color: mGreyThree,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: mGreyThree,
-                                                                                    blurRadius: 0,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              padding: const EdgeInsets.only(left: 5, right: 5),
-                                                                              height: 25,
-                                                                              width: (double.infinity),
-                                                                              child: const Center(child: Text("Early Stage", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyNine))),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5,
-                                                                            ),
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                color: mGreyThree,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: mGreyThree,
-                                                                                    blurRadius: 0,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              height: 25,
-                                                                              width: (double.infinity),
-                                                                              child: const Center(child: Text("Early Stage", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyNine))),
-                                                                            )
-                                                                          ]),
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Expanded(
-                                                            flex: 7,
-                                                            child: Container(
-                                                              width: double
-                                                                  .infinity,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right: 8,
-                                                                      left: 8),
-                                                              child: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                        "Arkstons Capital",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansBold',
-                                                                            fontSize:
-                                                                                mSizeThree,
-                                                                            color:
-                                                                                mBlackOne)),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Text(
-                                                                        "Arkstons Capital",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansRegular',
-                                                                            fontSize:
-                                                                                mSizeTwo,
-                                                                            color:
-                                                                                mGreySeven)),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Container(
-                                                                      height: 1,
-                                                                      color:
-                                                                          mGreyThree,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Text(
-                                                                        "We invest in IoT, Fintech, SaaS, Tech, EdTech across stages. We invest in IoT, Fintech, SaaS, Tech, EdTech..........See more",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansRegular',
-                                                                            fontSize:
-                                                                                mSizeTwo,
-                                                                            color:
-                                                                                mGreySeven)),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Container(
-                                                                      height: 1,
-                                                                      color:
-                                                                          mGreyThree,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Image.asset(
-                                                                            'assets/new_ic_money_bag.png',
-                                                                            width:
-                                                                                20,
-                                                                            height:
-                                                                                20,
-                                                                            fit:
-                                                                                BoxFit.fill),
-                                                                        const SizedBox(
-                                                                          width:
-                                                                              5,
-                                                                        ),
-                                                                        const Center(
-                                                                          child: Text(
-                                                                              " 10,000 -  50,000",
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven)),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          )
-                                                        ]),
-                                                  ),
-                                                  Container(
-                                                    height: 260,
-                                                    width: 260,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                      color: mGreyTwo,
-                                                      boxShadow: const [
-                                                        BoxShadow(
-                                                          color: mGreyTwo,
-                                                          blurRadius: 0,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: Container(
-                                                              height: 100,
-                                                              width: double
-                                                                  .infinity,
-                                                              child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      flex: 4,
-                                                                      child: Stack(
-                                                                          children: [
-                                                                            Align(
-                                                                              alignment: Alignment.center,
-                                                                              child: CircleAvatar(
-                                                                                radius: 35.0,
-                                                                                backgroundColor: Colors.white,
-                                                                                child: ClipOval(
-                                                                                  child: Image.asset('assets/avathar.png', fit: BoxFit.fill),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Align(
-                                                                              alignment: Alignment.topRight,
-                                                                              child: Image.asset('assets/new_ic_check.png', width: 30, height: 30, fit: BoxFit.fill),
-                                                                            )
-                                                                          ]),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 20,
-                                                                    ),
-                                                                    Expanded(
-                                                                      flex: 6,
-                                                                      child: Column(
-                                                                          crossAxisAlignment: CrossAxisAlignment
-                                                                              .end,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                color: mGreyThree,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: mGreyThree,
-                                                                                    blurRadius: 0,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              padding: const EdgeInsets.only(left: 5, right: 5),
-                                                                              height: 25,
-                                                                              width: (double.infinity),
-                                                                              child: const Center(child: Text("Early Stage", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyNine))),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5,
-                                                                            ),
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                color: mGreyThree,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: mGreyThree,
-                                                                                    blurRadius: 0,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              height: 25,
-                                                                              width: (double.infinity),
-                                                                              child: const Center(child: Text("Early Stage", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyNine))),
-                                                                            )
-                                                                          ]),
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Expanded(
-                                                            flex: 7,
-                                                            child: Container(
-                                                              width: double
-                                                                  .infinity,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right: 8,
-                                                                      left: 8),
-                                                              child: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                        "Arkstons Capital",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansBold',
-                                                                            fontSize:
-                                                                                mSizeThree,
-                                                                            color:
-                                                                                mBlackOne)),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Text(
-                                                                        "Arkstons Capital",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansRegular',
-                                                                            fontSize:
-                                                                                mSizeTwo,
-                                                                            color:
-                                                                                mGreySeven)),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Container(
-                                                                      height: 1,
-                                                                      color:
-                                                                          mGreyThree,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Text(
-                                                                        "We invest in IoT, Fintech, SaaS, Tech, EdTech across stages. We invest in IoT, Fintech, SaaS, Tech, EdTech..........See more",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansRegular',
-                                                                            fontSize:
-                                                                                mSizeTwo,
-                                                                            color:
-                                                                                mGreySeven)),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Container(
-                                                                      height: 1,
-                                                                      color:
-                                                                          mGreyThree,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Image.asset(
-                                                                            'assets/new_ic_money_bag.png',
-                                                                            width:
-                                                                                20,
-                                                                            height:
-                                                                                20,
-                                                                            fit:
-                                                                                BoxFit.fill),
-                                                                        const SizedBox(
-                                                                          width:
-                                                                              5,
-                                                                        ),
-                                                                        const Center(
-                                                                          child: Text(
-                                                                              " 10,000 -  50,000",
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven)),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          )
-                                                        ]),
-                                                  ),
-                                                  Container(
-                                                    height: 260,
-                                                    width: 260,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                      color: mGreyTwo,
-                                                      boxShadow: const [
-                                                        BoxShadow(
-                                                          color: mGreyTwo,
-                                                          blurRadius: 0,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: Container(
-                                                              height: 100,
-                                                              width: double
-                                                                  .infinity,
-                                                              child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      flex: 4,
-                                                                      child: Stack(
-                                                                          children: [
-                                                                            Align(
-                                                                              alignment: Alignment.center,
-                                                                              child: CircleAvatar(
-                                                                                radius: 35.0,
-                                                                                backgroundColor: Colors.white,
-                                                                                child: ClipOval(
-                                                                                  child: Image.asset('assets/avathar.png', fit: BoxFit.fill),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Align(
-                                                                              alignment: Alignment.topRight,
-                                                                              child: Image.asset('assets/new_ic_check.png', width: 30, height: 30, fit: BoxFit.fill),
-                                                                            )
-                                                                          ]),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 20,
-                                                                    ),
-                                                                    Expanded(
-                                                                      flex: 6,
-                                                                      child: Column(
-                                                                          crossAxisAlignment: CrossAxisAlignment
-                                                                              .end,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                color: mGreyThree,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: mGreyThree,
-                                                                                    blurRadius: 0,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              padding: const EdgeInsets.only(left: 5, right: 5),
-                                                                              height: 25,
-                                                                              width: (double.infinity),
-                                                                              child: const Center(child: Text("Early Stage", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyNine))),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5,
-                                                                            ),
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                color: mGreyThree,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: mGreyThree,
-                                                                                    blurRadius: 0,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              height: 25,
-                                                                              width: (double.infinity),
-                                                                              child: const Center(child: Text("Early Stage", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyNine))),
-                                                                            )
-                                                                          ]),
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Expanded(
-                                                            flex: 7,
-                                                            child: Container(
-                                                              width: double
-                                                                  .infinity,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right: 8,
-                                                                      left: 8),
-                                                              child: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                        "Arkstons Capital",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansBold',
-                                                                            fontSize:
-                                                                                mSizeThree,
-                                                                            color:
-                                                                                mBlackOne)),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Text(
-                                                                        "Arkstons Capital",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansRegular',
-                                                                            fontSize:
-                                                                                mSizeTwo,
-                                                                            color:
-                                                                                mGreySeven)),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Container(
-                                                                      height: 1,
-                                                                      color:
-                                                                          mGreyThree,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Text(
-                                                                        "We invest in IoT, Fintech, SaaS, Tech, EdTech across stages. We invest in IoT, Fintech, SaaS, Tech, EdTech..........See more",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansRegular',
-                                                                            fontSize:
-                                                                                mSizeTwo,
-                                                                            color:
-                                                                                mGreySeven)),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Container(
-                                                                      height: 1,
-                                                                      color:
-                                                                          mGreyThree,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Image.asset(
-                                                                            'assets/new_ic_money_bag.png',
-                                                                            width:
-                                                                                20,
-                                                                            height:
-                                                                                20,
-                                                                            fit:
-                                                                                BoxFit.fill),
-                                                                        const SizedBox(
-                                                                          width:
-                                                                              5,
-                                                                        ),
-                                                                        const Center(
-                                                                          child: Text(
-                                                                              " 10,000 -  50,000",
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven)),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          )
-                                                        ]),
-                                                  ),
-                                                  Container(
-                                                    height: 260,
-                                                    width: 260,
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                      color: mGreyTwo,
-                                                      boxShadow: const [
-                                                        BoxShadow(
-                                                          color: mGreyTwo,
-                                                          blurRadius: 0,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: Container(
-                                                              height: 100,
-                                                              width: double
-                                                                  .infinity,
-                                                              child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Expanded(
-                                                                      flex: 4,
-                                                                      child: Stack(
-                                                                          children: [
-                                                                            Align(
-                                                                              alignment: Alignment.center,
-                                                                              child: CircleAvatar(
-                                                                                radius: 35.0,
-                                                                                backgroundColor: Colors.white,
-                                                                                child: ClipOval(
-                                                                                  child: Image.asset('assets/avathar.png', fit: BoxFit.fill),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Align(
-                                                                              alignment: Alignment.topRight,
-                                                                              child: Image.asset('assets/new_ic_check.png', width: 30, height: 30, fit: BoxFit.fill),
-                                                                            )
-                                                                          ]),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 20,
-                                                                    ),
-                                                                    Expanded(
-                                                                      flex: 6,
-                                                                      child: Column(
-                                                                          crossAxisAlignment: CrossAxisAlignment
-                                                                              .end,
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.start,
-                                                                          children: [
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                color: mGreyThree,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: mGreyThree,
-                                                                                    blurRadius: 0,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              padding: const EdgeInsets.only(left: 5, right: 5),
-                                                                              height: 25,
-                                                                              width: (double.infinity),
-                                                                              child: const Center(child: Text("Early Stage", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeNine, color: mGreyNine))),
-                                                                            ),
-                                                                            const SizedBox(
-                                                                              height: 5,
-                                                                            ),
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: BorderRadius.circular(8),
-                                                                                color: mGreyThree,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: mGreyThree,
-                                                                                    blurRadius: 0,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              height: 25,
-                                                                              width: (double.infinity),
-                                                                              child: const Center(child: Text("Early Stage", textAlign: TextAlign.center, style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeNine, color: mGreyNine))),
-                                                                            )
-                                                                          ]),
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Expanded(
-                                                            flex: 7,
-                                                            child: Container(
-                                                              width: double
-                                                                  .infinity,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .only(
-                                                                      right: 8,
-                                                                      left: 8),
-                                                              child: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                        "Arkstons Capital",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansBold',
-                                                                            fontSize:
-                                                                                mSizeThree,
-                                                                            color:
-                                                                                mBlackOne)),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Text(
-                                                                        "Arkstons Capital",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .center,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansRegular',
-                                                                            fontSize:
-                                                                                mSizeTwo,
-                                                                            color:
-                                                                                mGreySeven)),
-                                                                    SizedBox(
-                                                                      height: 5,
-                                                                    ),
-                                                                    Container(
-                                                                      height: 1,
-                                                                      color:
-                                                                          mGreyThree,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Text(
-                                                                        "We invest in IoT, Fintech, SaaS, Tech, EdTech across stages. We invest in IoT, Fintech, SaaS, Tech, EdTech..........See more",
-                                                                        textAlign:
-                                                                            TextAlign
-                                                                                .start,
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'OpenSauceSansRegular',
-                                                                            fontSize:
-                                                                                mSizeTwo,
-                                                                            color:
-                                                                                mGreySeven)),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Container(
-                                                                      height: 1,
-                                                                      color:
-                                                                          mGreyThree,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height:
-                                                                          10,
-                                                                    ),
-                                                                    Row(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .center,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Image.asset(
-                                                                            'assets/new_ic_money_bag.png',
-                                                                            width:
-                                                                                20,
-                                                                            height:
-                                                                                20,
-                                                                            fit:
-                                                                                BoxFit.fill),
-                                                                        const SizedBox(
-                                                                          width:
-                                                                              5,
-                                                                        ),
-                                                                        const Center(
-                                                                          child: Text(
-                                                                              " 10,000 -  50,000",
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven)),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  ]),
-                                                            ),
-                                                          )
-                                                        ]),
-                                                  ),
-                                                ],
+                                                      );
+                                                    }),
                                               )
                                             ]),
                                       ),
@@ -1484,6 +614,522 @@ class _DashboardState extends State<Dashboard> {
               return Container();
             },
           )),
+    );
+  }
+
+  void OnProfileView() {
+    // UserDetails mUserDetails
+    showGeneralDialog(
+      barrierLabel: "",
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.5),
+      // transitionDuration: Duration(milliseconds: 700),
+      context: context,
+      pageBuilder: (context, anim1, anim2) {
+        return StatefulBuilder(builder: (context1, setState) {
+          return Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: 760,
+              height: 650,
+              margin: const EdgeInsets.only(left: 12, right: 20),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: mGreyThree, width: 1)),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 60,
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(left: 40),
+                      decoration: const BoxDecoration(
+                        color: mGreyTwo,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20)),
+                      ),
+                      child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Material(
+                            color: mGreyTwo,
+                            child: Text(Languages.of(context)!.mprofileinfo,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    fontFamily: 'OpenSauceSansBold',
+                                    fontSize: mSizeFive,
+                                    color: mGreyTen)),
+                          )),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 40),
+                      child: Material(
+                        color: Colors.white,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  hoverColor: Colors.white,
+                                  onTap: () {
+                                    setState(() {
+                                      //mSelectView = 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 150,
+                                    height: 40,
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                            Languages.of(context)!.mprofile,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: 'OpenSauceSansBold',
+                                                fontSize: mSizeFour,
+                                                color: mBlackTwo))),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  hoverColor: Colors.white,
+                                  onTap: () {
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    width: 200,
+                                    height: 40,
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                            Languages.of(context)!
+                                                .mAccountSettings,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontFamily: 'OpenSauceSansBold',
+                                                fontSize: mSizeFour,
+                                                color: mBlackTwo))),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 150,
+                                  height: 2,
+                                  child: Container(
+                                    color: mS1GreenNine,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 1,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Container(
+                                  width: 200,
+                                  height: 2,
+                                  child: Container(
+                                    color: mS1GreenNine,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 1,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Container(
+                                color: mGreyFive,
+                                width: MediaQuery.of(context).size.width,
+                                height: 1,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 40),
+                      child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                                flex: 6,
+                                child: Material(
+                                  color: Colors.white,
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: AuthFormField(
+                                            controller: nameController,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            keyboardType: TextInputType.text,
+                                            hintText:
+                                                Languages.of(context)!.mName,
+                                            radius: 30,
+                                            maxLength: 80,
+                                            labelText:
+                                                Languages.of(context)!.mName,
+                                            mBorderView: false,
+                                            mImageView: true,
+                                            isMandatory: true,
+                                            mTop: 20,
+                                            mBottom: 20,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: AuthFormField(
+                                            controller: mobileController,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            keyboardType: TextInputType.number,
+                                            hintText:
+                                                Languages.of(context)!.mMobile,
+                                            radius: 30,
+                                            maxLength: 10,
+                                            labelText:
+                                                Languages.of(context)!.mMobile,
+                                            mBorderView: false,
+                                            mImageView: true,
+                                            isMandatory: true,
+                                            mTop: 20,
+                                            mBottom: 20,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: AuthFormField(
+                                            controller: emailController,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            keyboardType: TextInputType.text,
+                                            hintText: Languages.of(context)!
+                                                .mEmailAddress,
+                                            radius: 30,
+                                            maxLength: 150,
+                                            labelText: Languages.of(context)!
+                                                .mEmailAddress,
+                                            mBorderView: false,
+                                            mImageView: true,
+                                            isMandatory: true,
+                                            mTop: 20,
+                                            mBottom: 20,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: AuthFormField(
+                                            controller: companynameController,
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            keyboardType: TextInputType.text,
+                                            hintText: Languages.of(context)!
+                                                .mCompanyName,
+                                            radius: 30,
+                                            maxLength: 250,
+                                            labelText: Languages.of(context)!
+                                                .mCompanyName,
+                                            mBorderView: false,
+                                            mImageView: true,
+                                            isMandatory: true,
+                                            mTop: 20,
+                                            mBottom: 20,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 15,
+                                        ),
+                                      ]),
+                                )),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Expanded(
+                                flex: 4,
+                                child: Material(
+                                  color: Colors.white,
+                                  child: Center(
+                                    child: Column(children: [
+                                      Image.asset(
+                                        'assets/new_ic_profileupload.png',
+                                        height: 200,
+                                        width: 200,
+                                      ),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                          Languages.of(context)!.muploadprofile,
+                                          textAlign: TextAlign.start,
+                                          style: const TextStyle(
+                                              fontFamily:
+                                                  'OpenSauceSansRegular',
+                                              fontSize: mSizeThree,
+                                              color: mBlackTwo))
+                                    ]),
+                                  ),
+                                ))
+                          ]),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 40, right: 20),
+                      child: Material(
+                          color: Colors.white,
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(Languages.of(context)!.mSocialMediaLinks,
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        fontFamily: 'OpenSauceSansSemiBold',
+                                        fontSize: mSizeFour,
+                                        color: mBlueOne)),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Container(
+                                  color: mGreyFive,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 1,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                        flex: 5,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                Languages.of(context)!
+                                                    .mlinkedinurl,
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                    fontFamily:
+                                                        'OpenSauceSansRegular',
+                                                    fontSize: mSizeOne,
+                                                    color: mGreyEigth)),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              child: AuthFormField(
+                                                controller: linedINController,
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                hintText: Languages.of(context)!
+                                                    .mlinkedinurl,
+                                                radius: 30,
+                                                maxLength: 250,
+                                                labelText:
+                                                    Languages.of(context)!
+                                                        .mlinkedinurl,
+                                                mBorderView: false,
+                                                mImageView: true,
+                                                isMandatory: true,
+                                                mTop: 20,
+                                                mBottom: 20,
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    Expanded(
+                                        flex: 5,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                Languages.of(context)!
+                                                    .mwebsiteurl,
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                    fontFamily:
+                                                        'OpenSauceSansRegular',
+                                                    fontSize: mSizeOne,
+                                                    color: mGreyEigth)),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Container(
+                                              alignment: Alignment.center,
+                                              child: AuthFormField(
+                                                controller: websiteController,
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                keyboardType:
+                                                    TextInputType.text,
+                                                hintText: Languages.of(context)!
+                                                    .mwebsiteurl,
+                                                radius: 30,
+                                                maxLength: 250,
+                                                labelText:
+                                                    Languages.of(context)!
+                                                        .mwebsiteurl,
+                                                mBorderView: false,
+                                                mImageView: true,
+                                                isMandatory: true,
+                                                mTop: 20,
+                                                mBottom: 20,
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ServiceButton(
+                                      mButtonname:
+                                          Languages.of(context)!.mSaveProfile,
+                                      onpressed: () {
+                                        setState(
+                                          () {
+                                            final TextEditingController
+                                                nameController =
+                                                TextEditingController();
+                                            final TextEditingController
+                                                companynameController =
+                                                TextEditingController();
+                                            final TextEditingController
+                                                mobileController =
+                                                TextEditingController();
+                                            final TextEditingController
+                                                emailController =
+                                                TextEditingController();
+                                            final TextEditingController
+                                                linedINController =
+                                                TextEditingController();
+                                            final TextEditingController
+                                                websiteController =
+                                                TextEditingController();
+
+                                            Loading(mLoaderGif).start(context);
+
+                                            /*_apiService1.ProfileUpdate(
+                                                    nameController.text,
+                                                    mUserId,
+                                                    mobileController.text,
+                                                    "",
+                                                    companynameController.text,
+                                                    linedINController.text,
+                                                    mCaptureUserImage,
+                                                    mUserType)
+                                                .then((value) async {
+                                              print(value);
+
+                                              if (value is ApiSuccess) {
+                                                if (LoginResponse.fromJson(
+                                                            value.data)!
+                                                        .message!
+                                                        .status ??
+                                                    false) {
+                                                  Loading.stop();
+                                                  String mUserInfo =
+                                                      json.encode(value.data);
+
+                                                  sl<StorageService>()
+                                                      .setString(
+                                                          StorageServiceConstant
+                                                              .MUSERINFO,
+                                                          mUserInfo);
+                                                  SucessToast(
+                                                      context: context,
+                                                      text: "Profile Updated");
+                                                } else {
+                                                  Loading.stop();
+                                                  ErrorToast(
+                                                      context: context,
+                                                      text: CommonResponse
+                                                                  .fromJson(value
+                                                                      .data)!
+                                                              .message!
+                                                              .message ??
+                                                          "");
+                                                }
+                                              } else if (value is ApiFailure) {
+                                                Loading.stop();
+                                              }
+                                            });*/
+                                          },
+                                        );
+                                      },
+                                      mTextColor: mWhiteColor,
+                                      mFontSize: 16,
+                                      mWidth: 130,
+                                      mHeigth: 35,
+                                      mhovercolor: Colors.white),
+                                )
+                              ])),
+                    )
+                  ]),
+            ),
+          );
+        });
+      },
     );
   }
 }

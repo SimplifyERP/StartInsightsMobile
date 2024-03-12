@@ -1,21 +1,24 @@
+import 'dart:convert';
+
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Network/endpoints.dart';
 import 'package:startinsights/Network/my_dio.dart';
 
+// 'amount': amount
+// 'country': country,
 class SearchinvestorsRepo {
   Future<ApiResults> getSearchinvestors(
     String userId,
     int PageNo,
     String country,
-    String fundingstage,
+    List<String> mStages,
     String amount,
   ) async {
     return await sl<MyDio>().postData(endPoint: searchinvestorslistAPI, data: {
+      'user_id': userId,
       'page_no': PageNo,
-      'country': country,
-      'funding_stage': fundingstage,
-      'amount': amount
+      'funding_stage': jsonEncode(mStages)
     });
   }
 

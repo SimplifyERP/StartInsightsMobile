@@ -104,6 +104,10 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
 
   String mSelectId = "";
 
+  List<String> mStages = [];
+
+  final List<String> itemStages = [];
+
   @override
   void initState() {
     super.initState();
@@ -148,21 +152,11 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
         text: Languages.of(context)!.mLostMenu,
       ),
     ];
-
-    List<MenuItem> FilterMenuItems = [
-      MenuItem(
-        text: Languages.of(context)!.mPreseedMenu,
-      ),
-      MenuItem(
-        text: Languages.of(context)!.mSeedMenu,
-      ),
-      MenuItem(
-        text: Languages.of(context)!.mEarlyMenu,
-      ),
-      MenuItem(
-        text: Languages.of(context)!.mGrowthMenu,
-      ),
-    ];
+    itemStages.clear();
+    itemStages.add(Languages.of(context)!.mPreseedMenu);
+    itemStages.add(Languages.of(context)!.mSeedMenu);
+    itemStages.add(Languages.of(context)!.mEarlyMenu);
+    itemStages.add(Languages.of(context)!.mGrowthMenu);
 
     mSearchInvestorsBloc = SearchInvestorsBloc(mContext: context);
 
@@ -708,8 +702,10 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                   child: Center(
                                                                     child:
                                                                         DropdownButtonHideUnderline(
-                                                                      child:
-                                                                          DropdownButton2(
+                                                                      child: DropdownButton2<
+                                                                          String>(
+                                                                        isExpanded:
+                                                                            true,
                                                                         customButton: Row(
                                                                             mainAxisAlignment:
                                                                                 MainAxisAlignment.center,
@@ -725,73 +721,102 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                               ),
                                                                               const Icon(Icons.arrow_drop_down_outlined, size: 30)
                                                                             ]),
-                                                                        items: [
-                                                                          ...FilterMenuItems
-                                                                              .map(
-                                                                            (item) =>
-                                                                                DropdownMenuItem<MenuItem>(
-                                                                              value: item,
-                                                                              child: buildItem(item),
+                                                                        items: itemStages
+                                                                            .map((item) {
+                                                                          return DropdownMenuItem(
+                                                                            value:
+                                                                                item,
+                                                                            //disable default onTap to avoid closing menu when selecting an item
+                                                                            enabled:
+                                                                                false,
+                                                                            child:
+                                                                                StatefulBuilder(
+                                                                              builder: (context, menuSetState) {
+                                                                                final isSelected = mStages.contains(item);
+                                                                                return InkWell(
+                                                                                  onTap: () {
+                                                                                    isSelected ? mStages.remove(item) : mStages.add(item);
+                                                                                    //This rebuilds the StatefulWidget to update the button's text
+                                                                                    setState(() {
+                                                                                      if (mStages.length > 1) {
+                                                                                        mFilterValue = "2 Items";
+                                                                                      } else {
+                                                                                        if (mStages.isEmpty) {
+                                                                                          mFilterValue = "";
+                                                                                        } else {
+                                                                                          mFilterValue = mStages.first;
+                                                                                        }
+                                                                                      }
+                                                                                    });
+                                                                                    //This rebuilds the dropdownMenu Widget to update the check mark
+                                                                                    menuSetState(() {});
+                                                                                  },
+                                                                                  child: Container(
+                                                                                    height: double.infinity,
+                                                                                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                                                    child: Row(
+                                                                                      children: [
+                                                                                        if (isSelected) const Icon(Icons.check_box_outlined) else const Icon(Icons.check_box_outline_blank),
+                                                                                        const SizedBox(width: 16),
+                                                                                        Expanded(
+                                                                                          child: Text(
+                                                                                            item,
+                                                                                            style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyNine),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                );
+                                                                              },
                                                                             ),
-                                                                          ),
-                                                                        ],
+                                                                          );
+                                                                        }).toList(),
+                                                                        //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                                                                        value: mStages.isEmpty
+                                                                            ? null
+                                                                            : mStages.last,
                                                                         onChanged:
-                                                                            (value) {
-                                                                          // onChanged(
-                                                                          //     context,
-                                                                          //     value! as ProfileMenuItem);
-
-                                                                          print(
-                                                                              value!.text);
-                                                                          setState(
-                                                                              () {
-                                                                            mFilterValue =
-                                                                                value!.text;
-                                                                          });
-
-                                                                          // MenuItems.onChanged(
-                                                                          //     context,
-                                                                          //     value! as MenuItem);
+                                                                            (value) {},
+                                                                        selectedItemBuilder:
+                                                                            (context) {
+                                                                          return items
+                                                                              .map(
+                                                                            (item) {
+                                                                              return Container(
+                                                                                alignment: AlignmentDirectional.center,
+                                                                                child: Text(
+                                                                                  mStages.join(', '),
+                                                                                  style: const TextStyle(
+                                                                                    fontSize: 14,
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                  ),
+                                                                                  maxLines: 1,
+                                                                                ),
+                                                                              );
+                                                                            },
+                                                                          ).toList();
                                                                         },
-                                                                        dropdownStyleData:
-                                                                            DropdownStyleData(
+                                                                        buttonStyleData:
+                                                                            const ButtonStyleData(
+                                                                          padding: EdgeInsets.only(
+                                                                              left: 16,
+                                                                              right: 8),
+                                                                          height:
+                                                                              40,
                                                                           width:
-                                                                              160,
-                                                                          padding: const EdgeInsets
-                                                                              .symmetric(
-                                                                              vertical: 6),
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(4),
-                                                                            border:
-                                                                                Border.all(color: mGreyThree, width: 2),
-                                                                            color:
-                                                                                Colors.white,
-                                                                          ),
-                                                                          offset: const Offset(
-                                                                              5,
-                                                                              -10),
+                                                                              140,
+                                                                        ),
+                                                                        menuItemStyleData:
+                                                                            const MenuItemStyleData(
+                                                                          height:
+                                                                              40,
+                                                                          padding:
+                                                                              EdgeInsets.zero,
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  // InkWell(
-                                                                  //     onTap:
-                                                                  //         () {
-                                                                  //       OnLoadDialog(context);
-                                                                  //     },
-                                                                  //     child: Row(
-                                                                  //         mainAxisAlignment: MainAxisAlignment.center,
-                                                                  //         crossAxisAlignment: CrossAxisAlignment.center,
-                                                                  //         children: [
-                                                                  //           Image.asset('assets/new_ic_filter.png', width: 20, height: 20),
-                                                                  //           Text(Languages.of(context)!.mFilter, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyEigth)),
-                                                                  //           const SizedBox(
-                                                                  //             width: 10,
-                                                                  //           ),
-                                                                  //           const Icon(Icons.arrow_drop_down_outlined, size: 30)
-                                                                  //         ])),
                                                                 ),
                                                                 const SizedBox(
                                                                   width: 15,
@@ -801,7 +826,14 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                         Languages.of(context)!
                                                                             .mSearchResult,
                                                                     onpressed:
-                                                                        () {},
+                                                                        () {
+                                                                      OnloadSearchinvestors(
+                                                                          "",
+                                                                          currentPage,
+                                                                          "",
+                                                                          mStages,
+                                                                          "");
+                                                                    },
                                                                     mSelectcolor:
                                                                         mBtnColor,
                                                                     mTextColor:
@@ -899,7 +931,16 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                               mSearchInvestorsList:
                                                                   mSearchList,
                                                               RemoveFavonpressed:
-                                                                  () {},
+                                                                  () {
+                                                                setState(() {
+                                                                  OnRemoveFav(
+                                                                      "jagadeesan.a1104@gmail.com",
+                                                                      items[index]
+                                                                              .id ??
+                                                                          "",
+                                                                      1);
+                                                                });
+                                                              },
                                                               ViewMorepressed:
                                                                   () {
                                                                 setState(() {
@@ -917,10 +958,12 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                               },
                                                               AddFavonpressed:
                                                                   () {
-                                                                OnloadAddFav(
-                                                                    "jagadeesan.a1104@gmail.com",
-                                                                    items[index]
-                                                                        .id);
+                                                                setState(() {
+                                                                  OnloadAddFav(
+                                                                      "jagadeesan.a1104@gmail.com",
+                                                                      items[index]
+                                                                          .id);
+                                                                });
                                                               },
                                                             ),
                                                           );
@@ -957,7 +1000,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                 "",
                                                                 currentPage,
                                                                 "",
-                                                                "",
+                                                                mStages,
                                                                 "");
                                                           });
                                                         },
@@ -1647,97 +1690,24 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                 mSearchList,
                                                             RemoveFavonpressed:
                                                                 () {
-                                                              Widget
-                                                                  cancelButton =
-                                                                  TextButton(
-                                                                child: Text(
-                                                                    Languages.of(
-                                                                            context)!
-                                                                        .mCancel,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        fontFamily:
-                                                                            'OpenSauceSansRegular',
-                                                                        fontSize:
-                                                                            mSizeThree,
-                                                                        color:
-                                                                            mGreyTen)),
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                              );
-                                                              Widget
-                                                                  continueButton =
-                                                                  TextButton(
-                                                                child: Text(
-                                                                    Languages.of(
-                                                                            context)!
-                                                                        .mok,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        fontFamily:
-                                                                            'OpenSauceSansRegular',
-                                                                        fontSize:
-                                                                            mSizeThree,
-                                                                        color:
-                                                                            mGreyTen)),
-                                                                onPressed: () {
-                                                                  OnloadChangeFav(
-                                                                      "jagadeesan.a1104@gmail.com",
-                                                                      mFavList[index]
-                                                                              .id ??
-                                                                          "",
-                                                                      0);
-
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                              );
-
-                                                              // set up the AlertDialog
-                                                              AlertDialog
-                                                                  alert =
-                                                                  AlertDialog(
-                                                                content: Text(
-                                                                    Languages.of(
-                                                                            context)!
-                                                                        .mFavMsg,
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        fontFamily:
-                                                                            'OpenSauceSansRegular',
-                                                                        fontSize:
-                                                                            mSizeTen,
-                                                                        color:
-                                                                            mGreyTen)),
-                                                                actions: [
-                                                                  cancelButton,
-                                                                  continueButton,
-                                                                ],
-                                                              );
-
-                                                              // show the dialog
-                                                              showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (BuildContext
-                                                                        context) {
-                                                                  return alert;
-                                                                },
-                                                              );
+                                                              setState(() {
+                                                                OnRemoveFav(
+                                                                    "jagadeesan.a1104@gmail.com",
+                                                                    mFavList[index]
+                                                                            .id ??
+                                                                        "",
+                                                                    2);
+                                                              });
                                                             },
                                                             AddFavonpressed:
-                                                                () {},
+                                                                () {
+                                                              setState(() {
+                                                                OnloadAddFav(
+                                                                    "jagadeesan.a1104@gmail.com",
+                                                                    items[index]
+                                                                        .id);
+                                                              });
+                                                            },
                                                             ViewMorepressed:
                                                                 () {
                                                               setState(() {
@@ -2011,8 +1981,10 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                 child: Center(
                                                                   child:
                                                                       DropdownButtonHideUnderline(
-                                                                    child:
-                                                                        DropdownButton2(
+                                                                    child: DropdownButton2<
+                                                                        String>(
+                                                                      isExpanded:
+                                                                          true,
                                                                       customButton: Row(
                                                                           mainAxisAlignment: MainAxisAlignment
                                                                               .center,
@@ -2034,77 +2006,108 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                             const Icon(Icons.arrow_drop_down_outlined,
                                                                                 size: 30)
                                                                           ]),
-                                                                      items: [
-                                                                        ...FilterMenuItems
-                                                                            .map(
-                                                                          (item) =>
-                                                                              DropdownMenuItem<MenuItem>(
-                                                                            value:
-                                                                                item,
-                                                                            child:
-                                                                                buildItem(item),
+                                                                      items: itemStages
+                                                                          .map(
+                                                                              (item) {
+                                                                        return DropdownMenuItem(
+                                                                          value:
+                                                                              item,
+                                                                          //disable default onTap to avoid closing menu when selecting an item
+                                                                          enabled:
+                                                                              false,
+                                                                          child:
+                                                                              StatefulBuilder(
+                                                                            builder:
+                                                                                (context, menuSetState) {
+                                                                              final isSelected = mStages.contains(item);
+                                                                              return InkWell(
+                                                                                onTap: () {
+                                                                                  isSelected ? mStages.remove(item) : mStages.add(item);
+                                                                                  //This rebuilds the StatefulWidget to update the button's text
+                                                                                  setState(() {
+                                                                                    if (mStages.length > 1) {
+                                                                                      mFilterValue = "2 Items";
+                                                                                    } else {
+                                                                                      if (mStages.isEmpty) {
+                                                                                        mFilterValue = "";
+                                                                                      } else {
+                                                                                        mFilterValue = mStages.first;
+                                                                                      }
+                                                                                    }
+                                                                                  });
+                                                                                  //This rebuilds the dropdownMenu Widget to update the check mark
+                                                                                  menuSetState(() {});
+                                                                                },
+                                                                                child: Container(
+                                                                                  height: double.infinity,
+                                                                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                                                                  child: Row(
+                                                                                    children: [
+                                                                                      if (isSelected) const Icon(Icons.check_box_outlined) else const Icon(Icons.check_box_outline_blank),
+                                                                                      const SizedBox(width: 16),
+                                                                                      Expanded(
+                                                                                        child: Text(
+                                                                                          item,
+                                                                                          style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyNine),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            },
                                                                           ),
-                                                                        ),
-                                                                      ],
+                                                                        );
+                                                                      }).toList(),
+                                                                      //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+                                                                      value: mStages
+                                                                              .isEmpty
+                                                                          ? null
+                                                                          : mStages
+                                                                              .last,
                                                                       onChanged:
-                                                                          (value) {
-                                                                        // onChanged(
-                                                                        //     context,
-                                                                        //     value! as ProfileMenuItem);
-
-                                                                        print(value!
-                                                                            .text);
-                                                                        setState(
-                                                                            () {
-                                                                          mFilterValue =
-                                                                              value!.text;
-                                                                        });
-
-                                                                        // MenuItems.onChanged(
-                                                                        //     context,
-                                                                        //     value! as MenuItem);
+                                                                          (value) {},
+                                                                      selectedItemBuilder:
+                                                                          (context) {
+                                                                        return items
+                                                                            .map(
+                                                                          (item) {
+                                                                            return Container(
+                                                                              alignment: AlignmentDirectional.center,
+                                                                              child: Text(
+                                                                                mStages.join(', '),
+                                                                                style: const TextStyle(
+                                                                                  fontSize: 14,
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                ),
+                                                                                maxLines: 1,
+                                                                              ),
+                                                                            );
+                                                                          },
+                                                                        ).toList();
                                                                       },
-                                                                      dropdownStyleData:
-                                                                          DropdownStyleData(
+                                                                      buttonStyleData:
+                                                                          const ButtonStyleData(
+                                                                        padding: EdgeInsets.only(
+                                                                            left:
+                                                                                16,
+                                                                            right:
+                                                                                8),
+                                                                        height:
+                                                                            40,
                                                                         width:
-                                                                            160,
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            vertical:
-                                                                                6),
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(4),
-                                                                          border: Border.all(
-                                                                              color: mGreyThree,
-                                                                              width: 2),
-                                                                          color:
-                                                                              Colors.white,
-                                                                        ),
-                                                                        offset: const Offset(
-                                                                            5,
-                                                                            -10),
+                                                                            140,
+                                                                      ),
+                                                                      menuItemStyleData:
+                                                                          const MenuItemStyleData(
+                                                                        height:
+                                                                            40,
+                                                                        padding:
+                                                                            EdgeInsets.zero,
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                // InkWell(
-                                                                //     onTap:
-                                                                //         () {
-                                                                //       OnLoadDialog(context);
-                                                                //     },
-                                                                //     child: Row(
-                                                                //         mainAxisAlignment: MainAxisAlignment.center,
-                                                                //         crossAxisAlignment: CrossAxisAlignment.center,
-                                                                //         children: [
-                                                                //           Image.asset('assets/new_ic_filter.png', width: 20, height: 20),
-                                                                //           Text(Languages.of(context)!.mFilter, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyEigth)),
-                                                                //           const SizedBox(
-                                                                //             width: 10,
-                                                                //           ),
-                                                                //           const Icon(Icons.arrow_drop_down_outlined, size: 30)
-                                                                //         ])),
                                                               ),
                                                               const SizedBox(
                                                                 width: 15,
@@ -2115,7 +2118,14 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                               context)!
                                                                           .mSearchResult,
                                                                   onpressed:
-                                                                      () {},
+                                                                      () {
+                                                                    OnloadSearchinvestors(
+                                                                        "",
+                                                                        currentPage,
+                                                                        "",
+                                                                        mStages,
+                                                                        "");
+                                                                  },
                                                                   mSelectcolor:
                                                                       mBtnColor,
                                                                   mTextColor:
@@ -2230,7 +2240,11 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                               mIndex: index,
                                                                               mSelectId: mSelectId,
                                                                               mSearchInvestorsList: mSearchList,
-                                                                              RemoveFavonpressed: () {},
+                                                                              RemoveFavonpressed: () {
+                                                                                setState(() {
+                                                                                  OnRemoveFav("jagadeesan.a1104@gmail.com", items[index].id ?? "", 1);
+                                                                                });
+                                                                              },
                                                                               ViewMorepressed: () {
                                                                                 setState(() {
                                                                                   mSelectView = 4;
@@ -2239,7 +2253,9 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                                 });
                                                                               },
                                                                               AddFavonpressed: () {
-                                                                                OnloadAddFav("jagadeesan.a1104@gmail.com", items[index].id);
+                                                                                setState(() {
+                                                                                  OnloadAddFav("jagadeesan.a1104@gmail.com", items[index].id);
+                                                                                });
                                                                               },
                                                                             ),
                                                                           );
@@ -2293,7 +2309,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                               width: 25,
                                                                               height: 25,
                                                                             )),
-                                                                        SizedBox(
+                                                                        const SizedBox(
                                                                           width:
                                                                               20,
                                                                         )
@@ -2803,33 +2819,6 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   }
 
   void OnLoadViewFundingCRM(Investor mInvestor, List<MenuItem> stagesItems) {
-    /*showDialog(
-      context: context,
-      builder: (context2) {
-        String contentText = "Content of Dialog";
-        return StatefulBuilder(
-          builder: (context1, setState) {
-            return AlertDialog(
-              //  title: Center(child: Text("Information")),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
-
-              content: SizedBox(
-                width: MediaQuery.of(context1).size.width / 3 + 50,
-                height: MediaQuery.of(context1).size.height - 100,
-                child: SingleChildScrollView(
-                    child: Container(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  color: Colors.white,
-                  child: Text("ASAGAK"),
-                )),
-              ),
-            );
-          },
-        );
-      },
-    );*/
-
     mStatusChange = mInvestor.status ?? "";
     showGeneralDialog(
       barrierLabel: "",
@@ -2856,7 +2845,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
-                        flex: 10,
+                        flex: 8,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -2939,374 +2928,411 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                             const SizedBox(
                               height: 20,
                             ),
-                            Material(
-                              color: Colors.white,
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          Languages.of(context)!.mStatus,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyEigth)),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                      flex: 7,
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: DropdownButtonHideUnderline(
-                                          child: DropdownButton2(
-                                            customButton: Container(
-                                              height: 32,
-                                              width: 150,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: mYellowFour,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.white,
-                                                    blurRadius: 1.0,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                        (mStatusChange.isEmpty)
-                                                            ? Languages.of(
-                                                                    context)!
-                                                                .mFilter
-                                                            : mStatusChange,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            fontFamily:
-                                                                'OpenSauceSansBold',
-                                                            fontSize:
-                                                                mSizeThree,
-                                                            color: mGreyTen)),
-                                                    const Icon(
-                                                      Icons
-                                                          .arrow_drop_down_outlined,
-                                                      size: 30,
-                                                      color: mBlackThree,
-                                                    )
-                                                  ]),
-                                            ),
-                                            items: [
-                                              ...stagesItems.map(
-                                                (item) =>
-                                                    DropdownMenuItem<MenuItem>(
-                                                  value: item,
-                                                  child: buildItem(item),
-                                                ),
-                                              ),
-                                            ],
-                                            onChanged: (value) {
-                                              print(value!.text);
-
-                                              setState(() {
-                                                mStatusChange = value!.text;
-                                              });
-
-                                              // MenuItems.onChanged(
-                                              //     context,
-                                              //     value! as MenuItem);
-                                            },
-                                            dropdownStyleData:
-                                                DropdownStyleData(
-                                              width: 160,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 6),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(4),
-                                                border: Border.all(
-                                                    color: mGreyThree,
-                                                    width: 2),
-                                                color: Colors.white,
-                                              ),
-                                              offset: const Offset(5, -10),
+                            Expanded(
+                                child: SingleChildScrollView(
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mStatus,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
                                             ),
                                           ),
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Material(
-                              color: Colors.white,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          Languages.of(context)!
-                                              .mContactedPerson,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyEigth)),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton2(
+                                                    customButton: Container(
+                                                      height: 32,
+                                                      width: 150,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: mYellowFour,
+                                                        boxShadow: const [
+                                                          BoxShadow(
+                                                            color: Colors.white,
+                                                            blurRadius: 1.0,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                                (mStatusChange.isEmpty)
+                                                                    ? Languages.of(
+                                                                            context)!
+                                                                        .mFilter
+                                                                    : mStatusChange,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'OpenSauceSansBold',
+                                                                    fontSize:
+                                                                        mSizeThree,
+                                                                    color:
+                                                                        mGreyTen)),
+                                                            const Icon(
+                                                              Icons
+                                                                  .arrow_drop_down_outlined,
+                                                              size: 30,
+                                                              color:
+                                                                  mBlackThree,
+                                                            )
+                                                          ]),
+                                                    ),
+                                                    items: [
+                                                      ...stagesItems.map(
+                                                        (item) =>
+                                                            DropdownMenuItem<
+                                                                MenuItem>(
+                                                          value: item,
+                                                          child:
+                                                              buildItem(item),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      print(value!.text);
+
+                                                      setState(() {
+                                                        mStatusChange =
+                                                            value!.text;
+                                                      });
+
+                                                      // MenuItems.onChanged(
+                                                      //     context,
+                                                      //     value! as MenuItem);
+                                                    },
+                                                    dropdownStyleData:
+                                                        DropdownStyleData(
+                                                      width: 160,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 6),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        border: Border.all(
+                                                            color: mGreyThree,
+                                                            width: 2),
+                                                        color: Colors.white,
+                                                      ),
+                                                      offset:
+                                                          const Offset(5, -10),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                      flex: 7,
-                                      child: Text(
-                                          mInvestor.contactedPerson ?? "",
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansSemiBold',
-                                              fontSize: mSizeThree,
-                                              color: mGreyTen)))
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Material(
-                              color: Colors.white,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          Languages.of(context)!.mFundingStage,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyEigth)),
+                                    const SizedBox(
+                                      height: 20,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                      flex: 7,
-                                      child: Text(mInvestor.status ?? "",
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansSemiBold',
-                                              fontSize: mSizeThree,
-                                              color: mGreyTen)))
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Material(
-                              color: Colors.white,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          Languages.of(context)!.mDescription,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyEigth)),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mContactedPerson,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: Text(
+                                                  mInvestor.contactedPerson ??
+                                                      "",
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansSemiBold',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyTen)))
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                      flex: 7,
-                                      child: Text(mInvestor.description ?? "",
-                                          textAlign: TextAlign.left,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 8,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansSemiBold',
-                                              fontSize: mSizeThree,
-                                              height: 1.5,
-                                              color: mGreyTen)))
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Material(
-                              color: Colors.white,
-                              child: Container(
-                                color: mGreyFive,
-                                width: MediaQuery.of(context).size.width,
-                                height: 1,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Material(
-                              color: Colors.white,
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          Languages.of(context)!.mWebsite,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyEigth)),
+                                    const SizedBox(
+                                      height: 20,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                      flex: 7,
-                                      child: Text(mInvestor.website ?? "",
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansSemiBold',
-                                              fontSize: mSizeThree,
-                                              color: mGreyTen)))
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Material(
-                              color: Colors.white,
-                              child: Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          Languages.of(context)!.mMailAddress,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyEigth)),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mFundingStage,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: Text(
+                                                  mInvestor.status ?? "",
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansSemiBold',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyTen)))
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                      flex: 7,
-                                      child: Text(mInvestor.mailAddress ?? "",
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansSemiBold',
-                                              fontSize: mSizeThree,
-                                              color: mGreyTen)))
-                                ],
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Material(
-                              color: Colors.white,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  Expanded(
-                                    flex: 3,
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                          Languages.of(context)!.mContactNumber,
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyEigth)),
+                                    const SizedBox(
+                                      height: 20,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Expanded(
-                                      flex: 7,
-                                      child: Text(mInvestor.contactNo ?? "",
-                                          textAlign: TextAlign.left,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansSemiBold',
-                                              fontSize: mSizeThree,
-                                              color: mGreyTen)))
-                                ],
-                              ),
-                            )
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mDescription,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: Text(
+                                                  mInvestor.description ?? "",
+                                                  textAlign: TextAlign.left,
+                                                  maxLines: 100,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansSemiBold',
+                                                      fontSize: mSizeThree,
+                                                      height: 1.5,
+                                                      color: mGreyTen)))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Container(
+                                        color: mGreyFive,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 1,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mWebsite,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: Text(
+                                                  mInvestor.website ?? "",
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansSemiBold',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyTen)))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mMailAddress,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: Text(
+                                                  mInvestor.mailAddress ?? "",
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansSemiBold',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyTen)))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mContactNumber,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: Text(
+                                                  mInvestor.contactNo ?? "",
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansSemiBold',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyTen)))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ]),
+                            ))
                           ],
                         )),
                     Expanded(
-                        flex: 2,
+                        flex: 1,
                         child: Container(
                           color: Colors.white,
                           child: Column(
@@ -3322,7 +3348,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                 ),
                               ),
                               const SizedBox(
-                                height: 30,
+                                height: 15,
                               ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -3351,7 +3377,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                           onpressed: () {
                                             OnupdatefundingCRM(
                                                 "jagadeesan.a1104@gmail.com",
-                                                "mInvestor.typeOfInvestor",
+                                                mInvestor.typeOfInvestor ?? "",
                                                 mStatusChange,
                                                 mInvestor.id ?? "");
                                           },
@@ -3539,11 +3565,12 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   }
 
   void OnloadSearchinvestors(String UserID, int currentPage, String country,
-      String fundingstage, String amount) {
+      List<String> mStages, String amount) {
     Loading(mLoaderGif).start(context);
 
     apiService1
-        .getSearchinvestors("", currentPage, "", "", "")
+        .getSearchinvestors(
+            "jagadeesan.a1104@gmail.com", currentPage, "", mStages, "")
         .then((value) async {
       print(value);
 
@@ -3591,7 +3618,8 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
     });
   }
 
-  void OnloadChangeFav(String UserId, String InvestorId, int status) {
+  void OnloadChangeFav(
+      String UserId, String InvestorId, int status, int mFrom) {
     Loading(mLoaderGif).start(context);
     apiService1.RemoveFavList(UserId, InvestorId, status).then((value) async {
       print(value);
@@ -3600,7 +3628,12 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
         if (FavouriteResponse.fromJson(value.data)!.message!.status ?? false) {
           Loading.stop();
           setState(() {
-            OnloadFavList("jagadeesan.a1104@gmail.com", 1);
+            if (mFrom == 2) {
+              OnloadFavList("jagadeesan.a1104@gmail.com", 1);
+            } else {
+              OnloadSearchinvestors(
+                  "jagadeesan.a1104@gmail.com", currentPage, "", mStages, "");
+            }
           });
         } else {
           Loading.stop();
@@ -3626,10 +3659,12 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
             false) {
           Loading.stop();
           setState(() {
+            Navigator.of(context).pop();
             OnLoadFundingCRM("jagadeesan.a1104@gmail.com");
           });
         } else {
           Loading.stop();
+          Navigator.of(context).pop();
           ErrorToast(context: context, text: "Error");
         }
       } else if (value is ApiFailure) {
@@ -3773,7 +3808,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
           Loading.stop();
           setState(() {
             OnloadSearchinvestors(
-                "jagadeesan.a1104@gmail.com", currentPage, "", "", "");
+                "jagadeesan.a1104@gmail.com", currentPage, "", mStages, "");
           });
         } else {
           Loading.stop();
@@ -3783,6 +3818,55 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
         Loading.stop();
       }
     });
+  }
+
+  void OnRemoveFav(String UserId, String investorid, int mFrom) {
+    Widget cancelButton = TextButton(
+      child: Text(Languages.of(context)!.mCancel,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'OpenSauceSansRegular',
+              fontSize: mSizeThree,
+              color: mGreyTen)),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text(Languages.of(context)!.mok,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'OpenSauceSansRegular',
+              fontSize: mSizeThree,
+              color: mGreyTen)),
+      onPressed: () {
+        OnloadChangeFav(UserId, investorid, 0, mFrom);
+
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(Languages.of(context)!.mFavMsg,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'OpenSauceSansRegular',
+              fontSize: mSizeTen,
+              color: mGreyTen)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
 /*  void onChanged(BuildContext context, ProfileMenuItem item) {

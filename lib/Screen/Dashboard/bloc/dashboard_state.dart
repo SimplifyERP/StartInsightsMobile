@@ -1,6 +1,6 @@
 //
 
-import 'package:startinsights/Model/MastersResponse.dart';
+import 'package:startinsights/Model/DashboardResponse.dart';
 
 abstract class DashboardStatus {}
 
@@ -17,6 +17,6 @@ class GetDashboardInfoFailState extends DashboardStatus {
 
 class GetDashboardInfoSuccessState extends DashboardStatus {
   //final String mMessage;
-  MastersData mMastersDataList;
-  GetDashboardInfoSuccessState(this.mMastersDataList);
+  List<MessageElement> mDashboarddata = [];
+  GetDashboardInfoSuccessState(this.mDashboarddata);
 }

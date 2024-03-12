@@ -103,7 +103,7 @@ class FundingCrmList {
 class Investor {
   String? id;
   String? name;
-  TypeOfInvestor? typeOfInvestor;
+  String? typeOfInvestor;
   String? logo;
   String? status;
   String? contactedPerson;
@@ -130,7 +130,7 @@ class Investor {
   factory Investor.fromJson(Map<String, dynamic> json) => Investor(
         id: json["id"],
         name: json["name"],
-        typeOfInvestor: typeOfInvestorValues.map[json["type_of_investor"]]!,
+        typeOfInvestor: json["type_of_investor"],
         logo: json["logo"],
         status: json["status"],
         contactedPerson: json["contacted_person"],
@@ -147,7 +147,7 @@ class Investor {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
-        "type_of_investor": typeOfInvestorValues.reverse[typeOfInvestor],
+        "type_of_investor": typeOfInvestor,
         "logo": logo,
         "status": status,
         "contacted_person": contactedPerson,
@@ -194,13 +194,6 @@ final mailAddressValues = EnumValues({
 enum Status { SORTLIST }
 
 final statusValues = EnumValues({"SORTLIST": Status.SORTLIST});
-
-enum TypeOfInvestor { SEARCH_INVESTORS, USER_CREATED_INVESTORS }
-
-final typeOfInvestorValues = EnumValues({
-  "Search Investors": TypeOfInvestor.SEARCH_INVESTORS,
-  "User Created Investors": TypeOfInvestor.USER_CREATED_INVESTORS
-});
 
 enum Website { APP_STARTINSIGHTSAI, EMPTY }
 

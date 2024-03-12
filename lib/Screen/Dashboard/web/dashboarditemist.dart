@@ -1,28 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_network/image_network.dart';
 import 'package:startinsights/Libery/readmore.dart';
 import 'package:startinsights/Localization/language/languages.dart';
-import 'package:startinsights/Model/SearchinvestorslistResponse.dart';
+import 'package:startinsights/Model/DashboardResponse.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
-import 'package:startinsights/Widgets/primary_button.dart';
 
-class SearchInvestorsItemList extends StatelessWidget {
+class DashboardItemList extends StatelessWidget {
   final int mIndex;
-  final SearchInvestorsList mSearchInvestorsList;
-  final VoidCallback RemoveFavonpressed;
-  final VoidCallback AddFavonpressed;
-  final VoidCallback ViewMorepressed;
-  final String mSelectId;
+  final MessageElement mMessageElement;
 
-  const SearchInvestorsItemList({
+  const DashboardItemList({
     required this.mIndex,
-    required this.mSearchInvestorsList,
-    required this.RemoveFavonpressed,
-    required this.AddFavonpressed,
-    required this.ViewMorepressed,
-    required this.mSelectId,
+    required this.mMessageElement,
     super.key,
   });
 
@@ -31,13 +21,13 @@ class SearchInvestorsItemList extends StatelessWidget {
     return InkWell(
       //onTap: (() => selectMeal(context)),
       child: Container(
+        height: 260,
+        width: 260,
         padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.only(right: 10, left: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: mGreyTwo,
-          border: (mSelectId == mSearchInvestorsList.id)
-              ? Border.all(color: mBlueOne, width: 1)
-              : null,
           boxShadow: const [
             BoxShadow(
               color: mGreyTwo,
@@ -64,13 +54,12 @@ class SearchInvestorsItemList extends StatelessWidget {
                             Align(
                               alignment: Alignment.center,
                               child: CircleAvatar(
-                                radius: 40.0,
+                                radius: 35,
                                 backgroundColor: Colors.white,
                                 child: ClipOval(
-                                  child: (mSearchInvestorsList.logo!.isNotEmpty)
+                                  child: (mMessageElement.logo!.isNotEmpty)
                                       ? ImageNetwork(
-                                          image:
-                                              mSearchInvestorsList.logo ?? "",
+                                          image: mMessageElement.logo ?? "",
                                           height: 100,
                                           width: 100,
                                         )
@@ -81,7 +70,7 @@ class SearchInvestorsItemList extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            (mSearchInvestorsList!.investorVerified! == 1)
+                            (mMessageElement!.investorVerified! == 1)
                                 ? Align(
                                     alignment: Alignment.topRight,
                                     child: Image.asset(
@@ -103,13 +92,13 @@ class SearchInvestorsItemList extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: 90,
+                                  height: 70,
                                   child: ListView.builder(
-                                    itemCount: (mSearchInvestorsList
+                                    itemCount: (mMessageElement
                                                 .fundingStagesTable!.length >
-                                            3)
-                                        ? 3
-                                        : mSearchInvestorsList
+                                            2)
+                                        ? 2
+                                        : mMessageElement
                                             .fundingStagesTable!.length,
                                     itemBuilder: (context, position) {
                                       return Container(
@@ -133,10 +122,10 @@ class SearchInvestorsItemList extends StatelessWidget {
                                             top: 5),
                                         height: 20,
                                         width: double.maxFinite,
-                                        child: (position > 1)
+                                        child: (position > 0)
                                             ? Center(
                                                 child: Text(
-                                                    "+ ${mSearchInvestorsList.fundingStagesTable!.length - 2}",
+                                                    "+ ${mMessageElement.fundingStagesTable!.length - 1}",
                                                     textAlign: TextAlign.center,
                                                     style: const TextStyle(
                                                         fontFamily:
@@ -145,7 +134,7 @@ class SearchInvestorsItemList extends StatelessWidget {
                                                         color: mGreyNine)))
                                             : Center(
                                                 child: Text(
-                                                    mSearchInvestorsList
+                                                    mMessageElement
                                                             .fundingStagesTable![
                                                                 position]
                                                             .fundingStages! ??
@@ -160,56 +149,6 @@ class SearchInvestorsItemList extends StatelessWidget {
                                     },
                                   ),
                                 )
-
-                                /* Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: mGreyThree,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: mGreyThree,
-                                        blurRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  padding:
-                                      const EdgeInsets.only(left: 5, right: 5),
-                                  height: 25,
-                                  width: (double.infinity),
-                                  child: const Center(
-                                      child: Text("Early Stage",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyNine))),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: mGreyThree,
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: mGreyThree,
-                                        blurRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  height: 25,
-                                  width: (double.infinity),
-                                  child: const Center(
-                                      child: Text("Early Stage",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mGreyNine))),
-                                )*/
                               ]),
                         )
                       ]),
@@ -221,12 +160,13 @@ class SearchInvestorsItemList extends StatelessWidget {
               Expanded(
                 flex: 7,
                 child: Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.only(right: 8, left: 8),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(mSearchInvestorsList.title ?? "",
+                        Text(mMessageElement.title ?? "",
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                                 fontFamily: 'OpenSauceSansBold',
@@ -235,8 +175,8 @@ class SearchInvestorsItemList extends StatelessWidget {
                         const SizedBox(
                           height: 5,
                         ),
-                        Text(mSearchInvestorsList.firmType ?? "",
-                            textAlign: TextAlign.left,
+                        Text(mMessageElement.firmType ?? "",
+                            textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontFamily: 'OpenSauceSansRegular',
                                 fontSize: mSizeTwo,
@@ -252,7 +192,7 @@ class SearchInvestorsItemList extends StatelessWidget {
                           height: 10,
                         ),
                         ReadMoreText(
-                          mSearchInvestorsList.aboutUs ?? "",
+                          mMessageElement.aboutUs ?? "",
                           trimLines: 3,
                           preDataTextStyle: const TextStyle(
                               fontFamily: 'OpenSauceSansRegular',
@@ -268,17 +208,10 @@ class SearchInvestorsItemList extends StatelessWidget {
                           trimMode: TrimMode.Line,
                           trimCollapsedText: 'See more',
                           trimExpandedText: ' show less',
-                          onpressed: ViewMorepressed,
+                          onpressed: () {
+                            showAlert(context, mMessageElement.aboutUs ?? "");
+                          },
                         ),
-
-                        /* Text(mSearchInvestorsList.aboutUs ?? "",
-                            textAlign: TextAlign.start,
-                            maxLines: 3,
-                            style: const TextStyle(
-                                fontFamily: 'OpenSauceSansRegular',
-                                fontSize: mSizeOne,
-                                height: 1.5,
-                                color: mGreySeven)),*/
                         const SizedBox(
                           height: 10,
                         ),
@@ -300,7 +233,7 @@ class SearchInvestorsItemList extends StatelessWidget {
                             ),
                             Center(
                               child: Text(
-                                  "${Languages.of(context)!.rupess} ${mSearchInvestorsList.minCheckSize} - ${mSearchInvestorsList.maxCheckSize}",
+                                  "${Languages.of(context)!.rupess} ${mMessageElement.minCheckSize} - ${mMessageElement.maxCheckSize}",
                                   textAlign: TextAlign.start,
                                   style: const TextStyle(
                                       fontFamily: 'OpenSauceSansRegular',
@@ -308,58 +241,43 @@ class SearchInvestorsItemList extends StatelessWidget {
                                       color: mGreySeven)),
                             ),
                           ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 8,
-                              child: PrimaryButton(
-                                  mButtonname: Languages.of(context)!.mSendDeck,
-                                  onpressed: () async {},
-                                  mSelectcolor: mBlueOne,
-                                  mTextColor: mWhiteColor,
-                                  mFontSize: mSizeTwo,
-                                  mHeigth: 40),
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: Align(
-                                  alignment: Alignment.center,
-                                  child: InkWell(
-                                    onTap: (mSearchInvestorsList!
-                                            .favouritesStatus!)
-                                        ? RemoveFavonpressed
-                                        : AddFavonpressed,
-                                    child: (mSearchInvestorsList!
-                                            .favouritesStatus!)
-                                        ? SvgPicture.asset(
-                                            'assets/new_ic_heart.svg',
-                                            width: 25,
-                                            height: 25,
-                                          )
-                                        // Image.asset('assets/new_ic_heart.png',
-                                        //         width: 25,
-                                        //         height: 25,
-                                        //         fit: BoxFit.fill)
-                                        : SvgPicture.asset(
-                                            'assets/new_ic_emptyheart.svg',
-                                            width: 25,
-                                            height: 25,
-                                            fit: BoxFit.fill),
-                                  )),
-                            )
-                          ],
-                        ),
+                        )
                       ]),
                 ),
               )
             ]),
       ),
+    );
+  }
+
+  void showAlert(BuildContext context, String message) {
+    Widget okButton = TextButton(
+      child: const Text("Ok",
+          style: TextStyle(
+              fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor)),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(
+        message,
+        style: const TextStyle(
+            fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor),
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

@@ -11,11 +11,14 @@ import 'package:startinsights/Localization/localizations_delegate.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/web/dashboard.dart';
+import 'package:startinsights/Screen/Learn/bloc/learn_bloc.dart';
+import 'package:startinsights/Screen/Learn/web/learnweb.dart';
 import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
 import 'package:startinsights/Screen/Login/web/login.dart';
 import 'package:startinsights/Screen/Register/bloc/register_bloc.dart';
 import 'package:startinsights/Screen/Register/web/registerfirst.dart';
 import 'package:startinsights/Screen/Register/web/registesecond.dart';
+import 'package:startinsights/Screen/Register/web/verificationpage.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.dart';
 import 'package:startinsights/Screen/SearchInvestors/web/searchinvestors.dart';
 import 'package:startinsights/Screen/Service/bloc/servicelist_bloc.dart';
@@ -111,6 +114,7 @@ class _MyAppState extends State<MyApp> {
 
   final GoRouter router = GoRouter(
     initialLocation: '/Dashboard',
+    // initialLocation: '/Dashboard',
     routes: <RouteBase>[
       GoRoute(
         name: "home",
@@ -118,7 +122,8 @@ class _MyAppState extends State<MyApp> {
         builder: (context, state) => MultiBlocProvider(
           providers: [
             BlocProvider<DashboardBloc>(
-              create: (context) => DashboardBloc(mContext: context),
+              create: (context) =>
+                  DashboardBloc(mContext: context)..getDashboardData(),
             )
           ],
           //child: DashboardWeb(),
@@ -230,6 +235,22 @@ class _MyAppState extends State<MyApp> {
               child: RegisterSecond(),
             ),
           ),
+          GoRoute(
+            name: "RegisterVerfication",
+            path: 'RegisterVerfication',
+            // Display on the root Navigator
+            builder: (context, state) => MultiBlocProvider(
+              providers: [
+                BlocProvider<RegisterBloc>(
+                  create: (context) =>
+
+                      // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                      RegisterBloc(mContext: context),
+                )
+              ],
+              child: VerificationPage(),
+            ),
+          ),
         ],
       ),
       GoRoute(
@@ -246,6 +267,33 @@ class _MyAppState extends State<MyApp> {
                   )
                 ],
                 child: SearchList(),
+              )
+          // routes: <RouteBase>[
+          //   GoRoute(
+          //     path: 'song/:songId',
+          //     // Display on the root Navigator
+          //     builder: (BuildContext context, GoRouterState state) {
+          //       return SongScreen(
+          //         songId: state.pathParameters['songId']!,
+          //       );
+          //     },
+          //   ),
+          // ],
+          ),
+      GoRoute(
+          name: "Learn",
+          path: '/Learn',
+          builder: (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<LearnBloc>(
+                    create: (context) =>
+
+                        // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                        LearnBloc(mContext: context),
+                    // ..getServiceListData(1),
+                  )
+                ],
+                child: LearnWeb(),
               )
           // routes: <RouteBase>[
           //   GoRoute(

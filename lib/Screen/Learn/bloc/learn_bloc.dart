@@ -6,23 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:startinsights/Model/SearchinvestorslistResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/SearchinvestorsRepo.dart';
-import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_event.dart';
-import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_state.dart';
+import 'package:startinsights/Screen/Learn/bloc/learn_event.dart';
+import 'package:startinsights/Screen/Learn/bloc/learn_state.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 
-class SearchInvestorsBloc
-    extends Bloc<SearchInvestorsEvent, SearchInvestorsStatus> {
+class LearnBloc extends Bloc<LearnEvent, LearnStatus> {
   final BuildContext mContext;
   List<SearchInvestorsList> mSearchInvestorsList = [];
   int mGetCount = 0;
 
-  SearchInvestorsBloc({
+  LearnBloc({
     required this.mContext,
-  }) : super(SearchInvestorsInitialState()) {
+  }) : super(LearnInitialState()) {
     onLoadView();
   }
 
-  void getSearchinvestorsData(
+  void getLearnData(
     int PageNo,
     String country,
     String fundingstage,
@@ -43,8 +42,7 @@ class SearchInvestorsBloc
             .message!
             .investorsCount!;
 
-        emit(GetSearchInvestorsInfoSuccessState(
-            mSearchInvestorsList, mGetCount));
+        emit(GetLearnInfoSuccessState(mSearchInvestorsList, mGetCount));
 
         // hideLoading(mContext);
         Loading.stop();
@@ -53,15 +51,15 @@ class SearchInvestorsBloc
         // hideLoading(mContext);
       }
     } else {
-      emit(SearchInvestorsNointernetState());
+      emit(LearnNointernetState());
     }
   }
 
   void onLoadView() async {
     if (await checkNetworkStatus()) {
-      emit(SearchInvestorsLoadingState());
+      emit(LearnLoadingState());
     } else {
-      emit(SearchInvestorsNointernetState());
+      emit(LearnNointernetState());
     }
   }
 }

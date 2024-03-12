@@ -25,6 +25,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
 
   late UserDetails mUserDetails;
 
+  String mpassword = "";
+
   void register({
     required String firstname,
     required String userid,
@@ -107,7 +109,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
     required String password,
   }) async {
     Loading(mLoaderGif).start(mContext);
-
+    mpassword = password;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     Map<String, dynamic> valueMap =
         json.decode((prefs.getString(StorageServiceConstant.MUSERINFO) ?? ''));
@@ -115,10 +117,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
         RegistrationResponse.fromJson(valueMap).message!.userDetails!;
 
     ApiResults apiResults = await RegisterRepo().CreateAccountFinish(
-        mUserDetails.userId ?? "",
+        mUserDetails.emailid ?? "",
         mUserDetails.mobileNo ?? "",
         usertype,
-        password);
+        password,
+        mUserDetails.fullName ?? "");
     if (apiResults is ApiSuccess) {
       Loading.stop();
 
@@ -128,7 +131,11 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
         String mUserInfo = json.encode(apiResults.data);
         await prefs.setString(StorageServiceConstant.MUSERINFO, mUserInfo);
 
-        GoRouter.of(mContext).go('/Dashboard');
+        if (usertype == 'Startups') {
+          GoRouter.of(mContext).go('/Dashboard');
+        } else {
+          GoRouter.of(mContext).go('/Register/RegisterVerfication');
+        }
       } else {
         // ignore: use_build_context_synchronously
         showErrorSnackBar(
@@ -143,7 +150,51 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
     }
   }
 
-  // void login({
+  void CreateInvestorsAccount({
+    required String Verfiycode,
+  }) async {
+    Loading(mLoaderGif).start(mContext);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> valueMap =
+        json.decode((prefs.getString(StorageServiceConstant.MUSERINFO) ?? ''));
+    mUserDetails =
+        RegistrationResponse.fromJson(valueMap).message!.userDetails!;
+
+    ApiResults apiResults = await RegisterRepo().InvestorsAccount(
+        mUserDetails.emailid ?? "",
+        mUserDetails.mobileNo ?? "",
+        mUserDetails.typeOfUser ?? "",
+        mUserDetails.password ?? "",
+        mUserDetails.fullName ?? "",
+        Verfiycode);
+    if (apiResults is ApiSuccess) {
+      Loading.stop();
+
+      if (RegistrationResponse.fromJson(apiResults.data).message!.status ==
+          true) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String mUserInfo = json.encode(apiResults.data);
+        await prefs.setString(StorageServiceConstant.MUSERINFO, mUserInfo);
+
+        SucessToast(context: mContext, text: "Sucess");
+
+        // GoRouter.of(mContext).go('/Dashboard');
+      } else {
+        // ignore: use_build_context_synchronously
+        showErrorSnackBar(
+            context: mContext,
+            text: RegistrationResponse.fromJson(apiResults.data)
+                .message!
+                .message!);
+      }
+    } else if (apiResults is ApiFailure) {
+      Loading.stop();
+      ErrorToast(context: mContext, text: "Failure");
+    }
+  }
+
+// void login({
   //   required String email,
   //   required String password,
   // }) async {

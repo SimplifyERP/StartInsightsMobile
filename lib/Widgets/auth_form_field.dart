@@ -27,10 +27,14 @@ class AuthFormField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final bool autofocus;
   final bool mreadOnly;
+  final bool isMandatory;
   final double radius;
+
   final bool mBorderView;
   final bool mImageView;
   final bool mIncreshHeight;
+  final double mTop;
+  final double mBottom;
 
   const AuthFormField({
     Key? key,
@@ -59,9 +63,12 @@ class AuthFormField extends StatelessWidget {
     this.suffiximageicon = 'assets/ic_maillogin.png',
     this.autofocus = false,
     this.mreadOnly = false,
+    this.isMandatory = false,
     this.mBorderView = true,
     this.mImageView = true,
     this.mIncreshHeight = false,
+    this.mTop = 15,
+    this.mBottom = 15,
   }) : super(key: key);
 
   @override
@@ -89,12 +96,37 @@ class AuthFormField extends StatelessWidget {
         textAlignVertical: TextAlignVertical.top,
         decoration: InputDecoration(
             counterText: "",
-            labelText: labelText,
+            label: isMandatory
+                ? RichText(
+                    text: TextSpan(
+                        text: labelText,
+                        style: const TextStyle(
+                            color: mGreyEigth,
+                            fontFamily: 'OpenSauceSansRegular',
+                            fontSize: mSizeTwo),
+                        children: const [
+                          TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontFamily: 'OpenSauceSansRegular',
+                                  fontSize: mSizeTwo))
+                        ]),
+                  )
+                : RichText(
+                    text: TextSpan(
+                      text: labelText,
+                      style: const TextStyle(
+                          color: mGreyEigth,
+                          fontFamily: 'OpenSauceSansRegular',
+                          fontSize: mSizeTwo),
+                    ),
+                  ),
             labelStyle: const TextStyle(
                 fontSize: mSizeTwo,
                 fontFamily: 'OpenSauceSansRegular',
                 color: mGreyEigth),
-            hintText: hintText,
+            hintText: isMandatory ? "${hintText} *" : hintText,
             alignLabelWithHint: true,
             hintStyle: const TextStyle(
               color: mGreyEigth,
@@ -103,7 +135,7 @@ class AuthFormField extends StatelessWidget {
 
             floatingLabelStyle: const TextStyle(color: Colors.blue),
             // floatingLabelBehavior: FloatingLabelBehavior.never,
-            contentPadding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
+            contentPadding: EdgeInsets.fromLTRB(10, mTop, 10, mBottom),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: mGreyFour, width: 1)),
@@ -116,5 +148,24 @@ class AuthFormField extends StatelessWidget {
                 borderSide: const BorderSide(width: 1, color: mGreyFour)),
             fillColor: mLightColorOne,
             filled: true));
+  }
+
+  Widget mMandatoryView() {
+    return RichText(
+      text: TextSpan(
+          text: labelText,
+          style: TextStyle(
+              color: mGreyEigth,
+              fontFamily: 'OpenSauceSansRegular',
+              fontSize: mSizeTwo),
+          children: [
+            TextSpan(
+                text: ' *',
+                style: TextStyle(
+                    color: Colors.red,
+                    fontFamily: 'OpenSauceSansRegular',
+                    fontSize: mSizeTwo))
+          ]),
+    );
   }
 }

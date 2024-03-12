@@ -47,14 +47,37 @@ class RegisterRepo {
     String phoneno,
     String usertype,
     String password,
+    String firstname,
   ) async {
     // email = 'vivekchamp84@gmail.com';
     // password = 'vivek@123';
     return await sl<MyDio>().postData(endPoint: createUserFinishAPI, data: {
-      'user_id': userid,
-      'phone_no': phoneno,
-      'user_type': usertype,
+      'email_id': userid,
+      'full_name': firstname,
+      'mobile_no': phoneno,
+      'type_of_user': usertype,
       'password': password
+    });
+  }
+
+  Future<ApiResults> InvestorsAccount(
+    String userid,
+    String phoneno,
+    String usertype,
+    String password,
+    String firstname,
+    String verifycode,
+  ) async {
+    // email = 'vivekchamp84@gmail.com';
+    // password = 'vivek@123';
+    return await sl<MyDio>()
+        .postData(endPoint: createInvestorsAccountAPI, data: {
+      'email_id': userid,
+      'full_name': firstname,
+      'mobile_no': phoneno,
+      'type_of_user': usertype,
+      'password': password,
+      'verify_code': verifycode
     });
   }
 }

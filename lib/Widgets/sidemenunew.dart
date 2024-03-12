@@ -13,10 +13,12 @@ class SideMenuNew extends StatelessWidget {
     required this.mFrom,
     required this.context,
     required this.mchange,
+    //required this.isExpanded,
   });
 
   int selectedIndex = -1;
   bool isExpanded = true;
+  //bool isExpanded;
   double sidemenubtnheight = 40;
   ValueChanged mchange;
   @override
@@ -268,110 +270,15 @@ class SideMenuNew extends StatelessWidget {
                       const SizedBox(
                         height: 15,
                       ),
-                      Container(
-                        height: 40,
-
-                        alignment: Alignment.centerRight,
-                        decoration: mFrom == 3
-                            ? const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(4),
-                                    bottomRight: Radius.circular(4)),
-                                color: mBlueTwo,
-                                boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.transparent,
-                                      blurRadius: 0,
-                                    ),
-                                  ])
-                            : null, // where to position the child
-                        child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const SizedBox(
-                                width: 50,
-                              ),
-                              Expanded(
-                                  flex: 9,
-                                  child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        mFrom == 3
-                                            ? const sidemenuImage(
-                                                menuicon:
-                                                    'assets/new_ic_resource_sel.png')
-                                            : const sidemenuImage(
-                                                menuicon:
-                                                    'assets/new_ic_resource.png'),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        SidemenuTextNew(
-                                            menuname: Languages.of(context)!
-                                                .mResources,
-                                            textColor: mFrom == 3
-                                                ? mBlackColor
-                                                : mGreyEigth,
-                                            isSelect: mFrom == 3 ? true : false,
-                                            fontSize: 17)
-
-                                        //ic_dashboardwhite
-                                      ])),
-                              Expanded(
-                                  flex: 1,
-                                  child: ColoredBox(
-                                    color: Colors.transparent,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          width: 5,
-                                          height: 40,
-                                          decoration: mFrom == 3
-                                              ? const BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10)),
-                                                  color: mBlueOne,
-                                                  boxShadow: [
-                                                      BoxShadow(
-                                                        color:
-                                                            Colors.transparent,
-                                                        blurRadius: 0,
-                                                      ),
-                                                    ])
-                                              : null,
-                                        )
-                                      ],
-                                    ),
-                                  )),
-                            ]),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
                       InkWell(
                         onTap: () {
-                          GoRouter.of(context).go('/Service');
+                          GoRouter.of(context).go('/Learn');
                         },
                         child: Container(
                           height: 40,
 
                           alignment: Alignment.centerRight,
-                          decoration: mFrom == 4
+                          decoration: mFrom == 3
                               ? const BoxDecoration(
                                   borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(10),
@@ -387,8 +294,8 @@ class SideMenuNew extends StatelessWidget {
                                     ])
                               : null, // where to position the child
                           child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 const SizedBox(
                                   width: 50,
@@ -401,24 +308,24 @@ class SideMenuNew extends StatelessWidget {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: [
-                                          mFrom == 4
+                                          mFrom == 3
                                               ? const sidemenuImage(
                                                   menuicon:
-                                                      'assets/new_ic_service_sel.png')
+                                                      'assets/new_ic_resource_sel.png')
                                               : const sidemenuImage(
                                                   menuicon:
-                                                      'assets/new_ic_service.png'),
+                                                      'assets/new_ic_resource.png'),
                                           const SizedBox(
                                             width: 10,
                                           ),
                                           SidemenuTextNew(
                                               menuname: Languages.of(context)!
-                                                  .mServices,
-                                              textColor: mFrom == 4
+                                                  .mResources,
+                                              textColor: mFrom == 3
                                                   ? mBlackColor
                                                   : mGreyEigth,
                                               isSelect:
-                                                  mFrom == 4 ? true : false,
+                                                  mFrom == 3 ? true : false,
                                               fontSize: 17)
 
                                           //ic_dashboardwhite
@@ -436,7 +343,7 @@ class SideMenuNew extends StatelessWidget {
                                           Container(
                                             width: 5,
                                             height: 40,
-                                            decoration: mFrom == 4
+                                            decoration: mFrom == 3
                                                 ? const BoxDecoration(
                                                     borderRadius:
                                                         BorderRadius.only(
@@ -461,6 +368,109 @@ class SideMenuNew extends StatelessWidget {
                               ]),
                         ),
                       ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            GoRouter.of(context).go('/Service');
+                            // GoRouter.of(context).go('/Login');
+                          },
+                          child: Container(
+                            height: 40,
+
+                            alignment: Alignment.centerRight,
+                            decoration: mFrom == 4
+                                ? const BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(4),
+                                        bottomRight: Radius.circular(4)),
+                                    color: mBlueTwo,
+                                    boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.transparent,
+                                          blurRadius: 0,
+                                        ),
+                                      ])
+                                : null, // where to position the child
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  const SizedBox(
+                                    width: 50,
+                                  ),
+                                  Expanded(
+                                      flex: 9,
+                                      child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            mFrom == 4
+                                                ? const sidemenuImage(
+                                                    menuicon:
+                                                        'assets/new_ic_service_sel.png')
+                                                : const sidemenuImage(
+                                                    menuicon:
+                                                        'assets/new_ic_service.png'),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            SidemenuTextNew(
+                                                menuname: Languages.of(context)!
+                                                    .mServices,
+                                                textColor: mFrom == 4
+                                                    ? mBlackColor
+                                                    : mGreyEigth,
+                                                isSelect:
+                                                    mFrom == 4 ? true : false,
+                                                fontSize: 17)
+
+                                            //ic_dashboardwhite
+                                          ])),
+                                  Expanded(
+                                      flex: 1,
+                                      child: ColoredBox(
+                                        color: Colors.transparent,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              width: 5,
+                                              height: 40,
+                                              decoration: mFrom == 4
+                                                  ? const BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      10)),
+                                                      color: mBlueOne,
+                                                      boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors
+                                                                .transparent,
+                                                            blurRadius: 0,
+                                                          ),
+                                                        ])
+                                                  : null,
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                                ]),
+                          )),
                       const SizedBox(
                         height: 15,
                       ),

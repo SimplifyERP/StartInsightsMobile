@@ -59,12 +59,16 @@ class UserDetails {
   String? fullName;
   String? mobileNo;
   String? typeOfUser;
+  String? emailid;
+  String? password;
 
   UserDetails({
     this.userId,
     this.fullName,
     this.mobileNo,
     this.typeOfUser,
+    this.emailid,
+    this.password,
   });
 
   factory UserDetails.fromJson(Map<String, dynamic> json) => UserDetails(
@@ -72,6 +76,8 @@ class UserDetails {
         fullName: json["full_name"],
         mobileNo: json["mobile_no"],
         typeOfUser: json["type_of_user"],
+        emailid: json["email_id"],
+        password: json["password"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -79,5 +85,7 @@ class UserDetails {
         "full_name": fullName,
         "mobile_no": mobileNo,
         "type_of_user": typeOfUser,
+        "email_id": emailid,
+        "password": password,
       };
 }

@@ -315,4 +315,24 @@ abstract class Languages {
   String get mValueadd;
   String get mFirmtype;
   String get mSendaDeck;
+
+  String get mWelcometoStartInsights;
+  String get mVerifyCode;
+  String get mWelcomemsg;
+  String get mEnterVerifyCode;
+
+  String get mLearntoRaise;
+  String get mViewCourses;
+  String get mEvents;
+  String get mSearchCourses;
+  String get mprofileinfo;
+  String get muploadprofile;
+  String get mSocialMediaLinks;
+  String get mlinkedinurl;
+  String get mwebsiteurl;
+  String get mSaveProfile;
+  String get mChapters;
+  String get mVideos;
+  String get mQuizzes;
+  String get mViewCourse;
 }

@@ -303,221 +303,215 @@ class _CaptableState extends State<CaptableWeb> {
           body: BlocConsumer<CaptableBloc, CaptableStatus>(
             listener: (context, state) {},
             builder: (context, state) {
-              if (state is GetCaptableInfoSuccessState) {
-                mInvestorWiseList = state.mInvestorWiseList;
-                mInvestorWiseGraphList = state.mInvestorWiseGraphList;
-                mRoundWiseGraphList = state.mRoundWiseGraphList;
-                mRoundWiseList = state.mRoundWiseList;
+              if (state is GetCaptableInfoSuccessState) {}
 
-                final returnsMapInvested = Map.fromIterables(
-                    mInvestorWiseGraphList.map((e) => e.name!),
-                    mInvestorWiseGraphList
-                        .map((e) => double.parse(e.percentage!)));
+              // mInvestorWiseList = state.mInvestorWiseList;
+              // mInvestorWiseGraphList = state.mInvestorWiseGraphList;
+              // mRoundWiseGraphList = state.mRoundWiseGraphList;
+              // mRoundWiseList = state.mRoundWiseList;
 
-                InvesteddataMap.addAll(returnsMapInvested);
+              final returnsMapInvested = Map.fromIterables(
+                  mInvestorWiseGraphList.map((e) => e.name!),
+                  mInvestorWiseGraphList
+                      .map((e) => double.parse(e.percentage!)));
 
-                final returnsMapRoundWise = Map.fromIterables(
-                    mRoundWiseGraphList.map((e) => e.name!),
-                    mRoundWiseGraphList
-                        .map((e) => double.parse(e.percentage!)));
+              InvesteddataMap.addAll(returnsMapInvested);
 
-                RoundWisedataMap.addAll(returnsMapRoundWise);
+              final returnsMapRoundWise = Map.fromIterables(
+                  mRoundWiseGraphList.map((e) => e.name!),
+                  mRoundWiseGraphList.map((e) => double.parse(e.percentage!)));
 
-                return SafeArea(
-                  child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
-                    child: Container(
-                      color: Colors.white,
-                      margin: const EdgeInsets.only(top: 0, left: 0, right: 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            //ROW 1
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                  flex: 2,
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(0),
-                                          color: kBorderColor),
-                                      child: SideMenu(mFrom: 10))),
-                              Expanded(
-                                  flex: 9,
-                                  child: Container(
-                                      height:
-                                          MediaQuery.of(context).size.height,
-                                      padding: EdgeInsets.all(15),
-                                      child: SingleChildScrollView(
-                                          child: Column(
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex:
-                                                    5, // takes 30% of available width
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                      children: <TextSpan>[
-                                                        TextSpan(
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mInvestorOverview,
-                                                            style: const TextStyle(
-                                                                fontFamily:
-                                                                    'ManropeBold',
-                                                                fontSize: 18,
-                                                                color:
-                                                                    mBlackColor)),
-                                                      ],
-                                                    ),
+              RoundWisedataMap.addAll(returnsMapRoundWise);
+
+              return SafeArea(
+                child: SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: Container(
+                    color: Colors.white,
+                    margin: const EdgeInsets.only(top: 0, left: 0, right: 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Row(
+                          //ROW 1
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(0),
+                                        color: kBorderColor),
+                                    child: SideMenu(mFrom: 10))),
+                            Expanded(
+                                flex: 9,
+                                child: Container(
+                                    height: MediaQuery.of(context).size.height,
+                                    padding: EdgeInsets.all(15),
+                                    child: SingleChildScrollView(
+                                        child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Expanded(
+                                              flex:
+                                                  5, // takes 30% of available width
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                          text: Languages.of(
+                                                                  context)!
+                                                              .mInvestorOverview,
+                                                          style: const TextStyle(
+                                                              fontFamily:
+                                                                  'ManropeBold',
+                                                              fontSize: 18,
+                                                              color:
+                                                                  mBlackColor)),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                width: 15,
-                                              ),
-                                              Expanded(
-                                                flex:
-                                                    5, // takes 30% of available width
-                                                child: Align(
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: RichText(
-                                                    text: TextSpan(
-                                                      children: <TextSpan>[
-                                                        TextSpan(
-                                                            text: Languages.of(
-                                                                    context)!
-                                                                .mRoundwiseOverview,
-                                                            style: const TextStyle(
-                                                                fontFamily:
-                                                                    'ManropeBold',
-                                                                fontSize: 18,
-                                                                color:
-                                                                    mBlackColor)),
-                                                      ],
-                                                    ),
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              flex:
+                                                  5, // takes 30% of available width
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                          text: Languages.of(
+                                                                  context)!
+                                                              .mRoundwiseOverview,
+                                                          style: const TextStyle(
+                                                              fontFamily:
+                                                                  'ManropeBold',
+                                                              fontSize: 18,
+                                                              color:
+                                                                  mBlackColor)),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: <Widget>[
-                                              Expanded(
-                                                flex:
-                                                    5, // takes 30% of available width
-                                                child: Container(
-                                                    height: 400,
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            2,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        color: Colors.white10,
-                                                        border: Border.all(
-                                                          color: kTextBorder,
-                                                          width: 1,
-                                                        )),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                          .fromLTRB(0, 0, 0, 0),
-                                                      child:
-                                                          (mInvestorWiseGraphList
-                                                                  .isNotEmpty)
-                                                              ? PieChart(
-                                                                  dataMap:
-                                                                      InvesteddataMap,
-                                                                  animationDuration:
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              800),
-                                                                  chartLegendSpacing:
-                                                                      32,
-                                                                  chartRadius:
-                                                                      300,
-                                                                  colorList:
-                                                                      InvestedcolorList,
-                                                                  initialAngleInDegree:
-                                                                      0,
-                                                                  chartType:
-                                                                      ChartType
-                                                                          .disc,
-                                                                  ringStrokeWidth:
-                                                                      80,
-                                                                  centerText:
-                                                                      "",
-                                                                  legendOptions:
-                                                                      const LegendOptions(
-                                                                    showLegendsInRow:
-                                                                        false,
-                                                                    legendPosition:
-                                                                        LegendPosition
-                                                                            .right,
-                                                                    showLegends:
-                                                                        true,
-                                                                    legendShape:
-                                                                        BoxShape
-                                                                            .circle,
-                                                                    legendTextStyle: TextStyle(
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: <Widget>[
+                                            Expanded(
+                                              flex:
+                                                  5, // takes 30% of available width
+                                              child: Container(
+                                                  height: 400,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Colors.white10,
+                                                      border: Border.all(
+                                                        color: kTextBorder,
+                                                        width: 1,
+                                                      )),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(0, 0, 0, 0),
+                                                    child:
+                                                        (mInvestorWiseGraphList
+                                                                .isNotEmpty)
+                                                            ? PieChart(
+                                                                dataMap:
+                                                                    InvesteddataMap,
+                                                                animationDuration:
+                                                                    const Duration(
+                                                                        milliseconds:
+                                                                            800),
+                                                                chartLegendSpacing:
+                                                                    32,
+                                                                chartRadius:
+                                                                    300,
+                                                                colorList:
+                                                                    InvestedcolorList,
+                                                                initialAngleInDegree:
+                                                                    0,
+                                                                chartType:
+                                                                    ChartType
+                                                                        .disc,
+                                                                ringStrokeWidth:
+                                                                    80,
+                                                                centerText: "",
+                                                                legendOptions:
+                                                                    const LegendOptions(
+                                                                  showLegendsInRow:
+                                                                      false,
+                                                                  legendPosition:
+                                                                      LegendPosition
+                                                                          .right,
+                                                                  showLegends:
+                                                                      true,
+                                                                  legendShape:
+                                                                      BoxShape
+                                                                          .circle,
+                                                                  legendTextStyle: TextStyle(
+                                                                      fontFamily:
+                                                                          'ManropeRegular',
+                                                                      fontSize:
+                                                                          14,
+                                                                      color:
+                                                                          mBlackColor),
+                                                                ),
+                                                                chartValuesOptions:
+                                                                    const ChartValuesOptions(
+                                                                  showChartValueBackground:
+                                                                      true,
+                                                                  showChartValues:
+                                                                      true,
+                                                                  showChartValuesInPercentage:
+                                                                      true,
+                                                                  showChartValuesOutside:
+                                                                      false,
+                                                                  decimalPlaces:
+                                                                      1,
+                                                                ),
+                                                                // gradientList: ---To add gradient colors---
+                                                                // emptyColorGradient: ---Empty Color gradient---
+                                                              )
+                                                            : const Center(
+                                                                child: Text(
+                                                                    "No Data found",
+                                                                    style: TextStyle(
                                                                         fontFamily:
-                                                                            'ManropeRegular',
+                                                                            'ManropeBold',
                                                                         fontSize:
-                                                                            14,
-                                                                        color:
-                                                                            mBlackColor),
-                                                                  ),
-                                                                  chartValuesOptions:
-                                                                      const ChartValuesOptions(
-                                                                    showChartValueBackground:
-                                                                        true,
-                                                                    showChartValues:
-                                                                        true,
-                                                                    showChartValuesInPercentage:
-                                                                        true,
-                                                                    showChartValuesOutside:
-                                                                        false,
-                                                                    decimalPlaces:
-                                                                        1,
-                                                                  ),
-                                                                  // gradientList: ---To add gradient colors---
-                                                                  // emptyColorGradient: ---Empty Color gradient---
-                                                                )
-                                                              : const Center(
-                                                                  child: Text(
-                                                                      "No Data found",
-                                                                      style: TextStyle(
-                                                                          fontFamily:
-                                                                              'ManropeBold',
-                                                                          fontSize:
-                                                                              20,
-                                                                          color:
-                                                                              Colors.black)),
-                                                                )
+                                                                            20,
+                                                                        color: Colors
+                                                                            .black)),
+                                                              )
 
-                                                      /*PieChart(
+                                                    /*PieChart(
                                                       // Pass in the data for
                                                       // the pie chart
                                                       dataMap: dataMap,
@@ -555,578 +549,559 @@ class _CaptableState extends State<CaptableWeb> {
                                                       // the background of the pie chart
                                                       // gradientList: gradientList,
                                                     )*/
-                                                      ,
-                                                    )),
-                                              ),
-                                              const SizedBox(
-                                                width: 15,
-                                              ),
-                                              Expanded(
-                                                flex:
-                                                    5, // takes 30% of available width
-                                                child: Container(
-                                                    height: 400,
+                                                    ,
+                                                  )),
+                                            ),
+                                            const SizedBox(
+                                              width: 15,
+                                            ),
+                                            Expanded(
+                                              flex:
+                                                  5, // takes 30% of available width
+                                              child: Container(
+                                                  height: 400,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      2,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      color: Colors.white10,
+                                                      border: Border.all(
+                                                        color: kTextBorder,
+                                                        width: 1,
+                                                      )),
+                                                  child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 0, 0, 0),
+                                                      child: InkWell(
+                                                        child: Align(
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          child:
+                                                              (mRoundWiseGraphList
+                                                                      .isNotEmpty)
+                                                                  ? PieChart(
+                                                                      dataMap:
+                                                                          RoundWisedataMap,
+                                                                      animationDuration:
+                                                                          const Duration(
+                                                                              milliseconds: 800),
+                                                                      chartLegendSpacing:
+                                                                          32,
+                                                                      chartRadius:
+                                                                          300,
+                                                                      colorList:
+                                                                          RoundWisecolorList,
+                                                                      initialAngleInDegree:
+                                                                          0,
+                                                                      chartType:
+                                                                          ChartType
+                                                                              .disc,
+                                                                      ringStrokeWidth:
+                                                                          80,
+                                                                      centerText:
+                                                                          "",
+                                                                      legendOptions:
+                                                                          const LegendOptions(
+                                                                        showLegendsInRow:
+                                                                            false,
+                                                                        legendPosition:
+                                                                            LegendPosition.right,
+                                                                        showLegends:
+                                                                            true,
+                                                                        legendShape:
+                                                                            BoxShape.circle,
+                                                                        legendTextStyle: TextStyle(
+                                                                            fontFamily:
+                                                                                'ManropeRegular',
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                mBlackColor),
+                                                                      ),
+                                                                      chartValuesOptions:
+                                                                          const ChartValuesOptions(
+                                                                        showChartValueBackground:
+                                                                            true,
+                                                                        showChartValues:
+                                                                            true,
+                                                                        showChartValuesInPercentage:
+                                                                            true,
+                                                                        showChartValuesOutside:
+                                                                            false,
+                                                                        decimalPlaces:
+                                                                            1,
+                                                                      ),
+                                                                      // gradientList: ---To add gradient colors---
+                                                                      // emptyColorGradient: ---Empty Color gradient---
+                                                                    )
+                                                                  : const Center(
+                                                                      child: Text(
+                                                                          "No Data found",
+                                                                          style: TextStyle(
+                                                                              fontFamily: 'ManropeBold',
+                                                                              fontSize: 20,
+                                                                              color: Colors.black)),
+                                                                    ),
+                                                        ),
+                                                      ))),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            color: mWhiteColor,
+                                            child: Stack(
+                                              children: [
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Text(
+                                                    (mFrom == 1)
+                                                        ? Languages.of(context)!
+                                                            .mInvestorCaptableDetails
+                                                        : Languages.of(context)!
+                                                            .mRoundwiseCaptableDetails,
+                                                    style: const TextStyle(
+                                                        fontFamily:
+                                                            'ManropeBold',
+                                                        fontSize: 18,
+                                                        color: mBlackColor),
+                                                  ),
+                                                ),
+                                                Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: Container(
                                                     width:
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width /
                                                             2,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        color: Colors.white10,
-                                                        border: Border.all(
-                                                          color: kTextBorder,
-                                                          width: 1,
-                                                        )),
-                                                    child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .fromLTRB(
-                                                                0, 0, 0, 0),
-                                                        child: InkWell(
-                                                          child: Align(
-                                                            alignment: Alignment
-                                                                .centerLeft,
-                                                            child: (mRoundWiseGraphList
-                                                                    .isNotEmpty)
-                                                                ? PieChart(
-                                                                    dataMap:
-                                                                        RoundWisedataMap,
-                                                                    animationDuration:
-                                                                        const Duration(
-                                                                            milliseconds:
-                                                                                800),
-                                                                    chartLegendSpacing:
-                                                                        32,
-                                                                    chartRadius:
-                                                                        300,
-                                                                    colorList:
-                                                                        RoundWisecolorList,
-                                                                    initialAngleInDegree:
+                                                    child: Row(
+                                                      //ROW 1
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              mFrom = 1;
+                                                            });
+                                                          },
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                Languages.of(
+                                                                        context)!
+                                                                    .mInvestorwise,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'ManropeSemiBold',
+                                                                    fontSize:
+                                                                        18,
+                                                                    color:
+                                                                        mBtnColor),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Visibility(
+                                                                  visible:
+                                                                      (mFrom ==
+                                                                              1)
+                                                                          ? true
+                                                                          : false,
+                                                                  child:
+                                                                      Container(
+                                                                    height: 3,
+                                                                    width: 120,
+                                                                    color:
+                                                                        mBtnColor,
+                                                                  )),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              mFrom = 2;
+                                                            });
+                                                          },
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                Languages.of(
+                                                                        context)!
+                                                                    .mRoundwise,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'ManropeSemiBold',
+                                                                    fontSize:
+                                                                        18,
+                                                                    color:
+                                                                        mBtnColor),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Visibility(
+                                                                  visible:
+                                                                      (mFrom ==
+                                                                              2)
+                                                                          ? true
+                                                                          : false,
+                                                                  child:
+                                                                      Container(
+                                                                    height: 3,
+                                                                    width: 120,
+                                                                    color:
+                                                                        mBtnColor,
+                                                                  )),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        Container(
+                                                            height: 35,
+                                                            width: 200,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                    border:
+                                                                        Border
+                                                                            .all(
+                                                                      color:
+                                                                          mWhiteColor,
+                                                                      width: 1,
+                                                                    )),
+                                                            child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .fromLTRB(
                                                                         0,
-                                                                    chartType:
-                                                                        ChartType
-                                                                            .disc,
-                                                                    ringStrokeWidth:
-                                                                        80,
-                                                                    centerText:
-                                                                        "",
-                                                                    legendOptions:
-                                                                        const LegendOptions(
-                                                                      showLegendsInRow:
-                                                                          false,
-                                                                      legendPosition:
-                                                                          LegendPosition
-                                                                              .right,
-                                                                      showLegends:
-                                                                          true,
-                                                                      legendShape:
-                                                                          BoxShape
-                                                                              .circle,
-                                                                      legendTextStyle: TextStyle(
-                                                                          fontFamily:
-                                                                              'ManropeRegular',
-                                                                          fontSize:
-                                                                              14,
-                                                                          color:
-                                                                              mBlackColor),
-                                                                    ),
-                                                                    chartValuesOptions:
-                                                                        const ChartValuesOptions(
-                                                                      showChartValueBackground:
-                                                                          true,
-                                                                      showChartValues:
-                                                                          true,
-                                                                      showChartValuesInPercentage:
-                                                                          true,
-                                                                      showChartValuesOutside:
-                                                                          false,
-                                                                      decimalPlaces:
-                                                                          1,
-                                                                    ),
-                                                                    // gradientList: ---To add gradient colors---
-                                                                    // emptyColorGradient: ---Empty Color gradient---
-                                                                  )
-                                                                : const Center(
-                                                                    child: Text(
-                                                                        "No Data found",
-                                                                        style: TextStyle(
-                                                                            fontFamily:
-                                                                                'ManropeBold',
-                                                                            fontSize:
-                                                                                20,
-                                                                            color:
-                                                                                Colors.black)),
+                                                                        0,
+                                                                        0,
+                                                                        0),
+                                                                child: InkWell(
+                                                                  child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .center,
+                                                                    child: PrimaryButton(
+                                                                        mButtonname: Languages.of(context)!.mAddFundingRound,
+                                                                        onpressed: () {
+                                                                          if (mFrom ==
+                                                                              1) {
+                                                                            OnCreateInvestorDialog();
+                                                                          }
+                                                                        },
+                                                                        mSelectcolor: mBtnColor,
+                                                                        mTextColor: mWhiteColor,
+                                                                        mFontSize: 16,
+                                                                        mHeigth: 40),
                                                                   ),
-                                                          ),
-                                                        ))),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(
-                                            height: 20,
-                                          ),
-                                          Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              color: mWhiteColor,
-                                              child: Stack(
-                                                children: [
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      (mFrom == 1)
-                                                          ? Languages.of(
-                                                                  context)!
-                                                              .mInvestorCaptableDetails
-                                                          : Languages.of(
-                                                                  context)!
-                                                              .mRoundwiseCaptableDetails,
-                                                      style: const TextStyle(
-                                                          fontFamily:
-                                                              'ManropeBold',
-                                                          fontSize: 18,
-                                                          color: mBlackColor),
+                                                                ))),
+                                                        const SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.topRight,
-                                                    child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              2,
-                                                      child: Row(
-                                                        //ROW 1
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          InkWell(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                mFrom = 1;
-                                                              });
-                                                            },
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Text(
-                                                                  Languages.of(
-                                                                          context)!
-                                                                      .mInvestorwise,
-                                                                  style: const TextStyle(
-                                                                      fontFamily:
-                                                                          'ManropeSemiBold',
-                                                                      fontSize:
-                                                                          18,
-                                                                      color:
-                                                                          mBtnColor),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                Visibility(
-                                                                    visible: (mFrom ==
-                                                                            1)
-                                                                        ? true
-                                                                        : false,
-                                                                    child:
-                                                                        Container(
-                                                                      height: 3,
-                                                                      width:
-                                                                          120,
-                                                                      color:
-                                                                          mBtnColor,
-                                                                    )),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 20,
-                                                          ),
-                                                          InkWell(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                mFrom = 2;
-                                                              });
-                                                            },
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Text(
-                                                                  Languages.of(
-                                                                          context)!
-                                                                      .mRoundwise,
-                                                                  style: const TextStyle(
-                                                                      fontFamily:
-                                                                          'ManropeSemiBold',
-                                                                      fontSize:
-                                                                          18,
-                                                                      color:
-                                                                          mBtnColor),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                Visibility(
-                                                                    visible: (mFrom ==
-                                                                            2)
-                                                                        ? true
-                                                                        : false,
-                                                                    child:
-                                                                        Container(
-                                                                      height: 3,
-                                                                      width:
-                                                                          120,
-                                                                      color:
-                                                                          mBtnColor,
-                                                                    )),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 20,
-                                                          ),
-                                                          Container(
-                                                              height: 35,
-                                                              width: 200,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              10),
-                                                                      border:
-                                                                          Border
-                                                                              .all(
-                                                                        color:
-                                                                            mWhiteColor,
+                                                ),
+                                              ],
+                                            )),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Visibility(
+                                            visible:
+                                                (mFrom == 1) ? true : false,
+                                            child: Container(
+                                                padding: const EdgeInsets.only(
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    bottom: 0),
+                                                alignment: Alignment.topCenter,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: kTextBorder,
+                                                    width: 0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(1),
+                                                ),
+                                                child: (mFrom == 1)
+                                                    ? SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        child:
+                                                            SingleChildScrollView(
+                                                                scrollDirection:
+                                                                    Axis
+                                                                        .horizontal,
+                                                                child:
+                                                                    DataTable(
+                                                                  headingRowColor:
+                                                                      MaterialStateColor.resolveWith(
+                                                                          (states) =>
+                                                                              mTabelHeader),
+                                                                  border:
+                                                                      const TableBorder(
+                                                                    top: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
                                                                         width:
-                                                                            1,
-                                                                      )),
-                                                              child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .fromLTRB(
-                                                                          0,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                                  child:
-                                                                      InkWell(
-                                                                    child:
-                                                                        Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .center,
-                                                                      child: PrimaryButton(
-                                                                          mButtonname: Languages.of(context)!.mAddFundingRound,
-                                                                          onpressed: () {
-                                                                            if (mFrom ==
-                                                                                1) {
-                                                                              OnCreateInvestorDialog();
-                                                                            }
-                                                                          },
-                                                                          mSelectcolor: mBtnColor,
-                                                                          mTextColor: mWhiteColor,
-                                                                          mFontSize: 16,
-                                                                          mHeigth: 40),
-                                                                    ),
-                                                                  ))),
-                                                          const SizedBox(
-                                                            width: 20,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
+                                                                            0.5),
+                                                                    bottom: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    left: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    right: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    horizontalInside: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    verticalInside: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                  ),
+                                                                  columns:
+                                                                      InvesteddataColumns,
+                                                                  rows: List
+                                                                      .generate(
+                                                                    mInvestorWiseList
+                                                                        .length,
+                                                                    (index) {
+                                                                      var getmInvestorWiseList =
+                                                                          mInvestorWiseList![
+                                                                              index];
+                                                                      return DataRow(
+                                                                          cells: [
+                                                                            DataCell(
+                                                                              DatacellText(
+                                                                                menuname: getmInvestorWiseList.investorName ?? "",
+                                                                              ),
+                                                                            ),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.tagName ?? "",
+                                                                            )),
+                                                                            DataCell(
+                                                                              DatacellText(menuname: DateFormat('dd MMM yyyy').format(getmInvestorWiseList.dateOfAllotment ?? DateTime.now())),
+                                                                            ),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.investedRound ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.amountInvested.toString() ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.distinctiveShareNo ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.shareCertificate ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.sharesAllotted ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.pricePerShare.toString() ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.fullyDilutedShares ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.classOfShares ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.folioNumber ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.shareholding ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.creationPersonId ?? "",
+                                                                            )),
+                                                                          ]);
+                                                                    },
+                                                                  ).toList(),
+                                                                  showBottomBorder:
+                                                                      true,
+                                                                )))
+                                                    : Text(""))),
+                                        Visibility(
+                                            visible:
+                                                (mFrom == 2) ? true : false,
+                                            child: Container(
+                                                padding: const EdgeInsets.only(
+                                                    top: 0,
+                                                    left: 0,
+                                                    right: 0,
+                                                    bottom: 0),
+                                                alignment: Alignment.topCenter,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: kTextBorder,
+                                                    width: 0,
                                                   ),
-                                                ],
-                                              )),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Visibility(
-                                              visible:
-                                                  (mFrom == 1) ? true : false,
-                                              child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 0,
-                                                          left: 0,
-                                                          right: 0,
-                                                          bottom: 0),
-                                                  alignment:
-                                                      Alignment.topCenter,
-                                                  width: double.infinity,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: kTextBorder,
-                                                      width: 0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            1),
-                                                  ),
-                                                  child: (mFrom == 1)
-                                                      ? SingleChildScrollView(
-                                                          scrollDirection:
-                                                              Axis.vertical,
-                                                          child:
-                                                              SingleChildScrollView(
-                                                                  scrollDirection:
-                                                                      Axis
-                                                                          .horizontal,
-                                                                  child:
-                                                                      DataTable(
-                                                                    headingRowColor:
-                                                                        MaterialStateColor.resolveWith((states) =>
-                                                                            mTabelHeader),
-                                                                    border:
-                                                                        const TableBorder(
-                                                                      top: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      bottom: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      left: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      right: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      horizontalInside: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      verticalInside: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                    ),
-                                                                    columns:
-                                                                        InvesteddataColumns,
-                                                                    rows: List
-                                                                        .generate(
-                                                                      mInvestorWiseList
-                                                                          .length,
-                                                                      (index) {
-                                                                        var getmInvestorWiseList =
-                                                                            mInvestorWiseList![index];
-                                                                        return DataRow(
-                                                                            cells: [
-                                                                              DataCell(
-                                                                                DatacellText(
-                                                                                  menuname: getmInvestorWiseList.investorName ?? "",
-                                                                                ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(1),
+                                                ),
+                                                child: (mFrom == 2)
+                                                    ? SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        child:
+                                                            SingleChildScrollView(
+                                                                scrollDirection:
+                                                                    Axis
+                                                                        .horizontal,
+                                                                child:
+                                                                    DataTable(
+                                                                  headingRowColor:
+                                                                      MaterialStateColor.resolveWith(
+                                                                          (states) =>
+                                                                              mTabelHeader),
+                                                                  border:
+                                                                      const TableBorder(
+                                                                    top: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    bottom: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    left: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    right: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    horizontalInside: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                    verticalInside: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            0.5),
+                                                                  ),
+                                                                  columns:
+                                                                      RoundWiseColumns,
+                                                                  rows: List
+                                                                      .generate(
+                                                                    mRoundWiseList
+                                                                        .length,
+                                                                    (index) {
+                                                                      var getmInvestorWiseList =
+                                                                          mRoundWiseList![
+                                                                              index];
+                                                                      return DataRow(
+                                                                          cells: [
+                                                                            DataCell(
+                                                                              DatacellText(
+                                                                                menuname: getmInvestorWiseList.nameOfTheRound ?? "",
                                                                               ),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.tagName ?? "",
-                                                                              )),
-                                                                              DataCell(
-                                                                                DatacellText(menuname: DateFormat('dd MMM yyyy').format(getmInvestorWiseList.dateOfAllotment ?? DateTime.now())),
-                                                                              ),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.investedRound ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.amountInvested.toString() ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.distinctiveShareNo ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.shareCertificate ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.sharesAllotted ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.pricePerShare.toString() ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.fullyDilutedShares ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.classOfShares ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.folioNumber ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.shareholding ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.creationPersonId ?? "",
-                                                                              )),
-                                                                            ]);
-                                                                      },
-                                                                    ).toList(),
-                                                                    showBottomBorder:
-                                                                        true,
-                                                                  )))
-                                                      : Text(""))),
-                                          Visibility(
-                                              visible:
-                                                  (mFrom == 2) ? true : false,
-                                              child: Container(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 0,
-                                                          left: 0,
-                                                          right: 0,
-                                                          bottom: 0),
-                                                  alignment:
-                                                      Alignment.topCenter,
-                                                  width: double.infinity,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: kTextBorder,
-                                                      width: 0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            1),
-                                                  ),
-                                                  child: (mFrom == 2)
-                                                      ? SingleChildScrollView(
-                                                          scrollDirection:
-                                                              Axis.vertical,
-                                                          child:
-                                                              SingleChildScrollView(
-                                                                  scrollDirection:
-                                                                      Axis
-                                                                          .horizontal,
-                                                                  child:
-                                                                      DataTable(
-                                                                    headingRowColor:
-                                                                        MaterialStateColor.resolveWith((states) =>
-                                                                            mTabelHeader),
-                                                                    border:
-                                                                        const TableBorder(
-                                                                      top: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      bottom: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      left: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      right: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      horizontalInside: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                      verticalInside: BorderSide(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              0.5),
-                                                                    ),
-                                                                    columns:
-                                                                        RoundWiseColumns,
-                                                                    rows: List
-                                                                        .generate(
-                                                                      mRoundWiseList
-                                                                          .length,
-                                                                      (index) {
-                                                                        var getmInvestorWiseList =
-                                                                            mRoundWiseList![index];
-                                                                        return DataRow(
-                                                                            cells: [
-                                                                              DataCell(
-                                                                                DatacellText(
-                                                                                  menuname: getmInvestorWiseList.nameOfTheRound ?? "",
-                                                                                ),
-                                                                              ),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.roundType ?? "",
-                                                                              )),
-                                                                              DataCell(
-                                                                                DatacellText(menuname: DateFormat('dd MMM yyyy').format(getmInvestorWiseList.closingDateOfTheRound!)),
-                                                                              ),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.description ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.selectSecurityPrefix ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.amountRaised.toString() ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.pricePerShare.toString() ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.preMoneyValuation.toString() ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.dilutionForThisRound.toString() ?? "",
-                                                                              )),
-                                                                              DataCell(DatacellText(
-                                                                                menuname: getmInvestorWiseList.creationPersonId ?? "",
-                                                                              )),
-                                                                            ]);
-                                                                      },
-                                                                    ).toList(),
-                                                                    showBottomBorder:
-                                                                        true,
-                                                                  )))
-                                                      : Text(""))),
-                                          const SizedBox(
-                                            height: 80,
-                                          ),
-                                        ],
-                                      )))),
-                            ],
-                          ),
-                        ],
-                      ),
+                                                                            ),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.roundType ?? "",
+                                                                            )),
+                                                                            DataCell(
+                                                                              DatacellText(menuname: DateFormat('dd MMM yyyy').format(getmInvestorWiseList.closingDateOfTheRound!)),
+                                                                            ),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.description ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.selectSecurityPrefix ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.amountRaised.toString() ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.pricePerShare.toString() ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.preMoneyValuation.toString() ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.dilutionForThisRound.toString() ?? "",
+                                                                            )),
+                                                                            DataCell(DatacellText(
+                                                                              menuname: getmInvestorWiseList.creationPersonId ?? "",
+                                                                            )),
+                                                                          ]);
+                                                                    },
+                                                                  ).toList(),
+                                                                  showBottomBorder:
+                                                                      true,
+                                                                )))
+                                                    : Text(""))),
+                                        const SizedBox(
+                                          height: 80,
+                                        ),
+                                      ],
+                                    )))),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                );
-              }
+                ),
+              );
 
               if (state is GetPitchcraftlistInfoSuccessState) {}
 

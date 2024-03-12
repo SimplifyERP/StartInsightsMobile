@@ -168,6 +168,7 @@ class _RegisterFirstState extends State<RegisterFirst> {
                                                         .mName,
                                                 mBorderView: false,
                                                 mImageView: true,
+                                                isMandatory: true,
                                               ),
                                             ),
                                             const SizedBox(
@@ -190,6 +191,7 @@ class _RegisterFirstState extends State<RegisterFirst> {
                                                         .mMobile,
                                                 mBorderView: false,
                                                 mImageView: true,
+                                                isMandatory: true,
                                               ),
                                             ),
                                             const SizedBox(
@@ -212,6 +214,7 @@ class _RegisterFirstState extends State<RegisterFirst> {
                                                         .mEmailAddress,
                                                 mBorderView: false,
                                                 mImageView: true,
+                                                isMandatory: true,
                                               ),
                                             ),
                                             const SizedBox(
@@ -385,11 +388,11 @@ class _RegisterFirstState extends State<RegisterFirst> {
                                                     ),
                                                     InkWell(
                                                       onTap: () {
-                                                        GoRouter.of(context)
-                                                            .go('/Login');
+                                                        // GoRouter.of(context)
+                                                        //     .go('/Login');
                                                         //GoRouter.of(context).go('RegisterComplet');
-                                                        // GoRouter.of(context).go(
-                                                        //     '/Register/RegisterComplet');
+                                                        GoRouter.of(context).go(
+                                                            '/Register/RegisterComplet');
                                                       },
                                                       child: Text(
                                                           Languages.of(context)!
