@@ -55,14 +55,14 @@ class Message {
 class Userinfo {
   String? userName;
   String? fullName;
-  String? userEmail;
-  String? companyName;
-  String? phoneNo;
+  dynamic userEmail;
+  dynamic companyName;
+  dynamic phoneNo;
   String? designation;
-  String? linkedin;
+  dynamic linkedin;
   String? profileImage;
   String? loginType;
-  String? role;
+  dynamic role;
 
   Userinfo({
     this.userName,

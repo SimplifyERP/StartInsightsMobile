@@ -7,7 +7,8 @@ class PitchroomRepository {
   Future<ApiResults> getPitchroomData(
     String userId,
   ) async {
-    return await sl<MyDio>().postData(endPoint: getpitchroomlistAPI, data: {});
+    return await sl<MyDio>()
+        .postData(endPoint: getpitchroomlistAPI, data: {'user_id': userId});
   }
 
   Future<ApiResults> getuserswithroleData(

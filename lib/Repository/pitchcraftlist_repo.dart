@@ -7,8 +7,18 @@ class PitchcraftListRepo {
   Future<ApiResults> getPitchcraftList(
     String userId,
   ) async {
-    return await sl<MyDio>().postData(endPoint: pitchcraftlistAPI, data: {
+    return await sl<MyDio>().postData(endPoint: servicelistAPI, data: {
       'user_id': userId,
+    });
+  }
+
+  Future<ApiResults> getServicedetails(
+    String userId,
+    String serviceid,
+  ) async {
+    return await sl<MyDio>().postData(endPoint: servicedetailsAPI, data: {
+      'user_id': userId,
+      'my_service_id': serviceid,
     });
   }
 
@@ -29,9 +39,8 @@ class PitchcraftListRepo {
     String paymentid,
     String amount,
   ) async {
-    return await sl<MyDio>()
-        .postData(endPoint: makepitchcraftpaymentAPI, data: {
-      'pitch_craft_id': pitchcraftid,
+    return await sl<MyDio>().postData(endPoint: makeservicepaymentAPI, data: {
+      'service_id': pitchcraftid,
       'user': userId,
       'date': date,
       'payment_id': paymentid,

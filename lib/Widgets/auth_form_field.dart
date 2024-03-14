@@ -36,6 +36,9 @@ class AuthFormField extends StatelessWidget {
   final double mTop;
   final double mBottom;
 
+  final Color? borderColor;
+  final Color? viewbgColor;
+
   const AuthFormField({
     Key? key,
     required this.controller,
@@ -69,6 +72,8 @@ class AuthFormField extends StatelessWidget {
     this.mIncreshHeight = false,
     this.mTop = 15,
     this.mBottom = 15,
+    this.borderColor = mGreyFour,
+    this.viewbgColor = mLightColorOne,
   }) : super(key: key);
 
   @override
@@ -138,15 +143,15 @@ class AuthFormField extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(10, mTop, 10, mBottom),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
-                borderSide: const BorderSide(color: mGreyFour, width: 1)),
+                borderSide: BorderSide(color: borderColor!, width: 1)),
             focusedBorder: OutlineInputBorder(
-              borderSide: const BorderSide(color: mGreyFour, width: 1),
+              borderSide: BorderSide(color: borderColor!, width: 1),
               borderRadius: BorderRadius.circular(5),
             ),
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
-                borderSide: const BorderSide(width: 1, color: mGreyFour)),
-            fillColor: mLightColorOne,
+                borderSide: BorderSide(width: 1, color: borderColor!)),
+            fillColor: viewbgColor,
             filled: true));
   }
 

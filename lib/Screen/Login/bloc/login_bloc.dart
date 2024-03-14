@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:startinsights/Model/LoginResponse.dart';
 import 'package:startinsights/Model/MastersResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
@@ -14,7 +15,6 @@ import 'package:startinsights/Repository/master_repository.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/pref_manager.dart';
-import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Utils/utils.dart';
 
 import 'login_event.dart';
@@ -105,7 +105,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginStatus> {
           context: mContext,
           text: LoginResponse.fromJson(getjson).message!.message!);
 
-      Navigator.pushReplacementNamed(mContext, dashboardRoute);
+      GoRouter.of(mContext).go('/Dashboard');
     } else {
       SucessToast(
           context: mContext,

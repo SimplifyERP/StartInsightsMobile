@@ -1,19 +1,29 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:custom_gif_loading/custom_gif_loading.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/DashboardResponse.dart';
+import 'package:startinsights/Model/LoginResponse.dart';
 import 'package:startinsights/Model/MastersResponse.dart';
+import 'package:startinsights/Model/RegistrationResponse.dart';
+import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Repository/dashboard_repo.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_state.dart';
 import 'package:startinsights/Screen/Dashboard/web/dashboarditemist.dart';
+import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/pref_manager.dart';
+import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbarnew.dart';
 import 'package:startinsights/Widgets/auth_form_field.dart';
 import 'package:startinsights/Widgets/button.dart';
@@ -21,7 +31,8 @@ import 'package:startinsights/Widgets/servicebutton.dart';
 import 'package:startinsights/Widgets/sidemenunew.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({super.key});
+  final String? mFrom;
+  Dashboard({super.key, required this.mFrom});
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -47,6 +58,12 @@ class _DashboardState extends State<Dashboard> {
 
   final DashboardRepo _apiService1 = DashboardRepo();
 
+  //User Image upload
+  String mCaptureUserImage = "";
+
+  String selectedFile = '';
+  Uint8List? image;
+  late UserDetails mUserDetails;
   @override
   void initState() {
     super.initState();
@@ -57,6 +74,16 @@ class _DashboardState extends State<Dashboard> {
   loadPrefs() async {
     // mUserName =
     //     await sl<StorageService>().getString(StorageServiceConstant.MUSERNAME);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> valueMap =
+        json.decode((prefs.getString(StorageServiceConstant.MUSERINFO) ?? ''));
+    mUserDetails =
+        RegistrationResponse.fromJson(valueMap).message!.userDetails!;
+
+    if (widget.mFrom == '1') {
+      OnProfileView(mUserDetails);
+    }
   }
 
   @override
@@ -276,9 +303,7 @@ class _DashboardState extends State<Dashboard> {
                                                       final mDashboardList =
                                                           mDashboarddata[index];
                                                       return InkWell(
-                                                        onTap: () {
-                                                          OnProfileView();
-                                                        },
+                                                        onTap: () {},
                                                         child:
                                                             DashboardItemList(
                                                           mIndex: index,
@@ -617,7 +642,10 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  void OnProfileView() {
+  void OnProfileView(UserDetails mUserDetails) {
+    nameController.text = mUserDetails.fullName ?? "";
+    mobileController.text = mUserDetails.mobileNo ?? "";
+    emailController.text = mUserDetails.emailid ?? "";
     // UserDetails mUserDetails
     showGeneralDialog(
       barrierLabel: "",
@@ -696,7 +724,7 @@ class _DashboardState extends State<Dashboard> {
                                         child: Text(
                                             Languages.of(context)!.mprofile,
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontFamily: 'OpenSauceSansBold',
                                                 fontSize: mSizeFour,
                                                 color: mBlackTwo))),
@@ -719,7 +747,7 @@ class _DashboardState extends State<Dashboard> {
                                             Languages.of(context)!
                                                 .mAccountSettings,
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontFamily: 'OpenSauceSansBold',
                                                 fontSize: mSizeFour,
                                                 color: mBlackTwo))),
@@ -727,7 +755,7 @@ class _DashboardState extends State<Dashboard> {
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Row(
@@ -743,7 +771,7 @@ class _DashboardState extends State<Dashboard> {
                                     height: 1,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Container(
@@ -872,7 +900,7 @@ class _DashboardState extends State<Dashboard> {
                                                 .mCompanyName,
                                             mBorderView: false,
                                             mImageView: true,
-                                            isMandatory: true,
+                                            isMandatory: false,
                                             mTop: 20,
                                             mBottom: 20,
                                           ),
@@ -889,26 +917,43 @@ class _DashboardState extends State<Dashboard> {
                                 flex: 4,
                                 child: Material(
                                   color: Colors.white,
-                                  child: Center(
-                                    child: Column(children: [
-                                      Image.asset(
-                                        'assets/new_ic_profileupload.png',
-                                        height: 200,
-                                        width: 200,
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                          Languages.of(context)!.muploadprofile,
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeThree,
-                                              color: mBlackTwo))
-                                    ]),
-                                  ),
+                                  child: InkWell(
+                                      hoverColor: Colors.transparent,
+                                      onTap: () {
+                                        setState(
+                                          () {
+                                            selectFile(setState);
+                                          },
+                                        );
+                                      },
+                                      child: Center(
+                                        child: Column(children: [
+                                          (image != null)
+                                              ? Image.memory(
+                                                  image!,
+                                                  fit: BoxFit.fill,
+                                                  width: 200,
+                                                  height: 200,
+                                                )
+                                              : Image.asset(
+                                                  'assets/new_ic_profileupload.png',
+                                                  height: 200,
+                                                  width: 200,
+                                                ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                              Languages.of(context)!
+                                                  .muploadprofile,
+                                              textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                  fontFamily:
+                                                      'OpenSauceSansRegular',
+                                                  fontSize: mSizeThree,
+                                                  color: mBlackTwo))
+                                        ]),
+                                      )),
                                 ))
                           ]),
                     ),
@@ -981,7 +1026,7 @@ class _DashboardState extends State<Dashboard> {
                                                         .mlinkedinurl,
                                                 mBorderView: false,
                                                 mImageView: true,
-                                                isMandatory: true,
+                                                isMandatory: false,
                                                 mTop: 20,
                                                 mBottom: 20,
                                               ),
@@ -1028,7 +1073,7 @@ class _DashboardState extends State<Dashboard> {
                                                         .mwebsiteurl,
                                                 mBorderView: false,
                                                 mImageView: true,
-                                                isMandatory: true,
+                                                isMandatory: false,
                                                 mTop: 20,
                                                 mBottom: 20,
                                               ),
@@ -1048,72 +1093,96 @@ class _DashboardState extends State<Dashboard> {
                                       onpressed: () {
                                         setState(
                                           () {
-                                            final TextEditingController
-                                                nameController =
-                                                TextEditingController();
-                                            final TextEditingController
-                                                companynameController =
-                                                TextEditingController();
-                                            final TextEditingController
-                                                mobileController =
-                                                TextEditingController();
-                                            final TextEditingController
-                                                emailController =
-                                                TextEditingController();
-                                            final TextEditingController
-                                                linedINController =
-                                                TextEditingController();
-                                            final TextEditingController
-                                                websiteController =
-                                                TextEditingController();
+                                            if (nameController.text.isEmpty) {
+                                              ErrorToast(
+                                                  context: context1,
+                                                  text: Languages.of(context)!
+                                                      .mEnterName);
+                                            } else if (mobileController
+                                                .text.isEmpty) {
+                                              ErrorToast(
+                                                  context: context,
+                                                  text: Languages.of(context)!
+                                                      .mEnterMobile);
+                                            } else if (!isMobileNumberValid(
+                                                mobileController.text)) {
+                                              ErrorToast(
+                                                  context: context,
+                                                  text: "Not Valid  Mobile");
+                                            } else if (emailController
+                                                .text.isEmpty) {
+                                              ErrorToast(
+                                                  context: context,
+                                                  text: Languages.of(context)!
+                                                      .mEmailAddresshint);
+                                            } else if (!emailController.text
+                                                .isValidEmail()) {
+                                              ErrorToast(
+                                                  context: context,
+                                                  text: Languages.of(context)!
+                                                      .mVaildEmailAddresshint);
+                                            } else if (companynameController
+                                                .text.isEmpty) {
+                                              ErrorToast(
+                                                  context: context,
+                                                  text: Languages.of(context)!
+                                                      .mentercompanyname);
+                                            } else {
+                                              Loading(mLoaderGif)
+                                                  .start(context);
 
-                                            Loading(mLoaderGif).start(context);
+                                              _apiService1.ProfileUpdate(
+                                                      nameController.text,
+                                                      mobileController.text,
+                                                      emailController.text,
+                                                      "",
+                                                      companynameController
+                                                          .text,
+                                                      linedINController.text,
+                                                      websiteController.text,
+                                                      mCaptureUserImage,
+                                                      mUserDetails.password ??
+                                                          "")
+                                                  .then((value) async {
+                                                print(value);
 
-                                            /*_apiService1.ProfileUpdate(
-                                                    nameController.text,
-                                                    mUserId,
-                                                    mobileController.text,
-                                                    "",
-                                                    companynameController.text,
-                                                    linedINController.text,
-                                                    mCaptureUserImage,
-                                                    mUserType)
-                                                .then((value) async {
-                                              print(value);
+                                                if (value is ApiSuccess) {
+                                                  if (LoginResponse.fromJson(
+                                                              value.data)!
+                                                          .message!
+                                                          .status ??
+                                                      false) {
+                                                    Loading.stop();
+                                                    String mUserInfo =
+                                                        json.encode(value.data);
 
-                                              if (value is ApiSuccess) {
-                                                if (LoginResponse.fromJson(
-                                                            value.data)!
-                                                        .message!
-                                                        .status ??
-                                                    false) {
+                                                    sl<StorageService>()
+                                                        .setString(
+                                                            StorageServiceConstant
+                                                                .MUSERINFO,
+                                                            mUserInfo);
+                                                    Navigator.pop(context);
+                                                    SucessToast(
+                                                        context: context,
+                                                        text:
+                                                            "Profile Updated");
+                                                  } else {
+                                                    Loading.stop();
+                                                    ErrorToast(
+                                                        context: context,
+                                                        text: LoginResponse
+                                                                    .fromJson(value
+                                                                        .data)!
+                                                                .message!
+                                                                .message ??
+                                                            "");
+                                                  }
+                                                } else if (value
+                                                    is ApiFailure) {
                                                   Loading.stop();
-                                                  String mUserInfo =
-                                                      json.encode(value.data);
-
-                                                  sl<StorageService>()
-                                                      .setString(
-                                                          StorageServiceConstant
-                                                              .MUSERINFO,
-                                                          mUserInfo);
-                                                  SucessToast(
-                                                      context: context,
-                                                      text: "Profile Updated");
-                                                } else {
-                                                  Loading.stop();
-                                                  ErrorToast(
-                                                      context: context,
-                                                      text: CommonResponse
-                                                                  .fromJson(value
-                                                                      .data)!
-                                                              .message!
-                                                              .message ??
-                                                          "");
                                                 }
-                                              } else if (value is ApiFailure) {
-                                                Loading.stop();
-                                              }
-                                            });*/
+                                              });
+                                            }
                                           },
                                         );
                                       },
@@ -1131,5 +1200,27 @@ class _DashboardState extends State<Dashboard> {
         });
       },
     );
+  }
+
+  void selectFile(StateSetter setState1) async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'png',
+        'jpg',
+        'jpeg',
+      ],
+    );
+
+    if (result != null) {
+      setState1(() {
+        selectedFile = result.files.first.name;
+      });
+
+      image = result.files.first.bytes;
+
+      mCaptureUserImage = base64Encode(image!);
+      mCaptureUserImage = base64Encode(image!);
+    }
   }
 }

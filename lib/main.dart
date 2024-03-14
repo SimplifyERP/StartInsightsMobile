@@ -11,10 +11,19 @@ import 'package:startinsights/Localization/localizations_delegate.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/web/dashboard.dart';
+import 'package:startinsights/Screen/ForgetPassword/bloc/forgetpwd_bloc.dart';
+import 'package:startinsights/Screen/ForgetPassword/web/forgetpwd.dart';
+import 'package:startinsights/Screen/ForgetPassword/web/resetpwd.dart';
+import 'package:startinsights/Screen/InvestmentDeals/bloc/investmentdeals_bloc.dart';
+import 'package:startinsights/Screen/InvestmentDeals/web/Deals.dart';
 import 'package:startinsights/Screen/Learn/bloc/learn_bloc.dart';
 import 'package:startinsights/Screen/Learn/web/learnweb.dart';
 import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
 import 'package:startinsights/Screen/Login/web/login.dart';
+import 'package:startinsights/Screen/PitchRoom/bloc/pitchroom_bloc.dart';
+import 'package:startinsights/Screen/PitchRoom/web/newpitchroom.dart';
+import 'package:startinsights/Screen/Profile/bloc/profile_bloc.dart';
+import 'package:startinsights/Screen/Profile/web/profile.dart';
 import 'package:startinsights/Screen/Register/bloc/register_bloc.dart';
 import 'package:startinsights/Screen/Register/web/registerfirst.dart';
 import 'package:startinsights/Screen/Register/web/registesecond.dart';
@@ -23,6 +32,8 @@ import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.d
 import 'package:startinsights/Screen/SearchInvestors/web/searchinvestors.dart';
 import 'package:startinsights/Screen/Service/bloc/servicelist_bloc.dart';
 import 'package:startinsights/Screen/Service/web/searchlist.dart';
+import 'package:startinsights/Screen/SplashScreen/bloc/splash_bloc.dart';
+import 'package:startinsights/Screen/SplashScreen/splash_screen.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/theme.dart';
 import 'package:startinsights/firebase_options.dart';
@@ -113,9 +124,25 @@ class _MyAppState extends State<MyApp> {
   // );
 
   final GoRouter router = GoRouter(
-    initialLocation: '/Dashboard',
-    // initialLocation: '/Dashboard',
+    //initialLocation: '/Login',
+    //initialLocation: '/Dashboard',
+    initialLocation: '/',
     routes: <RouteBase>[
+      GoRoute(
+          name: "Splashscreen",
+          path: '/',
+          builder: (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<SplashBloc>(
+                    create: (context) =>
+
+                        // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                        SplashBloc(),
+                    // ..getServiceListData(1),
+                  )
+                ],
+                child: SplashScreen(),
+              )),
       GoRoute(
         name: "home",
         path: "/Dashboard",
@@ -127,7 +154,46 @@ class _MyAppState extends State<MyApp> {
             )
           ],
           //child: DashboardWeb(),
-          child: Dashboard(),
+
+          child: Dashboard(
+            mFrom: state.extra as String?,
+          ),
+        ),
+        /*  routes: <RouteBase>[
+          GoRoute(
+            path: 'album/:albumId',
+            builder: (BuildContext context, GoRouterState state) {
+              return AlbumScreen(
+                albumId: state.pathParameters['albumId'],
+              );
+            },
+            routes: [
+              GoRoute(
+                path: 'song/:songId',
+                // Display on the root Navigator
+                builder: (BuildContext context, GoRouterState state) {
+                  return SongScreen(
+                    songId: state.pathParameters['songId']!,
+                  );
+                },
+              ),
+            ],
+          ),
+        ],*/
+      ),
+      GoRoute(
+        name: "Deals",
+        path: "/Deals",
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider<InvestmentDealsBloc>(
+                create: (context) => InvestmentDealsBloc(
+                    mContext: context) //..getDashboardData(),
+                )
+          ],
+          //child: DashboardWeb(),
+
+          child: Deals(),
         ),
         /*  routes: <RouteBase>[
           GoRoute(
@@ -281,6 +347,64 @@ class _MyAppState extends State<MyApp> {
           // ],
           ),
       GoRoute(
+          name: "ForgetPwd",
+          path: '/ForgetPwd',
+          builder: (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<ForgetPwdBloc>(
+                    create: (context) =>
+
+                        // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                        ForgetPwdBloc(
+                            mContext: context,
+                            mEmailid: state.extra as String?),
+                  )
+                ],
+                child: ForgetPwd(
+                  mEmailid: state.extra as String?,
+                ),
+              )
+          // routes: <RouteBase>[
+          //   GoRoute(
+          //     path: 'song/:songId',
+          //     // Display on the root Navigator
+          //     builder: (BuildContext context, GoRouterState state) {
+          //       return SongScreen(
+          //         songId: state.pathParameters['songId']!,
+          //       );
+          //     },
+          //   ),
+          // ],
+          ),
+      GoRoute(
+          name: "ResetPassword",
+          path: '/ResetPassword',
+          builder: (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<ForgetPwdBloc>(
+                    create: (context) =>
+
+                        // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                        ForgetPwdBloc(
+                            mContext: context,
+                            mEmailid: state.extra as String?),
+                  )
+                ],
+                child: ResetPwd(),
+              )
+          // routes: <RouteBase>[
+          //   GoRoute(
+          //     path: 'song/:songId',
+          //     // Display on the root Navigator
+          //     builder: (BuildContext context, GoRouterState state) {
+          //       return SongScreen(
+          //         songId: state.pathParameters['songId']!,
+          //       );
+          //     },
+          //   ),
+          // ],
+          ),
+      GoRoute(
           name: "Learn",
           path: '/Learn',
           builder: (context, state) => MultiBlocProvider(
@@ -307,6 +431,36 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ],
           ),
+      GoRoute(
+          name: "Pitchroom",
+          path: '/Pitchroom',
+          builder: (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<PitchroomBloc>(
+                    create: (context) =>
+
+                        // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                        PitchroomBloc(mContext: context)
+                          ..getPitchroomListData(),
+                  )
+                ],
+                child: NewPitchRoom(),
+              )),
+      GoRoute(
+          name: "Profile",
+          path: '/Profile',
+          builder: (context, state) => MultiBlocProvider(
+                providers: [
+                  BlocProvider<ProfileBloc>(
+                    create: (context) =>
+
+                        // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
+                        ProfileBloc(mContext: context),
+                  )
+                ],
+                child: Profile(),
+              )),
+
       /*  GoRoute(
         path: '/search',
         pageBuilder: (context, state) {

@@ -1,5 +1,6 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
@@ -148,10 +149,29 @@ class AppbarNew extends StatelessWidget implements PreferredSizeWidget {
                       const SizedBox(
                         width: 20,
                       ),
-                      const SizedBox(
-                        child: Column(
+                      SizedBox(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            InkWell(
+                              onTap: () {
+                                GoRouter.of(context).go('/Deals');
+                              },
+                              child: mFrom == 10
+                                  ? SvgPicture.asset(
+                                      'assets/new_ic_dealsselect.svg',
+                                      width: 40,
+                                      height: 40,
+                                    )
+                                  : SvgPicture.asset(
+                                      'assets/new_ic_deals.svg',
+                                      width: 40,
+                                      height: 40,
+                                    ),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
                             Image(
                               width: 40,
                               height: 40,
@@ -464,6 +484,7 @@ class AppbarNew extends StatelessWidget implements PreferredSizeWidget {
 
   static void onValueChanged(BuildContext context, ProfileMenuItem item) {
     if (item.text == Languages.of(context)!.mprofile) {
+      GoRouter.of(context).go('/Profile');
     } else if (item.text == Languages.of(context)!.mAccountSettings) {
     } else if (item.text == Languages.of(context)!.mCustomerSupport) {
     } else if (item.text == Languages.of(context)!.mLogout) {

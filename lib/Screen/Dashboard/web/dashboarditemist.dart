@@ -5,6 +5,7 @@ import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/DashboardResponse.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/utils.dart';
 
 class DashboardItemList extends StatelessWidget {
   final int mIndex;
@@ -250,34 +251,34 @@ class DashboardItemList extends StatelessWidget {
     );
   }
 
-  void showAlert(BuildContext context, String message) {
-    Widget okButton = TextButton(
-      child: const Text("Ok",
-          style: TextStyle(
-              fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor)),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      content: Text(
-        message,
-        style: const TextStyle(
-            fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor),
-      ),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+  // void showAlert(BuildContext context, String message) {
+  //   Widget okButton = TextButton(
+  //     child: const Text("Ok",
+  //         style: TextStyle(
+  //             fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor)),
+  //     onPressed: () {
+  //       Navigator.pop(context);
+  //     },
+  //   );
+  //
+  //   // set up the AlertDialog
+  //   AlertDialog alert = AlertDialog(
+  //     content: Text(
+  //       message,
+  //       style: const TextStyle(
+  //           fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor),
+  //     ),
+  //     actions: [
+  //       okButton,
+  //     ],
+  //   );
+  //
+  //   // show the dialog
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
 }

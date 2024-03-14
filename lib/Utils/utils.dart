@@ -57,6 +57,102 @@ Future<bool> connectivityChecker() async {
   return connected;
 }
 
+SetTrackingTextColor(String mType) {
+  Color mSetcolor = mBlackOne;
+  switch (mType) {
+    case "Under Progress":
+      {
+        mSetcolor = mBlueOne;
+      }
+      break;
+
+    case "Completed":
+      {
+        mSetcolor = mGreenSeven;
+      }
+      break;
+
+    case "Hold":
+      {
+        mSetcolor = mOrangeSeven;
+      }
+      break;
+
+    default:
+      {
+        mSetcolor = mBlackOne;
+      }
+      break;
+  }
+
+  return mSetcolor;
+}
+
+SetTextColor(String mType) {
+  Color mSetcolor = mBlackOne;
+  switch (mType) {
+    case "Under Progress":
+      {
+        mSetcolor = mS1GreenNine;
+      }
+      break;
+
+    case "Completed":
+      {
+        mSetcolor = Colors.white;
+      }
+      break;
+
+    case "Hold":
+      {
+        mSetcolor = mOrangeSeven;
+      }
+      break;
+
+    default:
+      {
+        mSetcolor = mBlackOne;
+      }
+      break;
+  }
+
+  return mSetcolor;
+}
+
+//Under Progress
+// Hold
+//Completed
+SetBackgroungColor(String mType) {
+  Color mSetcolor = mBlackOne;
+  switch (mType) {
+    case "Under Progress":
+      {
+        mSetcolor = mGreenThree;
+      }
+      break;
+
+    case "Completed":
+      {
+        mSetcolor = mGreyTen;
+      }
+      break;
+
+    case "Hold":
+      {
+        mSetcolor = mOrangeThree;
+      }
+      break;
+
+    default:
+      {
+        mSetcolor = mBlackOne;
+      }
+      break;
+  }
+
+  return mSetcolor;
+}
+
 void ErrorToast({
   required BuildContext context,
   required String text,
@@ -234,6 +330,37 @@ final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);*/
 
 int getHashCode(DateTime key) {
   return key.day * 1000000 + key.month * 10000 + key.year;
+}
+
+void showAlert(BuildContext context, String message) {
+  Widget okButton = TextButton(
+    child: const Text("Ok",
+        style: TextStyle(
+            fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor)),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    content: Text(
+      message,
+      style: const TextStyle(
+          fontFamily: 'ManropeRegular', fontSize: 16, color: mBlackColor),
+    ),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
 
 void OnProfileload(BuildContext context1) {

@@ -55,45 +55,33 @@ class Message {
 
 class PitchRoomDetail {
   String? id;
+  String? coverImage;
   String? roomName;
-  String? description;
-  String? pitch_deck;
-  String? projections;
-  String? executive_summary;
-  String? shared_user;
-  String? expiryDate;
+  String? companyName;
+  String? aboutStartup;
 
   PitchRoomDetail({
     this.id,
+    this.coverImage,
     this.roomName,
-    this.description,
-    this.pitch_deck,
-    this.projections,
-    this.executive_summary,
-    this.shared_user,
-    this.expiryDate,
+    this.companyName,
+    this.aboutStartup,
   });
 
   factory PitchRoomDetail.fromJson(Map<String, dynamic> json) =>
       PitchRoomDetail(
         id: json["id"],
+        coverImage: json["cover_image"],
         roomName: json["room_name"],
-        description: json["description"],
-        pitch_deck: json["pitch_deck"],
-        projections: json["projections"],
-        executive_summary: json["executive_summary"],
-        shared_user: json["shared_user"],
-        expiryDate: json["expiry_date"],
+        companyName: json["company_name"],
+        aboutStartup: json["about_startup"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "cover_image": coverImage,
         "room_name": roomName,
-        "description": description,
-        "pitch_deck": pitch_deck,
-        "projections": projections,
-        "executive_summary": executive_summary,
-        "shared_user": shared_user,
-        "expiry_date": expiryDate,
+        "company_name": companyName,
+        "about_startup": aboutStartup,
       };
 }

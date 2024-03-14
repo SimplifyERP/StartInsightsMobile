@@ -1,6 +1,7 @@
 //
 
 import 'package:startinsights/Model/PitchcraftlistResponse.dart';
+import 'package:startinsights/Model/ServiceListResponse.dart';
 
 abstract class ServicelistStatus {}
 
@@ -16,8 +17,8 @@ class GetServicelistInfoFailState extends ServicelistStatus {
 }
 
 class GetServicelistInfoSuccessState extends ServicelistStatus {
-  final List<MyService> mServiceList;
-  final List<MyService> mMyServicelist;
+  final List<MyServices> mServiceList;
+  final List<MyServices> mMyServicelist;
   GetServicelistInfoSuccessState(this.mServiceList, this.mMyServicelist);
 }
 

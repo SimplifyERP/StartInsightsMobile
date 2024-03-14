@@ -44,16 +44,14 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           // if (state is GetSplashInfoSucessState) {
           if (mIsLogin == null) {
-            // Navigator.pushReplacementNamed(context, loginRoute);
-            // Navigator.pushReplacementNamed(context, dashboardRoute);
+            GoRouter.of(context).go('/Login');
+            // GoRouter.of(context).go('/Dashboard');
           } else {
             if (mIsLogin) {
-              // Navigator.pushReplacementNamed(context, searchinvestorRoute);
-
-              //   Navigator.pushReplacementNamed(context, dashboardRoute);
+              GoRouter.of(context).go('/Dashboard');
             } else {
-              // Navigator.pushReplacementNamed(context, dashboardRoute);
-              // Navigator.pushReplacementNamed(context, loginRoute);
+              GoRouter.of(context).go('/Login');
+              //GoRouter.of(context).go('/Dashboard');
             }
           }
           //  }

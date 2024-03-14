@@ -47,7 +47,7 @@ class _LearnWebState extends State<LearnWeb> {
 
   ValueNotifier<bool> setnotifier = ValueNotifier(true);
 
-  // 1-> Search Investors , 2->Funding CRM , 3 -> Fav 4 -> Details view
+  // 1-> LMS list , 2->LMS list Details , 3 ->  ->
   int mSelectView = 1;
   int mGetCount = 0;
   int numPages = 1;
@@ -244,7 +244,7 @@ class _LearnWebState extends State<LearnWeb> {
                                   child: Column(
                                 children: [
                                   Container(
-                                    height: 70,
+                                    height: 60,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: Colors.white,
@@ -285,7 +285,7 @@ class _LearnWebState extends State<LearnWeb> {
                                               ]),
                                         ),
                                         Align(
-                                          alignment: Alignment.topRight,
+                                          alignment: Alignment.centerRight,
                                           child: Container(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -303,7 +303,7 @@ class _LearnWebState extends State<LearnWeb> {
                                                 ),
                                                 Container(
                                                     width: 400,
-                                                    height: 60,
+                                                    height: 45,
                                                     padding: const EdgeInsets
                                                         .fromLTRB(5, 5, 5, 5),
                                                     decoration: BoxDecoration(
@@ -966,6 +966,16 @@ class _LearnWebState extends State<LearnWeb> {
                                                 ]),
                                           ),
                                         ],
+                                      )), //
+                                    ),
+                                  )),
+                              Visibility(
+                                  visible: mSelectView == 2 ? true : false,
+                                  child: Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Container(
+                                          child: Column(
+                                        children: [],
                                       )), //
                                     ),
                                   )),

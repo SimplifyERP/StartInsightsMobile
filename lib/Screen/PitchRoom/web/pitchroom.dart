@@ -433,7 +433,7 @@ class _PitchroomState extends State<PitchroomWeb> {
                               height: 10,
                             ),
                             Text(
-                              mPitchroomList.description ?? "",
+                              mPitchroomList.aboutStartup ?? "",
                               style: const TextStyle(
                                   fontFamily: 'ManropeRegular',
                                   fontSize: 16,
@@ -503,17 +503,17 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                     color:
                                                         kprogressbarpitchcraft),
                                                 text: ((mPitchroomList
-                                                                .pitch_deck ??
+                                                                .aboutStartup ??
                                                             "")
                                                         .isEmpty)
                                                     ? ""
-                                                    : (mPitchroomList.pitch_deck ??
+                                                    : (mPitchroomList.aboutStartup ??
                                                                     "")
                                                                 .length >
                                                             40
-                                                        ? '${(mPitchroomList.pitch_deck ?? "").substring(0, 40)}...'
+                                                        ? '${(mPitchroomList.aboutStartup ?? "").substring(0, 40)}...'
                                                         : (mPitchroomList
-                                                                .pitch_deck ??
+                                                                .aboutStartup ??
                                                             "")),
                                           ),
                                           const SizedBox(
@@ -521,11 +521,13 @@ class _PitchroomState extends State<PitchroomWeb> {
                                           ),
                                           InkWell(
                                             onTap: () {
-                                              if (((mPitchroomList.pitch_deck ??
+                                              if (((mPitchroomList
+                                                          .aboutStartup ??
                                                       "")
                                                   .isNotEmpty)) {
                                                 html.window.open(
-                                                    mPitchroomList.pitch_deck ??
+                                                    mPitchroomList
+                                                            .aboutStartup ??
                                                         "",
                                                     'new tab');
                                               }
@@ -545,7 +547,7 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                     ),
                                                   ]),
                                               child: Text(
-                                                  ((mPitchroomList.pitch_deck ??
+                                                  ((mPitchroomList.aboutStartup ??
                                                               "")
                                                           .isNotEmpty)
                                                       ? Languages.of(context)!
@@ -605,17 +607,17 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                     color:
                                                         kprogressbarpitchcraft),
                                                 text: ((mPitchroomList
-                                                                .projections ??
+                                                                .aboutStartup ??
                                                             "")
                                                         .isEmpty)
                                                     ? ""
-                                                    : (mPitchroomList.projections ??
+                                                    : (mPitchroomList.aboutStartup ??
                                                                     "")
                                                                 .length >
                                                             40
-                                                        ? '${(mPitchroomList.projections ?? "").substring(0, 40)}...'
+                                                        ? '${(mPitchroomList.aboutStartup ?? "").substring(0, 40)}...'
                                                         : (mPitchroomList
-                                                                .projections ??
+                                                                .aboutStartup ??
                                                             "")),
                                           ),
                                           const SizedBox(
@@ -624,12 +626,12 @@ class _PitchroomState extends State<PitchroomWeb> {
                                           InkWell(
                                             onTap: () async {
                                               if (((mPitchroomList
-                                                          .projections ??
+                                                          .aboutStartup ??
                                                       "")
                                                   .isNotEmpty)) {
                                                 html.window.open(
                                                     mPitchroomList
-                                                            .projections ??
+                                                            .aboutStartup ??
                                                         "",
                                                     'new tab');
                                               }
@@ -649,7 +651,7 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                     ),
                                                   ]),
                                               child: Text(
-                                                  ((mPitchroomList.projections ??
+                                                  ((mPitchroomList.aboutStartup ??
                                                               "")
                                                           .isNotEmpty)
                                                       ? Languages.of(context)!
@@ -709,17 +711,17 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                     color:
                                                         kprogressbarpitchcraft),
                                                 text: ((mPitchroomList
-                                                                .executive_summary ??
+                                                                .aboutStartup ??
                                                             "")
                                                         .isEmpty)
                                                     ? ""
-                                                    : (mPitchroomList.executive_summary ??
+                                                    : (mPitchroomList.aboutStartup ??
                                                                     "")
                                                                 .length >
                                                             40
-                                                        ? '${(mPitchroomList.executive_summary ?? "").substring(0, 40)}...'
+                                                        ? '${(mPitchroomList.aboutStartup ?? "").substring(0, 40)}...'
                                                         : (mPitchroomList
-                                                                .executive_summary ??
+                                                                .aboutStartup ??
                                                             "")),
                                           ),
                                           const SizedBox(
@@ -728,12 +730,12 @@ class _PitchroomState extends State<PitchroomWeb> {
                                           InkWell(
                                             onTap: () async {
                                               if (((mPitchroomList
-                                                          .executive_summary ??
+                                                          .aboutStartup ??
                                                       "")
                                                   .isNotEmpty)) {
                                                 html.window.open(
                                                     mPitchroomList
-                                                            .executive_summary ??
+                                                            .aboutStartup ??
                                                         "",
                                                     'new tab');
                                               }
@@ -753,7 +755,7 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                     ),
                                                   ]),
                                               child: Text(
-                                                  ((mPitchroomList.executive_summary ??
+                                                  ((mPitchroomList.aboutStartup ??
                                                               "")
                                                           .isNotEmpty)
                                                       ? Languages.of(context)!
@@ -793,7 +795,7 @@ class _PitchroomState extends State<PitchroomWeb> {
                               height: 10,
                             ),
                             Text(
-                              mPitchroomList.shared_user ?? "",
+                              mPitchroomList.aboutStartup ?? "",
                               style: const TextStyle(
                                   fontFamily: 'ManropeRegular',
                                   fontSize: 16,
@@ -821,7 +823,7 @@ class _PitchroomState extends State<PitchroomWeb> {
                               height: 10,
                             ),
                             Text(
-                              mPitchroomList.expiryDate ?? "",
+                              mPitchroomList.aboutStartup ?? "",
                               style: const TextStyle(
                                   fontFamily: 'ManropeRegular',
                                   fontSize: 16,

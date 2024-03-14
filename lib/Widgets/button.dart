@@ -8,6 +8,7 @@ class Button extends StatelessWidget {
     required this.onpressed,
     required this.mSelectcolor,
     required this.mTextColor,
+    this.mHovercolor = Colors.white,
     this.mFontSize = 18,
     this.mWidth = 200,
     this.mHeigth = 45,
@@ -17,6 +18,7 @@ class Button extends StatelessWidget {
   final VoidCallback onpressed;
   final Color mSelectcolor;
   final Color mTextColor;
+  final Color mHovercolor;
   final double mFontSize;
   final double mWidth;
   final double mHeigth;
@@ -26,7 +28,7 @@ class Button extends StatelessWidget {
     return MaterialButton(
         onPressed: onpressed,
         textColor: Colors.white,
-        hoverColor: Colors.white,
+        hoverColor: mHovercolor,
         child: Container(
           width: mWidth,
           height: mHeigth,

@@ -3,6 +3,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:startinsights/Model/CommonResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/login_repo.dart';
 import 'package:startinsights/Screen/ForgetPassword/bloc/forgetpwd_event.dart';
@@ -12,21 +13,34 @@ import 'package:startinsights/Utils/utils.dart';
 
 class ForgetPwdBloc extends Bloc<ForgetPwdEvent, ForgetPwdStatus> {
   final BuildContext mContext;
+  final String? mEmailid;
 
   ForgetPwdBloc({
     required this.mContext,
+    required this.mEmailid,
   }) : super(ForgetPwdInitialState()) {
     onLoadView();
   }
 
-  void login({
-    required String userid,
-    required String password,
-    required bool checkedValue,
+  void forgetPwd({
+    required String mEmailid,
   }) async {
     Loading(mLoaderGif).start(mContext);
-    ApiResults apiResults = await LoginRepo().loginData(userid, password);
+    ApiResults apiResults = await LoginRepo().forgetPwdCall(mEmailid);
     if (apiResults is ApiSuccess) {
+      if (CommonResponse.fromJson(apiResults.data)!.message!.status ?? false) {
+        Loading.stop();
+        SucessToast(
+            context: mContext,
+            text: CommonResponse.fromJson(apiResults.data)!.message!.message ??
+                "");
+      } else {
+        ErrorToast(
+            context: mContext,
+            text: CommonResponse.fromJson(apiResults.data)!.message!.message ??
+                "");
+      }
+
       Loading.stop();
     } else if (apiResults is ApiFailure) {
       Loading.stop();

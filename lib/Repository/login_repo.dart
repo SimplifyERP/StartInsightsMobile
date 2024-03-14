@@ -15,4 +15,25 @@ class LoginRepo {
       'password': password,
     });
   }
+
+  Future<ApiResults> forgetPwdCall(
+    String mEmailid,
+  ) async {
+    // email = 'vivekchamp84@gmail.com';
+    // password = 'vivek@123';
+    return await sl<MyDio>().postData(endPoint: ForgetPwdAPI, data: {
+      'email': mEmailid,
+    });
+  }
+
+  Future<ApiResults> resetPwd(
+    String password,
+    String authcode,
+  ) async {
+    // email = 'vivekchamp84@gmail.com';
+    // password = 'vivek@123';
+    return await sl<MyDio>().postData(
+        endPoint: ResetPwdAPI,
+        data: {'password': password, 'auth_code': authcode});
+  }
 }

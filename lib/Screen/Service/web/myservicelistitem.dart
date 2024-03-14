@@ -3,14 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_network/image_network.dart';
 import 'package:startinsights/Libery/readmore.dart';
 import 'package:startinsights/Localization/language/languages.dart';
-import 'package:startinsights/Model/PitchcraftlistResponse.dart';
+import 'package:startinsights/Model/ServiceListResponse.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/servicebutton.dart';
 
 class MyServiceListItem extends StatelessWidget {
   final int mIndex;
-  final MyService mMyServiceList;
+  final MyServices mMyServiceList;
   final VoidCallback onpressed;
 
   const MyServiceListItem({
@@ -47,48 +48,86 @@ class MyServiceListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                          width: 75,
-                          height: 75,
-                          padding: EdgeInsets.all(0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: mGreyTwo,
-                                blurRadius: 0,
-                              ),
-                            ],
+                      Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                                width: 75,
+                                height: 75,
+                                padding: EdgeInsets.all(0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.white,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: mGreyTwo,
+                                      blurRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    const CircularProgressIndicator(
+                                      color: mBlueOne,
+                                    ),
+                                    Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child:
+                                              ((mMyServiceList.serviceImage ??
+                                                          "")
+                                                      .isNotEmpty)
+                                                  ? ImageNetwork(
+                                                      image: mMyServiceList
+                                                          .serviceImage!,
+                                                      height: 75,
+                                                      width: 75,
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      'assets/new_ic_watermarkbg.svg',
+                                                      width: 75,
+                                                      height: 75,
+                                                    ),
+                                        )),
+                                  ],
+                                )),
                           ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              const CircularProgressIndicator(
-                                color: mBlueOne,
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              width: 150,
+                              height: 30,
+                              padding: EdgeInsets.only(left: 10, right: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: SetBackgroungColor(
+                                    mMyServiceList.servicestatus ?? ""),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: mGreyTwo,
+                                    blurRadius: 0,
+                                  ),
+                                ],
                               ),
-                              Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: ((mMyServiceList.pitchCraftImage ??
-                                                "")
-                                            .isNotEmpty)
-                                        ? ImageNetwork(
-                                            image:
-                                                mMyServiceList.pitchCraftImage!,
-                                            height: 75,
-                                            width: 75,
-                                          )
-                                        : SvgPicture.asset(
-                                            'assets/new_ic_watermarkbg.svg',
-                                            width: 75,
-                                            height: 75,
-                                          ),
-                                  ))
-                            ],
-                          )),
-                      SizedBox(
+                              child: Center(
+                                  child: Text(
+                                mMyServiceList.servicestatus ?? "",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontFamily: 'OpenSauceSansMedium',
+                                    fontSize: mSizeThree,
+                                    color: SetTextColor(
+                                        mMyServiceList.servicestatus ?? "")),
+                              )),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
                         height: 20,
                       ),
                       Text(mMyServiceList.serviceName ?? "",
@@ -97,7 +136,7 @@ class MyServiceListItem extends StatelessWidget {
                               fontFamily: 'OpenSauceSansSemiBold',
                               fontSize: mSizeFour,
                               color: mBlackTwo)),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       ReadMoreText(
@@ -117,7 +156,10 @@ class MyServiceListItem extends StatelessWidget {
                         trimMode: TrimMode.Line,
                         trimCollapsedText: 'See more',
                         trimExpandedText: ' show less',
-                        onpressed: onpressed,
+                        onpressed: () {
+                          showAlert(
+                              context, mMyServiceList.shortDescription ?? "");
+                        },
                       ),
                     ],
                   )),
@@ -132,7 +174,7 @@ class MyServiceListItem extends StatelessWidget {
                         height: 1,
                         width: MediaQuery.of(context).size.width,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       Row(
@@ -147,7 +189,7 @@ class MyServiceListItem extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
                                     Text(Languages.of(context)!.rupess,
@@ -156,7 +198,7 @@ class MyServiceListItem extends StatelessWidget {
                                             fontFamily: 'OpenSauceSansSemiBold',
                                             fontSize: mSizeTen,
                                             color: mBlackTwo)),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
                                     Text(
@@ -176,7 +218,7 @@ class MyServiceListItem extends StatelessWidget {
                                 child: ServiceButton(
                                     mButtonname:
                                         Languages.of(context)!.mViewUpdates,
-                                    onpressed: () {},
+                                    onpressed: onpressed,
                                     mSelectcolor: mBlueOne,
                                     mTextColor: mWhiteColor,
                                     mFontSize: 16,

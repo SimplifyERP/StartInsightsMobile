@@ -102,3 +102,18 @@ const String UpdatefundingcrmAPI =
 
 const String DashboardAPI =
     '$baseUrl/method/startinsights.website_api.search_investors.get_recommended_search_investors';
+
+const String ForgetPwdAPI =
+    '$baseUrl/method/startinsights.website_api.forget_api.auth_code_with_mail';
+
+const String ResetPwdAPI =
+    '$baseUrl/method/startinsights.website_api.forget_api.change_password';
+
+const String servicelistAPI =
+    '$baseUrl/method/startinsights.website_api.services.service_list';
+
+const String makeservicepaymentAPI =
+    '$baseUrl/method/startinsights.website_api.services.create_service_payment';
+
+const String servicedetailsAPI =
+    '$baseUrl/method/startinsights.website_api.services.get_my_service_details';

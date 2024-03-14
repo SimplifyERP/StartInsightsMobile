@@ -5,9 +5,9 @@ import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_network/image_network.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:image_network/image_network.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CommonResponse.dart';
 import 'package:startinsights/Model/LoginResponse.dart';
@@ -719,7 +719,7 @@ class _ProfileWebState extends State<ProfileWeb> {
                                                                       mLinkedInController
                                                                           .text,
                                                                       mCaptureUserImage,
-                                                                      mUserType)
+                                                                      mUserType,"")
                                                                       .then((value) async {
                                                                     print(value);
 

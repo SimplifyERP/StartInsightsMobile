@@ -132,7 +132,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterStatus> {
         await prefs.setString(StorageServiceConstant.MUSERINFO, mUserInfo);
 
         if (usertype == 'Startups') {
-          GoRouter.of(mContext).go('/Dashboard');
+          GoRouter.of(mContext).go('/Dashboard', extra: '1');
         } else {
           GoRouter.of(mContext).go('/Register/RegisterVerfication');
         }

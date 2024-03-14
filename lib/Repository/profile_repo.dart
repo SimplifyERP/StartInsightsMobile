@@ -6,26 +6,25 @@ import 'package:startinsights/Network/my_dio.dart';
 class ProfileRepo {
   Future<ApiResults> ProfileUpdate(
     String firstname,
-    String userid,
     String phoneno,
+    String emailid,
     String designation,
     String companyname,
     String linkedin,
-    String image,
-    String usertype,
+    String website,
+    String profileimage,
+    String password,
   ) async {
-    // email = 'vivekchamp84@gmail.com';
-    // password = 'vivek@123';
     return await sl<MyDio>().postData(endPoint: updateprofileAPI, data: {
-      'user_id': userid,
       'full_name': firstname,
-      'email_id': userid,
-      'phone_no': phoneno,
-      'company_name': companyname,
+      'mobile_no': phoneno,
+      'email_id': emailid,
       'designation': designation,
+      'company_name': companyname,
       'linkedin': linkedin,
-      'image': image,
-      'user_type': usertype
+      'website': website,
+      'profile_image': profileimage,
+      'password': password
     });
   }
 }

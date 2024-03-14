@@ -133,7 +133,11 @@ const Color mgradientOne = Color(0xff0135E3);
 const Color mgradientTwo = Color(0xff5994FF);
 
 const Color mgradientThree = Color(0xff00997D);
+
 const Color mgradientFour = Color(0xff00332A);
+
+const Color mgradientFive = Color(0x4D00997D);
+const Color mgradientFsix = Color(0x263EB14A);
 
 // const Color defaultTwitterColor = Color(0xff00acee);
 // Color defaultLightWhite = mPrimaryColor.withOpacity(0.1);

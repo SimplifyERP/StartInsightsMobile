@@ -336,4 +336,51 @@ class LanguageEn extends Languages {
   String get mVideos => "Videos";
   String get mQuizzes => "Quizzes";
   String get mViewCourse => "View Course";
+  String get mCheckyourMail => "Check your Mail";
+  String get mforgetpwdmsg =>
+      "We have sent an email with password reset link to \n";
+  String get mnotreceiveMail => "Don’t Receive any mail? ";
+  String get mResentEmail => "Resent Email";
+  String get mBacktoLogin => "Back to Login";
+  String get mResetPassword => "Reset Password";
+  String get mResetPasswordmsg => "Create a new password for your account";
+  String get mAuthcode => "Auth Code";
+  String get mEnterAuthcode => "Enter Your Auth Code";
+  String get mUpdateAccountInformation => "Update Account Information";
+  String get mPaymentSuccessful => "Payment Successful !";
+
+  String get mPaymentSuccessmsg =>
+      "The payment has been done successfully.\nThanks for being there with us.";
+  String get mPaymentid => "Payment Id: ";
+  String get mDownloadInvoice => "Download Invoice";
+  String get mViewStatus => "View Status";
+  String get mPaymentFailed => "Payment Failed!";
+
+  String get mPaymentFailedmsg =>
+      "Unfortunately Payment was rejected, \n Page will be automatically redirected to the dashboard.";
+  String get mFundraisingsession => "Preparing to Fundraising Session";
+  String get mOngoing => "Ongoing";
+  String get mOnHold => "On Hold";
+  String get mCancelled => "Cancelled";
+  String get mCompleted => "Completed";
+  String get mGetSupport => "Get Support";
+  String get mCallMe => "Call Me";
+  String get mChatwithMe => "Chat with Me";
+  String get mServiceTracking => "Service Tracking";
+  String get mtoolsLink => "Dashboard >  Tools > ";
+  String get mpurchased => "Purchased";
+  String get mUploadDoc => "Upload Doc";
+  String get mDone => "Done";
+  String get mcreateroom => "Click “+” to \n Create a Pitch Room";
+  String get mShareLink => "Share Link";
+  String get mEditRoom => "Edit Room";
+  String get mPitchRoomName => "Pitch Room Name";
+  String get mCoverImage => "Cover Image";
+  String get mAboutStartup => "About Start-up";
+  String get mNotes => "Notes";
+  String get mDeals => "Deals";
+  String get mViewDeals => "View Deals";
+  String get mCreateaPitchRoom => "Create a Pitch Room";
+  String get mCreateaRoom => "Create a Room";
+  String get mcoverimage => "Upload your Cover Image";
 }

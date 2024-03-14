@@ -259,15 +259,38 @@ class _LoginState extends State<Login> {
                                         ),
                                         Align(
                                           alignment: Alignment.centerRight,
-                                          child: Text(
-                                            Languages.of(context)!
-                                                .mForgetpassword,
-                                            style: const TextStyle(
-                                                fontSize: mSizeTwo,
-                                                fontFamily:
-                                                    'OpenSauceSansRegular',
-                                                color: mRedColorOne),
-                                          ),
+                                          child: InkWell(
+                                              onTap: () {
+                                                if (emailController
+                                                    .text.isEmpty) {
+                                                  ErrorToast(
+                                                      context: context,
+                                                      text: Languages.of(
+                                                              context)!
+                                                          .mVaildEmailAddresshint);
+                                                } else if (!emailController.text
+                                                    .isValidEmail()) {
+                                                  ErrorToast(
+                                                      context: context,
+                                                      text: Languages.of(
+                                                              context)!
+                                                          .mVaildEmailAddresshint);
+                                                } else {
+                                                  GoRouter.of(context).go(
+                                                      '/ForgetPwd',
+                                                      extra:
+                                                          emailController.text);
+                                                }
+                                              },
+                                              child: Text(
+                                                Languages.of(context)!
+                                                    .mForgetpassword,
+                                                style: const TextStyle(
+                                                    fontSize: mSizeTwo,
+                                                    fontFamily:
+                                                        'OpenSauceSansRegular',
+                                                    color: mRedColorOne),
+                                              )),
                                         ),
                                         const SizedBox(
                                           height: 15,
@@ -430,6 +453,13 @@ class _LoginState extends State<Login> {
                                                               'OpenSauceSansBold',
                                                           color: mBlackOne)),
                                                   onTap: () {
+                                                    // GoRouter.of(context).go(
+                                                    //   '/Dashboard',
+                                                    //   queryParameters: {
+                                                    //     'isRegister': true,
+                                                    //   },
+                                                    // );
+
                                                     GoRouter.of(context)
                                                         .go('/Register');
                                                   },

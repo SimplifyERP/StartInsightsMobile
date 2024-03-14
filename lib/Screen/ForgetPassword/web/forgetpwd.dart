@@ -1,14 +1,18 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Screen/ForgetPassword/bloc/forgetpwd_bloc.dart';
 import 'package:startinsights/Screen/ForgetPassword/bloc/forgwtpwd_state.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
-import 'package:startinsights/Widgets/auth_form_field.dart';
+import 'package:startinsights/Widgets/button.dart';
 
 class ForgetPwd extends StatefulWidget {
-  ForgetPwd({super.key});
+  final String? mEmailid;
+  ForgetPwd({super.key, required this.mEmailid});
 
   @override
   State<ForgetPwd> createState() => _ForgetPwdState();
@@ -17,6 +21,8 @@ class ForgetPwd extends StatefulWidget {
 class _ForgetPwdState extends State<ForgetPwd> {
   @override
   late ForgetPwdBloc mForgetPwdBloc;
+
+  bool mMailcall = true;
 
   final TextEditingController emailController = TextEditingController();
   @override
@@ -30,7 +36,13 @@ class _ForgetPwdState extends State<ForgetPwd> {
   }
 
   Widget build(BuildContext context) {
-    mForgetPwdBloc = ForgetPwdBloc(mContext: context);
+    mForgetPwdBloc =
+        ForgetPwdBloc(mContext: context, mEmailid: widget.mEmailid);
+
+    if (mMailcall) {
+      mForgetPwdBloc.forgetPwd(mEmailid: widget.mEmailid ?? "");
+      mMailcall = false;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -95,10 +107,18 @@ class _ForgetPwdState extends State<ForgetPwd> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.center,
                                       children: [
+                                        SvgPicture.asset(
+                                          'assets/new_ic_panda.svg',
+                                          width: 120,
+                                          height: 120,
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
                                         Text(
-                                          Languages.of(context)!.mWelcomeback,
+                                          Languages.of(context)!.mCheckyourMail,
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                               fontFamily: 'OpenSauceSansBold',
@@ -106,37 +126,78 @@ class _ForgetPwdState extends State<ForgetPwd> {
                                               color: mBlackOne),
                                         ),
                                         const SizedBox(
-                                          height: 5,
+                                          height: 20,
                                         ),
-                                        Text(
-                                          Languages.of(context)!.mLogmsg,
+                                        RichText(
                                           textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeTwo,
-                                              color: mGreySeven),
+                                          text: TextSpan(
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                  text: Languages.of(context)!
+                                                      .mforgetpwdmsg,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansMedium',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreySeven)),
+                                              TextSpan(
+                                                  text: widget.mEmailid,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansSemiBold',
+                                                      fontSize: mSizeThree,
+                                                      color: mBlackTwo)),
+                                            ],
+                                          ),
                                         ),
                                         const SizedBox(
                                           height: 30,
                                         ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          child: AuthFormField(
-                                            controller: emailController,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            keyboardType: TextInputType.text,
-                                            hintText: Languages.of(context)!
-                                                .mEmailAddresshint,
-                                            radius: 30,
-                                            maxLength: 80,
-                                            labelText: Languages.of(context)!
-                                                .mEmailAddresshint,
-                                            mBorderView: false,
-                                            mImageView: true,
+                                        RichText(
+                                          textAlign: TextAlign.center,
+                                          text: TextSpan(
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                  text: Languages.of(context)!
+                                                      .mnotreceiveMail,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansMedium',
+                                                      fontSize: mSizeTwo,
+                                                      color: mGreySeven)),
+                                              TextSpan(
+                                                text: Languages.of(context)!
+                                                    .mResentEmail,
+                                                style: const TextStyle(
+                                                    fontFamily:
+                                                        'OpenSauceSansSemiBold',
+                                                    fontSize: mSizeTwo,
+                                                    color: mBlackTwo),
+                                                recognizer:
+                                                    TapGestureRecognizer()
+                                                      ..onTap = () {
+                                                        // Single tapped.
+                                                      },
+                                              ),
+                                            ],
                                           ),
                                         ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Button(
+                                            mButtonname: Languages.of(context)!
+                                                .mBacktoLogin,
+                                            onpressed: () {
+                                              GoRouter.of(context).go('/Login');
+                                            },
+                                            mSelectcolor: mBtnColor,
+                                            mTextColor: mWhiteColor,
+                                            mFontSize: 16,
+                                            mWidth: MediaQuery.of(context)!
+                                                .size
+                                                .width,
+                                            mHeigth: 40),
                                         const SizedBox(
                                           height: 20,
                                         ),

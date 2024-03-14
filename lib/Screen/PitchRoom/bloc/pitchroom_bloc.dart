@@ -23,7 +23,8 @@ class PitchroomBloc extends Bloc<PitchroomEvent, PitchroomStatus> {
   void getPitchroomListData() async {
     if (await checkNetworkStatus()) {
       Loading(mLoaderGif).start(mContext);
-      ApiResults apiResults = await PitchroomRepository().getPitchroomData("");
+      ApiResults apiResults = await PitchroomRepository()
+          .getPitchroomData("jagadeesan.a1104@gmail.com");
       if (apiResults is ApiSuccess) {
         mPitchroomList = PitchroomlistResponse.fromJson(apiResults.data)
             .message!
@@ -34,7 +35,7 @@ class PitchroomBloc extends Bloc<PitchroomEvent, PitchroomStatus> {
         // hideLoading(mContext);
         Loading.stop();
       } else if (apiResults is ApiFailure) {
-        //  Loading.stop();
+        Loading.stop();
         // hideLoading(mContext);
       }
     } else {
