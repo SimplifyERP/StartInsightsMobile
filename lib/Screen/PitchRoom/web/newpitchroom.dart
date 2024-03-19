@@ -1,22 +1,30 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' show Client;
 import 'package:startinsights/Localization/language/languages.dart';
+import 'package:startinsights/Model/CommonResponse.dart';
 import 'package:startinsights/Model/PitchroomlistResponse.dart';
+import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/pitchroom_repository.dart';
 import 'package:startinsights/Screen/PitchRoom/bloc/pitchroom_bloc.dart';
 import 'package:startinsights/Screen/PitchRoom/bloc/pitchroom_state.dart';
+import 'package:startinsights/Screen/PitchRoom/web/docview.dart';
 import 'package:startinsights/Screen/PitchRoom/web/newpichroomItem.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/mandatoryText.dart';
 import 'package:startinsights/Utils/screens.dart';
+import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbarnew.dart';
 import 'package:startinsights/Widgets/auth_form_field.dart';
 import 'package:startinsights/Widgets/button.dart';
@@ -39,13 +47,18 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
   List<PitchRoomDetail> mPitchroomList = [];
   String mUserImage = "";
   final TextEditingController mRoomnameController = TextEditingController();
+  final TextEditingController mAboutStartupController = TextEditingController();
+  final TextEditingController mUpdateAboutStartupController =
+      TextEditingController();
   final TextEditingController mmShortDescriptionController =
       TextEditingController();
   final TextEditingController CompanynameController = TextEditingController();
   final TextEditingController PitchroomController = TextEditingController();
-  final TextEditingController coverimageController = TextEditingController();
+  final TextEditingController mNotesController = TextEditingController();
   late PlatformFile objFile;
   List<PlatformFile>? _paths;
+
+  String mGetCoverImage = "";
 
   Client client = Client();
 
@@ -57,6 +70,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
       mProjectionsFileName = "",
       mExecutivesummaryFileName = "";
   String mSelectPeople = "";
+  List<UploadFiles> mUploadFiles = [];
 
   final PitchroomRepository _apiService1 = PitchroomRepository();
   List<String> mUserList = [];
@@ -71,6 +85,13 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
 
   ValueNotifier<bool> setnotifier = ValueNotifier(true);
 
+  //Cover Image
+  String selectedFile = '';
+  Uint8List? image;
+  String mCaptureUserImage = "";
+
+  bool mReload = false;
+
   @override
   void initState() {
     super.initState();
@@ -81,10 +102,12 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
   void dispose() {
     super.dispose();
     mRoomnameController.dispose();
+    mAboutStartupController.dispose();
+    mUpdateAboutStartupController.dispose();
     mmShortDescriptionController.dispose();
     CompanynameController.dispose();
     PitchroomController.dispose();
-    coverimageController.dispose();
+    mNotesController.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -120,7 +143,11 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
             listener: (context, state) {},
             builder: (context, state) {
               if (state is GetPitchroomInfoSuccessState) {
-                mPitchroomList = state.mPitchRoomDetail;
+                if (!mReload) {
+                  mPitchroomList = state.mPitchRoomDetail;
+                }
+
+                mReload = false;
 
                 return SafeArea(
                     child: Container(
@@ -256,6 +283,8 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                             child: InkWell(
                                                                 onTap: () {
                                                                   setState(() {
+                                                                    mReload =
+                                                                        true;
                                                                     mSelectView =
                                                                         1;
                                                                   });
@@ -549,9 +578,11 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                                         () {
                                                                       if (index ==
                                                                           0) {
-                                                                        OnCreateRoomDialog();
+                                                                        OnCreateRoomDialog(
+                                                                            setState);
                                                                       } else {
-                                                                        OnLoadDialog();
+                                                                        OnLoadDialog(
+                                                                            mPitchroomList[index]);
                                                                       }
                                                                     },
                                                                   ),
@@ -695,70 +726,43 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
         if (_paths != null) {
           //passing file bytes and file name for API call
 
-          List<UploadFiles> mUploadFiles = [];
-
           for (int i = 0; i < _paths!.length; i++) {
             print(_paths![i].extension);
 
             UploadFiles objUploadFiles = UploadFiles();
 
-            objUploadFiles.Image = base64Encode(_paths![i].bytes!);
-            objUploadFiles.ImageExtension = _paths![i].extension!;
-            objUploadFiles.ImageName = _paths![i].name!;
+            // mPitchdeck = _paths![i];
+
+            // PlatformFile file = _paths!.first;
+            // String fileName = _paths!.first.files!.first.name;
+            //   file = File(_paths!.files.single.path!);
+
+            // objUploadFiles.attach = base64Encode(_paths![i].bytes!);
+            objUploadFiles.attach = "";
+            objUploadFiles.documenttype = _paths![i].extension!;
+            objUploadFiles.name = _paths![i].name!;
+
+            // Create file path
+            //  final filePath = directory + "/"+_paths![i].name!+ "."+_paths![i].extension!;
+
+            // '${directory}/ .extension'; // Change file_name and extension accordingly
+
             mUploadFiles.add(objUploadFiles);
-
-            mPitchdeck = base64Encode(_paths![i].bytes!);
-            mPitchdeckExt = _paths![i].extension!;
-            mPitchdeckFileName = _paths![i].name!;
           }
-          print(mUploadFiles.length);
 
-          //  Loading.stop();
+          Loading.stop();
           // ApiClient.uploadFile(_paths!.first.bytes!, _paths!.first.name);
         }
       }
     });
   }
 
-  void pickCoverImage(StateSetter setState1, BuildContext context1) async {
-    try {
-      // Loading(mLoaderGif).start(context1);
-      _paths = (await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowMultiple: false,
-
-        onFileLoading: (FilePickerStatus status) => print(status),
-        allowedExtensions: ['png', 'jpg', 'jpeg'],
-        // allowedExtensions: ['pdf', 'docx', 'doc', 'xlsx'],
-      ))
-          ?.files;
-    } on PlatformException catch (e) {
-      log('Unsupported operation' + e.toString());
-      // Loading.stop();
-    } catch (e) {
-      log(e.toString());
-      //Loading.stop();
-    }
-    //Loading.stop();
-    // setState1((){});
-    setState1(() {
-      if (_paths != null) {
-        if (_paths != null) {
-          //passing file bytes and file name for API call
-
-          mCoverImage = base64Encode(_paths!.first.bytes!);
-          CoverImageExt = _paths!.first.extension!;
-          CoverImageName = _paths!.first.name!;
-          CoverImageName = _paths!.first.name!;
-
-          //  Loading.stop();
-          // ApiClient.uploadFile(_paths!.first.bytes!, _paths!.first.name);
-        }
-      }
-    });
-  }
-
-  void OnLoadDialog() {
+  void OnLoadDialog(PitchRoomDetail mPitchroomList) {
+    CompanynameController.text = mPitchroomList.companyName ?? "";
+    mUpdateAboutStartupController.text = mPitchroomList.aboutStartup ?? "";
+    PitchroomController.text = mPitchroomList.roomName ?? "";
+    mNotesController.text = mPitchroomList.notes ?? "";
+    mGetCoverImage = mPitchroomList.coverImage ?? "";
     showDialog(
       context: context,
       builder: (context2) {
@@ -792,7 +796,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                               Expanded(
                                   flex: 7,
                                   child: Text(
-                                    "Justtap Seed A Pitch",
+                                    mPitchroomList.roomName ?? "",
                                     style: const TextStyle(
                                         fontFamily: 'OpenSauceSansSemiBold',
                                         fontSize: mSizeFour,
@@ -986,28 +990,43 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                             BorderRadius
                                                                 .circular(8),
                                                         child:
-                                                            /*  ((mPitchRoomDetail.coverImage ?? "")
-                                                .isNotEmpty)
-                                                ? ImageNetwork(
-                                              image: mPitchRoomDetail.coverImage!,
-                                              height: 150,
-                                              width: 300,
-                                            )
-                                                :*/
-                                                            SvgPicture.asset(
-                                                          'assets/new_ic_watermarkbg.svg',
-                                                          height: 30,
-                                                          width: 30,
-                                                        ),
+                                                            ((mGetCoverImage ??
+                                                                        "")
+                                                                    .isNotEmpty)
+                                                                ? Container(
+                                                                    height: 30,
+                                                                    width: 30,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      image:
+                                                                          DecorationImage(
+                                                                        image: NetworkImage(
+                                                                            mGetCoverImage),
+                                                                        //whatever image you can put here
+                                                                        fit: BoxFit
+                                                                            .fill,
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : SvgPicture
+                                                                    .asset(
+                                                                    'assets/new_ic_watermarkbg.svg',
+                                                                    height: 30,
+                                                                    width: 30,
+                                                                  ),
                                                       ),
-                                                      SizedBox(
+                                                      const SizedBox(
                                                         width: 15,
                                                       ),
                                                       Text(
-                                                        Languages.of(context)!
-                                                            .mEditRoom,
+                                                        mGetCoverImage.length >
+                                                                30
+                                                            ? '${mGetCoverImage.substring(0, 30)}...'
+                                                            : mGetCoverImage,
                                                         textAlign:
                                                             TextAlign.center,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: const TextStyle(
                                                             fontFamily:
                                                                 'OpenSauceSansRegular',
@@ -1042,7 +1061,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                           Container(
                             alignment: Alignment.center,
                             child: AuthFormField(
-                              controller: CompanynameController,
+                              controller: mUpdateAboutStartupController,
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.text,
                               hintText: Languages.of(context)!.mAboutStartup,
@@ -1072,7 +1091,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                           Container(
                             alignment: Alignment.center,
                             child: AuthFormField(
-                                controller: CompanynameController,
+                                controller: mNotesController,
                                 textInputAction: TextInputAction.next,
                                 keyboardType: TextInputType.text,
                                 hintText: Languages.of(context)!.mNotes,
@@ -1091,17 +1110,87 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                           ),
                           InkWell(
                             onTap: () {
-                              pickFiles(3, setState, context1);
+                              if (mUploadFiles.isNotEmpty) {
+                              } else {
+                                Loading(mLoaderGif).start(context);
+                                pickFiles(3, setState, context1);
+                              }
                             },
                             child: Container(
-                                height: 200,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: mGreyTwo,
-                                  border:
-                                      Border.all(color: mGreyEigth, width: 1),
-                                )),
+                              height: 200,
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: mGreyTwo,
+                                border: Border.all(color: mGreyEigth, width: 1),
+                              ),
+                              child: (mUploadFiles.isNotEmpty)
+                                  ? Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                          Container(
+                                            height: 190,
+                                            padding: EdgeInsets.all(10),
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: ((context, index) {
+                                                final mLessonsList =
+                                                    mUploadFiles[index];
+                                                return DocView(
+                                                  mUploadFiles: mLessonsList,
+                                                  mRemoveFile: () {
+                                                    setState(
+                                                      () {
+                                                        mUploadFiles
+                                                            .removeAt(index);
+                                                      },
+                                                    );
+                                                  },
+                                                  mViewFile: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            PDFView(
+                                                                pdfData:
+                                                                    _paths![0]
+                                                                        .bytes!),
+                                                      ),
+                                                    );
+                                                    //OpenFilex.open("");
+                                                  },
+                                                );
+                                              }),
+                                              itemCount: mUploadFiles.length,
+                                            ),
+                                          )
+                                        ])
+                                  : Text(""),
+                            ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Visibility(
+                              visible: (mUploadFiles.isNotEmpty) ? true : false,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Button(
+                                    mButtonname:
+                                        Languages.of(context)!.mAddMore,
+                                    onpressed: () {
+                                      Loading(mLoaderGif).start(context);
+                                      pickFiles(3, setState, context1);
+                                    },
+                                    mSelectcolor: mBtnColor,
+                                    mTextColor: mWhiteColor,
+                                    mFontSize: 16,
+                                    mWidth: 130,
+                                    mHeigth: 35),
+                              )),
                           const SizedBox(
                             height: 20,
                           ),
@@ -1138,7 +1227,96 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                     child: Button(
                                         mButtonname:
                                             Languages.of(context)!.mSaveChanges,
-                                        onpressed: () {},
+                                        onpressed: () {
+                                          if (CompanynameController
+                                              .text.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .mentercompanyname);
+                                          } else if (PitchroomController
+                                              .text.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .mEnterCreateaRoom);
+                                          } else if (mGetCoverImage.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .mcoverimage);
+                                          } else if (mUpdateAboutStartupController
+                                              .text.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .mEnterAboutStartup);
+                                          } else if (mNotesController
+                                              .text.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .mEnterNotes);
+                                          } else if (mUploadFiles.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .mUploadFiles);
+                                          } else {
+                                            Loading(mLoaderGif).start(context);
+
+                                            _apiService1.UpdateCreateRoom(
+                                                    mPitchroomList.id ?? "",
+                                                    mNotesController.text,
+                                                    mUpdateAboutStartupController
+                                                        .text,
+                                                    CompanynameController.text,
+                                                    PitchroomController.text,
+                                                    mCaptureUserImage,
+                                                    mUploadFiles)
+                                                .then((value) async {
+                                              print(value);
+
+                                              if (value is ApiSuccess) {
+                                                if (CommonResponse.fromJson(
+                                                            value.data)!
+                                                        .message!
+                                                        .status ??
+                                                    false) {
+                                                  Loading.stop();
+
+                                                  SucessToast(
+                                                      context: context,
+                                                      text: CommonResponse
+                                                                  .fromJson(value
+                                                                      .data)!
+                                                              .message!
+                                                              .message ??
+                                                          "");
+
+                                                  setState(
+                                                    () {
+                                                      GoRouter.of(context1)
+                                                          .push('/Pitchroom');
+                                                    },
+                                                  );
+                                                } else {
+                                                  Loading.stop();
+                                                  ErrorToast(
+                                                      context: context,
+                                                      text: CommonResponse
+                                                                  .fromJson(value
+                                                                      .data)!
+                                                              .message!
+                                                              .message ??
+                                                          "");
+                                                }
+                                              } else if (value is ApiFailure) {
+                                                Loading.stop();
+                                              }
+                                            });
+                                          }
+                                        },
                                         mSelectcolor: mBtnColor,
                                         mTextColor: mWhiteColor,
                                         mFontSize: 16,
@@ -1161,7 +1339,30 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
     );
   }
 
-  void OnCreateRoomDialog() {
+  //Cover Image Picker View
+  void selectFile(StateSetter setState) async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'png',
+        'jpg',
+        'jpeg',
+      ],
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedFile = result.files.first.name;
+      });
+
+      image = result.files.first.bytes;
+
+      mCaptureUserImage = base64Encode(image!);
+      mCaptureUserImage = base64Encode(image!);
+    }
+  }
+
+  void OnCreateRoomDialog(void Function(VoidCallback fn) getsetState) {
     showDialog(
       context: context,
       builder: (context2) {
@@ -1232,7 +1433,8 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                           ),
                           InkWell(
                             onTap: () {
-                              pickCoverImage(setState, context1);
+                              //Click Cover Image
+                              selectFile(setState);
                             },
                             child: Container(
                                 height: 250,
@@ -1243,29 +1445,39 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                   border:
                                       Border.all(color: mGreyEigth, width: 1),
                                 ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/new_ic_upload.svg',
-                                      width: 120,
-                                      height: 120,
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Text(
-                                      Languages.of(context)!.mcoverimage,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontFamily: 'OpenSauceSansRegular',
-                                          fontSize: mSizeTwo,
-                                          color: mGreySeven,
-                                          height: 1.5),
-                                    ),
-                                  ],
-                                )),
+                                child: (image != null)
+                                    ? Image.memory(
+                                        image!,
+                                        fit: BoxFit.fill,
+                                        width: 200,
+                                        height: 200,
+                                      )
+                                    : Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(
+                                            'assets/new_ic_upload.svg',
+                                            width: 120,
+                                            height: 120,
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Text(
+                                            Languages.of(context)!.mcoverimage,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontFamily:
+                                                    'OpenSauceSansRegular',
+                                                fontSize: mSizeTwo,
+                                                color: mGreySeven,
+                                                height: 1.5),
+                                          ),
+                                        ],
+                                      )),
                           ),
                           const SizedBox(
                             height: 20,
@@ -1309,7 +1521,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                           Container(
                             alignment: Alignment.center,
                             child: AuthFormField(
-                              controller: CompanynameController,
+                              controller: mAboutStartupController,
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.text,
                               hintText: Languages.of(context)!.mAboutStartup,
@@ -1348,7 +1560,111 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                     child: Button(
                                         mButtonname:
                                             Languages.of(context)!.mCreateaRoom,
-                                        onpressed: () {},
+                                        onpressed: () {
+                                          if (mCaptureUserImage.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .mcoverimage);
+                                          } else if (mRoomnameController
+                                              .text.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .menterroomname);
+                                          } else if (mAboutStartupController
+                                              .text.isEmpty) {
+                                            ErrorToast(
+                                                context: context,
+                                                text: Languages.of(context)!
+                                                    .mEnterAboutStartup);
+                                          } else {
+                                            Loading(mLoaderGif).start(context);
+
+                                            _apiService1.CreateRoom(
+                                              "jagadeesan.a1104@gmail.com",
+                                              mRoomnameController.text,
+                                              mAboutStartupController.text,
+                                              mCaptureUserImage,
+                                            ).then((value) async {
+                                              print(value);
+
+                                              if (value is ApiSuccess) {
+                                                if (CommonResponse.fromJson(
+                                                            value.data)!
+                                                        .message!
+                                                        .status ??
+                                                    false) {
+                                                  Loading.stop();
+
+                                                  SucessToast(
+                                                      context: context,
+                                                      text: CommonResponse
+                                                                  .fromJson(value
+                                                                      .data)!
+                                                              .message!
+                                                              .message ??
+                                                          "");
+
+                                                  setState(
+                                                    () {
+                                                      GoRouter.of(context1)
+                                                          .push('/Pitchroom');
+
+                                                      /* _apiService1
+                                                          .getPitchroomData(
+                                                        "jagadeesan.a1104@gmail.com",
+                                                      )
+                                                          .then((value) async {
+                                                        if (value
+                                                            is ApiSuccess) {
+                                                          Loading.stop();
+
+                                                          if (PitchroomlistResponse
+                                                                      .fromJson(
+                                                                          value
+                                                                              .data)!
+                                                                  .message!
+                                                                  .status ??
+                                                              false) {
+                                                            getsetState(
+                                                              () {
+                                                                mReload = true;
+
+                                                                mPitchroomList =
+                                                                    PitchroomlistResponse.fromJson(
+                                                                            value.data)
+                                                                        .message!
+                                                                        .pitchRoomDetails!;
+                                                                Navigator.pop(
+                                                                    context1);
+                                                              },
+                                                            );
+                                                          } else {}
+                                                        } else if (value
+                                                            is ApiFailure) {
+                                                          Loading.stop();
+                                                        }
+                                                      });*/
+                                                    },
+                                                  );
+                                                } else {
+                                                  Loading.stop();
+                                                  ErrorToast(
+                                                      context: context,
+                                                      text: CommonResponse
+                                                                  .fromJson(value
+                                                                      .data)!
+                                                              .message!
+                                                              .message ??
+                                                          "");
+                                                }
+                                              } else if (value is ApiFailure) {
+                                                Loading.stop();
+                                              }
+                                            });
+                                          }
+                                        },
                                         mSelectcolor: mBtnColor,
                                         mTextColor: mWhiteColor,
                                         mFontSize: 16,
@@ -1529,10 +1845,57 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
       },
     );
   }
+
+  // void OnLoadList(void Function(VoidCallback fn) getsetState) {
+  //   _apiService1
+  //       .getPitchroomData(
+  //     "jagadeesan.a1104@gmail.com",
+  //   )
+  //       .then((value) async {
+  //     if (value is ApiSuccess) {
+  //       Loading.stop();
+  //
+  //       if (PitchroomlistResponse.fromJson(value.data)!.message!.status ??
+  //           false) {
+  //         setState(
+  //           () {
+  //             mPitchroomList = PitchroomlistResponse.fromJson(value.data)
+  //                 .message!
+  //                 .pitchRoomDetails!;
+  //
+  //           },
+  //         );
+  //       } else {}
+  //     } else if (value is ApiFailure) {
+  //       Loading.stop();
+  //     }
+  //   });
+  // }
 }
 
 class UploadFiles {
-  String? Image;
-  String? ImageExtension;
-  String? ImageName;
+  // String? Image;
+  // String? ImageExtension;
+
+  String? documenttype;
+  String? attach;
+  String? name;
+
+  UploadFiles({
+    this.documenttype,
+    this.attach,
+    this.name,
+  });
+
+  factory UploadFiles.fromJson(Map<String, dynamic> json) => UploadFiles(
+        documenttype: json["document_type"],
+        attach: json["attach"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "document_type": documenttype,
+        "attach": attach,
+        "name": name,
+      };
 }

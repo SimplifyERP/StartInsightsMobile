@@ -17,8 +17,8 @@ class StartupDealsRepository {
     String DealId,
   ) async {
     return await sl<MyDio>().postData(endPoint: getdealsredeemcodeAPI, data: {
-      'name': DealId,
-      'user_id': userId,
+      'deal_id': DealId,
+      // 'user_id': userId,
     });
   }
 

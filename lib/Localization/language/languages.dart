@@ -378,4 +378,13 @@ abstract class Languages {
   String get mCreateaPitchRoom;
   String get mCreateaRoom;
   String get mcoverimage;
+  String get mEnterAboutStartup;
+  String get mEnterNotes;
+  String get mEnterCreateaRoom;
+  String get mUploadFiles;
+  String get mView;
+  String get mAddMore;
+  String get mCoursesOverview;
+  String get mCoursesSummary;
+  String get mAlreadyUsed;
 }

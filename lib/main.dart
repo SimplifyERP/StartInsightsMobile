@@ -14,11 +14,10 @@ import 'package:startinsights/Screen/Dashboard/web/dashboard.dart';
 import 'package:startinsights/Screen/ForgetPassword/bloc/forgetpwd_bloc.dart';
 import 'package:startinsights/Screen/ForgetPassword/web/forgetpwd.dart';
 import 'package:startinsights/Screen/ForgetPassword/web/resetpwd.dart';
-import 'package:startinsights/Screen/InvestmentDeals/bloc/investmentdeals_bloc.dart';
-import 'package:startinsights/Screen/InvestmentDeals/web/Deals.dart';
 import 'package:startinsights/Screen/Learn/bloc/learn_bloc.dart';
 import 'package:startinsights/Screen/Learn/web/learnweb.dart';
 import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
+import 'package:startinsights/Screen/Login/mobile/loginmobile.dart';
 import 'package:startinsights/Screen/Login/web/login.dart';
 import 'package:startinsights/Screen/PitchRoom/bloc/pitchroom_bloc.dart';
 import 'package:startinsights/Screen/PitchRoom/web/newpitchroom.dart';
@@ -34,7 +33,10 @@ import 'package:startinsights/Screen/Service/bloc/servicelist_bloc.dart';
 import 'package:startinsights/Screen/Service/web/searchlist.dart';
 import 'package:startinsights/Screen/SplashScreen/bloc/splash_bloc.dart';
 import 'package:startinsights/Screen/SplashScreen/splash_screen.dart';
+import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_bloc.dart';
+import 'package:startinsights/Screen/StartupDeals/web/startupdeals.dart';
 import 'package:startinsights/Utils/MyColor.dart';
+import 'package:startinsights/Utils/ResponsiveLayout.dart';
 import 'package:startinsights/Utils/theme.dart';
 import 'package:startinsights/firebase_options.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -186,14 +188,14 @@ class _MyAppState extends State<MyApp> {
         path: "/Deals",
         builder: (context, state) => MultiBlocProvider(
           providers: [
-            BlocProvider<InvestmentDealsBloc>(
-                create: (context) => InvestmentDealsBloc(
-                    mContext: context) //..getDashboardData(),
-                )
+            BlocProvider<StartupdealsBloc>(
+              create: (context) => StartupdealsBloc(mContext: context)
+                ..getStartupDealsListData(),
+            )
           ],
           //child: DashboardWeb(),
 
-          child: Deals(),
+          child: StartupDealsWeb(),
         ),
         /*  routes: <RouteBase>[
           GoRoute(
@@ -256,7 +258,14 @@ class _MyAppState extends State<MyApp> {
                         LoginBloc(mContext: context), //..getMasterData(),
                   )
                 ],
-                child: Login(),
+                child: ResponsiveLayout(
+                  mobileScreenLayout: const LoginMobile(),
+                  webScreenLayout: Login(),
+                ),
+
+                /*(SizerUtil.deviceType == DeviceType.mobile)
+                    ? LoginMobile()
+                    : Login()*/
               )
           // routes: <RouteBase>[
           //   GoRoute(
@@ -515,34 +524,6 @@ class _MyAppState extends State<MyApp> {
       },
     );
   }
-}
-
-class MusicAppShell extends StatelessWidget {
-  final Widget child;
-
-  const MusicAppShell({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: child,
-    );
-  }
-
-  /* static int _calculateSelectedIndex(BuildContext context) {
-    final GoRouter route = GoRouter.of(context);
-    final String location = route.location;
-    if (location.startsWith('/recents')) {
-      return 1;
-    } else if (location.startsWith('/search')) {
-      return 2;
-    } else {
-      return 0;
-    }
-  }*/
 }
 
 class FadeTransitionPage extends CustomTransitionPage<void> {

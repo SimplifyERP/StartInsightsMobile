@@ -44,14 +44,14 @@ class _SplashScreenState extends State<SplashScreen> {
         listener: (context, state) {
           // if (state is GetSplashInfoSucessState) {
           if (mIsLogin == null) {
-            GoRouter.of(context).go('/Login');
-            // GoRouter.of(context).go('/Dashboard');
+            //GoRouter.of(context).go('/Login');
+            GoRouter.of(context).go('/Dashboard');
           } else {
             if (mIsLogin) {
               GoRouter.of(context).go('/Dashboard');
             } else {
-              GoRouter.of(context).go('/Login');
-              //GoRouter.of(context).go('/Dashboard');
+              //GoRouter.of(context).go('/Login');
+              GoRouter.of(context).go('/Dashboard');
             }
           }
           //  }
@@ -65,21 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
           return SafeArea(
             child: Stack(
-              children: [
-                InkWell(
-                  child: const Text(
-                    "Test",
-                    style: TextStyle(fontSize: 30),
-                  ),
-                  onTap: () {
-                    GoRouter.of(context).go('/settings/:name');
-                  },
-                ),
-                const Align(
-                  alignment: Alignment.center,
-                  child: Text("sfasasfsaffas"),
-                ),
-              ],
+              children: [],
             ),
           );
 

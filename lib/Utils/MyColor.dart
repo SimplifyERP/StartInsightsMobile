@@ -139,6 +139,8 @@ const Color mgradientFour = Color(0xff00332A);
 const Color mgradientFive = Color(0x4D00997D);
 const Color mgradientFsix = Color(0x263EB14A);
 
+const Color mGreyTwolight = Color(0xFFf6f7f9);
+
 // const Color defaultTwitterColor = Color(0xff00acee);
 // Color defaultLightWhite = mPrimaryColor.withOpacity(0.1);
 /*100% — FF

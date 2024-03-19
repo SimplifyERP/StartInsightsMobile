@@ -57,22 +57,30 @@ class RedeemCode {
   String? id;
   String? name;
   String? redeemCode;
+  String? redeemurl;
+  String? redeemdescription;
 
   RedeemCode({
     this.id,
     this.name,
     this.redeemCode,
+    this.redeemurl,
+    this.redeemdescription,
   });
 
   factory RedeemCode.fromJson(Map<String, dynamic> json) => RedeemCode(
         id: json["id"],
         name: json["name"],
         redeemCode: json["redeem_code"],
+        redeemurl: json["redeem_url"],
+        redeemdescription: json["redeem_description"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "redeem_code": redeemCode,
+        "redeem_url": redeemurl,
+        "redeem_description": redeemdescription,
       };
 }

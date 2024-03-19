@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Network/endpoints.dart';
 import 'package:startinsights/Network/my_dio.dart';
+import 'package:startinsights/Screen/PitchRoom/web/newpitchroom.dart';
 
 class PitchroomRepository {
   Future<ApiResults> getPitchroomData(
@@ -15,6 +18,35 @@ class PitchroomRepository {
     String userId,
   ) async {
     return await sl<MyDio>().postData(endPoint: getuserswithroleAPI, data: {});
+  }
+
+  Future<ApiResults> CreateRoom(
+    String userid,
+    String pitchroomname,
+    String aboutstartup,
+    String coverimage,
+  ) async {
+    return await sl<MyDio>().postData(endPoint: createpitchroomAPI, data: {
+      'pitch_room_name': pitchroomname,
+      'about_startup': aboutstartup,
+      'user_id': userid,
+      'cover_image': coverimage
+    });
+  }
+
+  Future<ApiResults> UpdateCreateRoom(
+      String roomid,
+      String notes,
+      String aboutstartup,
+      String mCompanyname,
+      String mRoomname,
+      String mCoverimage,
+      List<UploadFiles> json) async {
+    return await sl<MyDio>().postData(endPoint: updateRoomAPI, data: {
+      'room_id': roomid,
+      'notes': notes,
+      'pitch_room_documents': jsonEncode(json),
+    });
   }
 
   Future<ApiResults> CreatePitchroom(

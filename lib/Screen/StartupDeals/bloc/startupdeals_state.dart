@@ -16,6 +16,6 @@ class GetStartupdealsInfoFailState extends StartupdealsStatus {
 }
 
 class GetStartupdealsInfoSuccessState extends StartupdealsStatus {
-  final List<Datum> mDatum;
+  final List<DealList> mDatum;
   GetStartupdealsInfoSuccessState(this.mDatum);
 }

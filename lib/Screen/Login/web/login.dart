@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sizer/sizer.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/MastersResponse.dart';
 import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
@@ -60,7 +61,7 @@ class _LoginState extends State<Login> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             padding:
-                const EdgeInsets.only(top: 30, left: 40, right: 20, bottom: 10),
+                const EdgeInsets.only(top: 25, left: 40, right: 20, bottom: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(0),
               image: const DecorationImage(
@@ -68,173 +69,171 @@ class _LoginState extends State<Login> {
                 fit: BoxFit.fill,
               ),
             ),
-            child: Container(
-              child: Stack(children: [
-                Image.asset('assets/new_appicon.png', width: 200, height: 60),
-                /*Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 200,
-                      width: 200,
-                      color: Colors.red,
-                    )
-                  ],
-                )*/
-
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width / 2 + 100,
-                      height: MediaQuery.of(context).size.height / 2 + 100,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(
+                  alignment: Alignment.topLeft,
+                  child: Image.asset('assets/new_appicon.png',
+                      width: 15.w, height: 10.h),
+                ),
+                Expanded(
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          width: 60.w,
+                          height: 65.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
                             color: Colors.white,
-                            blurRadius: 1.0,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Colors.white,
+                                blurRadius: 1.0,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: Container(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, left: 40, right: 30, bottom: 10),
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          Languages.of(context)!.mWelcomeback,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontFamily: 'OpenSauceSansBold',
-                                              fontSize: mSizeSix,
-                                              color: mBlackOne),
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Text(
-                                          Languages.of(context)!.mLogmsg,
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              fontFamily:
-                                                  'OpenSauceSansRegular',
-                                              fontSize: mSizeTwo,
-                                              color: mGreySeven),
-                                        ),
-                                        const SizedBox(
-                                          height: 30,
-                                        ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          child: AuthFormField(
-                                            controller: emailController,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            keyboardType: TextInputType.text,
-                                            hintText: Languages.of(context)!
-                                                .mEmailAddresshint,
-                                            radius: 30,
-                                            maxLength: 80,
-                                            labelText: Languages.of(context)!
-                                                .mEmailAddresshint,
-                                            mBorderView: false,
-                                            mImageView: true,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                  child: SingleChildScrollView(
+                                child: Container(
+                                    padding: const EdgeInsets.only(
+                                        top: 10,
+                                        left: 40,
+                                        right: 30,
+                                        bottom: 10),
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            Languages.of(context)!.mWelcomeback,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontFamily: 'OpenSauceSansBold',
+                                                fontSize: mSizeSix,
+                                                color: mBlackOne),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          child: TextFormField(
+                                          const SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text(
+                                            Languages.of(context)!.mLogmsg,
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                fontFamily:
+                                                    'OpenSauceSansRegular',
+                                                fontSize: mSizeTwo,
+                                                color: mGreySeven),
+                                          ),
+                                          const SizedBox(
+                                            height: 30,
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            child: AuthFormField(
+                                              controller: emailController,
+                                              textInputAction:
+                                                  TextInputAction.next,
                                               keyboardType: TextInputType.text,
-                                              controller: passwordController,
-                                              obscureText: !passwordVisible,
-                                              maxLines: 1,
-                                              maxLength:
-                                                  16, //This will obscure text dynamically
-                                              style: const TextStyle(
-                                                  fontSize: mSizeThree,
-                                                  fontFamily:
-                                                      'OpenSauceSansRegular',
-                                                  color: mBlackOne),
-                                              decoration: InputDecoration(
-                                                  counterText: "",
-                                                  labelText: Languages.of(context)!
-                                                      .mPassword,
-                                                  labelStyle: const TextStyle(
-                                                      fontSize: mSizeTwo,
-                                                      fontFamily:
-                                                          'OpenSauceSansRegular',
-                                                      color: mGreyEigth),
-                                                  hintText: Languages.of(context)!
-                                                      .mPassword,
-                                                  suffixIcon: IconButton(
-                                                    icon: Icon(
-                                                      // Based on passwordVisible state choose the icon
-                                                      passwordVisible
-                                                          ? Icons.visibility
-                                                          : Icons
-                                                              .visibility_off,
-                                                      color: Theme.of(context)
-                                                          .primaryColorDark,
+                                              hintText: Languages.of(context)!
+                                                  .mEmailAddresshint,
+                                              radius: 30,
+                                              maxLength: 80,
+                                              labelText: Languages.of(context)!
+                                                  .mEmailAddresshint,
+                                              mBorderView: false,
+                                              mImageView: true,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            child: TextFormField(
+                                                keyboardType: TextInputType
+                                                    .text,
+                                                controller: passwordController,
+                                                obscureText: !passwordVisible,
+                                                maxLines: 1,
+                                                maxLength:
+                                                    16, //This will obscure text dynamically
+                                                style: const TextStyle(
+                                                    fontSize: mSizeThree,
+                                                    fontFamily:
+                                                        'OpenSauceSansRegular',
+                                                    color: mBlackOne),
+                                                decoration: InputDecoration(
+                                                    counterText: "",
+                                                    labelText: Languages.of(context)!
+                                                        .mPassword,
+                                                    labelStyle: const TextStyle(
+                                                        fontSize: mSizeTwo,
+                                                        fontFamily:
+                                                            'OpenSauceSansRegular',
+                                                        color: mGreyEigth),
+                                                    hintText: Languages.of(context)!
+                                                        .mPassword,
+                                                    suffixIcon: IconButton(
+                                                      icon: Icon(
+                                                        // Based on passwordVisible state choose the icon
+                                                        passwordVisible
+                                                            ? Icons.visibility
+                                                            : Icons
+                                                                .visibility_off,
+                                                        color: Theme.of(context)
+                                                            .primaryColorDark,
+                                                      ),
+                                                      onPressed: () {
+                                                        // Update the state i.e. toogle the state of passwordVisible variable
+                                                        setState(() {
+                                                          passwordVisible =
+                                                              !passwordVisible;
+                                                        });
+                                                      },
                                                     ),
-                                                    onPressed: () {
-                                                      // Update the state i.e. toogle the state of passwordVisible variable
-                                                      setState(() {
-                                                        passwordVisible =
-                                                            !passwordVisible;
-                                                      });
-                                                    },
-                                                  ),
-                                                  alignLabelWithHint: true,
-                                                  hintStyle: const TextStyle(
-                                                    color: mGreyEigth,
-                                                  ),
-                                                  isDense: true, // Added this
+                                                    alignLabelWithHint: true,
+                                                    hintStyle: const TextStyle(
+                                                      color: mGreyEigth,
+                                                    ),
+                                                    isDense: true, // Added this
 
-                                                  floatingLabelStyle: const TextStyle(
-                                                      color: Colors.blue),
-                                                  // floatingLabelBehavior: FloatingLabelBehavior.never,
-                                                  contentPadding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          10, 15, 10, 15),
-                                                  enabledBorder: OutlineInputBorder(
+                                                    floatingLabelStyle: const TextStyle(
+                                                        color: Colors.blue),
+                                                    // floatingLabelBehavior: FloatingLabelBehavior.never,
+                                                    contentPadding: const EdgeInsets.fromLTRB(
+                                                        10, 15, 10, 15),
+                                                    enabledBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(
+                                                            8),
+                                                        borderSide: const BorderSide(
+                                                            color: mGreyFour,
+                                                            width: 1)),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide:
+                                                          const BorderSide(
+                                                              color: mGreyFour,
+                                                              width: 1),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              8),
-                                                      borderSide: const BorderSide(
-                                                          color: mGreyFour,
-                                                          width: 1)),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide:
-                                                        const BorderSide(
-                                                            color: mGreyFour,
-                                                            width: 1),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                  ),
-                                                  border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(5),
-                                                      borderSide: const BorderSide(width: 1, color: mGreyFour)),
-                                                  fillColor: mLightColorOne,
-                                                  filled: true))
+                                                              5),
+                                                    ),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(5),
+                                                        borderSide: const BorderSide(width: 1, color: mGreyFour)),
+                                                    fillColor: mLightColorOne,
+                                                    filled: true))
 
-                                          /*AuthFormField(
+                                            /*AuthFormField(
                                                 controller: passwordController,
                                                 obscureText: true,
                                                 maxLines: 1,
@@ -252,244 +251,289 @@ class _LoginState extends State<Login> {
                                                 mBorderView: false,
                                                 mImageView: true,
                                               )*/
-                                          ,
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: InkWell(
-                                              onTap: () {
-                                                if (emailController
-                                                    .text.isEmpty) {
-                                                  ErrorToast(
-                                                      context: context,
-                                                      text: Languages.of(
-                                                              context)!
-                                                          .mVaildEmailAddresshint);
-                                                } else if (!emailController.text
-                                                    .isValidEmail()) {
-                                                  ErrorToast(
-                                                      context: context,
-                                                      text: Languages.of(
-                                                              context)!
-                                                          .mVaildEmailAddresshint);
-                                                } else {
-                                                  GoRouter.of(context).go(
-                                                      '/ForgetPwd',
-                                                      extra:
-                                                          emailController.text);
-                                                }
-                                              },
-                                              child: Text(
-                                                Languages.of(context)!
-                                                    .mForgetpassword,
-                                                style: const TextStyle(
-                                                    fontSize: mSizeTwo,
-                                                    fontFamily:
-                                                        'OpenSauceSansRegular',
-                                                    color: mRedColorOne),
-                                              )),
-                                        ),
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Button(
-                                              mButtonname:
-                                                  Languages.of(context)!.mLogin,
-                                              onpressed: () {
-                                                if (emailController
-                                                    .text.isEmpty) {
-                                                  ErrorToast(
-                                                      context: context,
-                                                      text: Languages.of(
-                                                              context)!
-                                                          .mVaildEmailAddresshint);
-                                                } else if (!emailController.text
-                                                    .isValidEmail()) {
-                                                  ErrorToast(
-                                                      context: context,
-                                                      text: Languages.of(
-                                                              context)!
-                                                          .mVaildEmailAddresshint);
-                                                } else if (passwordController
-                                                    .text.isEmpty) {
-                                                  ErrorToast(
-                                                      context: context,
-                                                      text:
-                                                          Languages.of(context)!
-                                                              .mEnterPassword);
-                                                } else {
-                                                  FirebaseAnalytics.instance
-                                                      .logEvent(
-                                                          name: 'Login Event');
-
-                                                  mLoginBloc.login(
-                                                      userid:
-                                                          emailController.text,
-                                                      password:
-                                                          passwordController
-                                                              .text,
-                                                      checkedValue:
-                                                          checkedValue);
-                                                }
-                                              },
-                                              mSelectcolor: mBtnColor,
-                                              mTextColor: mWhiteColor,
-                                              mFontSize: 16,
-                                              mWidth: 400,
-                                              mHeigth: 45),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                height: 1,
-                                                width: 100,
-                                                color: mGreySeven,
-                                              ),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Text(
+                                            ,
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: InkWell(
+                                                onTap: () {
+                                                  if (emailController
+                                                      .text.isEmpty) {
+                                                    ErrorToast(
+                                                        context: context,
+                                                        text: Languages.of(
+                                                                context)!
+                                                            .mVaildEmailAddresshint);
+                                                  } else if (!emailController
+                                                      .text
+                                                      .isValidEmail()) {
+                                                    ErrorToast(
+                                                        context: context,
+                                                        text: Languages.of(
+                                                                context)!
+                                                            .mVaildEmailAddresshint);
+                                                  } else {
+                                                    GoRouter.of(context).go(
+                                                        '/ForgetPwd',
+                                                        extra: emailController
+                                                            .text);
+                                                  }
+                                                },
+                                                child: Text(
                                                   Languages.of(context)!
-                                                      .mOrLoginusing,
+                                                      .mForgetpassword,
                                                   style: const TextStyle(
                                                       fontSize: mSizeTwo,
                                                       fontFamily:
                                                           'OpenSauceSansRegular',
-                                                      color: mGreySeven)),
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                              Container(
-                                                height: 1,
-                                                width: 100,
-                                                color: mGreySeven,
-                                              )
-                                            ],
+                                                      color: mRedColorOne),
+                                                )),
                                           ),
-                                        ),
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Container(
-                                            height: 40,
-                                            width: 250,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Colors.white,
-                                              border:
-                                                  Border.all(color: mGreyOne),
-                                            ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Button(
+                                                mButtonname:
+                                                    Languages.of(context)!
+                                                        .mLogin,
+                                                onpressed: () {
+                                                  if (emailController
+                                                      .text.isEmpty) {
+                                                    ErrorToast(
+                                                        context: context,
+                                                        text: Languages.of(
+                                                                context)!
+                                                            .mVaildEmailAddresshint);
+                                                  } else if (!emailController
+                                                      .text
+                                                      .isValidEmail()) {
+                                                    ErrorToast(
+                                                        context: context,
+                                                        text: Languages.of(
+                                                                context)!
+                                                            .mVaildEmailAddresshint);
+                                                  } else if (passwordController
+                                                      .text.isEmpty) {
+                                                    ErrorToast(
+                                                        context: context,
+                                                        text: Languages.of(
+                                                                context)!
+                                                            .mEnterPassword);
+                                                  } else {
+                                                    FirebaseAnalytics.instance
+                                                        .logEvent(
+                                                            name:
+                                                                'Login Event');
+
+                                                    mLoginBloc.login(
+                                                        userid: emailController
+                                                            .text,
+                                                        password:
+                                                            passwordController
+                                                                .text,
+                                                        checkedValue:
+                                                            checkedValue);
+                                                  }
+                                                },
+                                                mSelectcolor: mBtnColor,
+                                                mTextColor: mWhiteColor,
+                                                mFontSize: 16,
+                                                mWidth: 400,
+                                                mHeigth: 45),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.center,
                                             child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/new_ic_linkedin.png',
-                                                    width: 20,
-                                                    height: 20,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Text(
-                                                      Languages.of(context)!
-                                                          .mLoginwithLinkedIn,
-                                                      style: const TextStyle(
-                                                          fontSize: mSizeThree,
-                                                          fontFamily:
-                                                              'OpenSauceSansBold',
-                                                          color: mBlueColor))
-                                                ]),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
                                               children: [
+                                                Expanded(
+                                                    child: Container(
+                                                  height: 1,
+                                                  color: mGreySeven,
+                                                )),
+                                                Expanded(
+                                                    child: Center(
+                                                  child: Text(
+                                                      Languages.of(context)!
+                                                          .mOrLoginusing,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          fontSize: mSizeTwo,
+                                                          fontFamily:
+                                                              'OpenSauceSansRegular',
+                                                          color: mGreySeven)),
+                                                )),
+                                                Expanded(
+                                                    child: Container(
+                                                  height: 1,
+                                                  color: mGreySeven,
+                                                  width: 8.w,
+                                                ))
+
+                                                /*Container(
+                                                  height: 1,
+                                                  color: mGreySeven,
+                                                  width: 8.w,
+                                                ),
+                                                const SizedBox(
+                                                  width: 10,
+                                                ),
                                                 Text(
                                                     Languages.of(context)!
-                                                        .mnoaccount,
+                                                        .mOrLoginusing,
                                                     style: const TextStyle(
                                                         fontSize: mSizeTwo,
                                                         fontFamily:
                                                             'OpenSauceSansRegular',
-                                                        color: mGreyEigth)),
+                                                        color: mGreySeven)),
                                                 const SizedBox(
                                                   width: 10,
                                                 ),
-                                                InkWell(
-                                                  child: Text(
-                                                      Languages.of(context)!
-                                                          .mCreateanAccount,
-                                                      style: const TextStyle(
-                                                          fontSize: mSizeTwo,
-                                                          fontFamily:
-                                                              'OpenSauceSansBold',
-                                                          color: mBlackOne)),
-                                                  onTap: () {
-                                                    // GoRouter.of(context).go(
-                                                    //   '/Dashboard',
-                                                    //   queryParameters: {
-                                                    //     'isRegister': true,
-                                                    //   },
-                                                    // );
+                                                Container(
+                                                  height: 1,
+                                                  width: 8.w,
+                                                  color: mGreySeven,
+                                                )*/
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              height: 40,
+                                              width: 250,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                color: Colors.white,
+                                                border:
+                                                    Border.all(color: mGreyOne),
+                                              ),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/new_ic_linkedin.png',
+                                                      width: 20,
+                                                      height: 20,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Text(
+                                                        Languages.of(context)!
+                                                            .mLoginwithLinkedIn,
+                                                        style: const TextStyle(
+                                                            fontSize:
+                                                                mSizeThree,
+                                                            fontFamily:
+                                                                'OpenSauceSansBold',
+                                                            color: mBlueColor))
+                                                  ]),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                      child: Text(
+                                                          Languages.of(context)!
+                                                              .mnoaccount,
+                                                          textAlign:
+                                                              TextAlign.end,
+                                                          style: const TextStyle(
+                                                              fontSize:
+                                                                  mSizeTwo,
+                                                              fontFamily:
+                                                                  'OpenSauceSansRegular',
+                                                              color:
+                                                                  mGreyEigth))),
+                                                  const SizedBox(
+                                                    width: 5,
+                                                  ),
+                                                  Expanded(
+                                                      child: InkWell(
+                                                    child: Text(
+                                                        Languages.of(context)!
+                                                            .mCreateanAccount,
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: const TextStyle(
+                                                            fontSize: mSizeTwo,
+                                                            fontFamily:
+                                                                'OpenSauceSansBold',
+                                                            color: mBlackOne)),
+                                                    onTap: () {
+                                                      // GoRouter.of(context).go(
+                                                      //   '/Dashboard',
+                                                      //   queryParameters: {
+                                                      //     'isRegister': true,
+                                                      //   },
+                                                      // );
 
-                                                    GoRouter.of(context)
-                                                        .go('/Register');
-                                                  },
-                                                ),
-                                              ]),
-                                        ),
-                                      ])),
-                            ),
-                            Expanded(
-                              flex: 5,
-                              child: Image.asset('assets/new_ic_loginimg.png',
-                                  fit: BoxFit.fill),
-                            )
-                          ]),
-                    ))
+                                                      GoRouter.of(context)
+                                                          .go('/Register');
+                                                    },
+                                                  )),
+                                                ]),
+                                          ),
+                                        ])),
+                              )),
+                              Expanded(
+                                  child: Container(
+                                child: Image.asset(
+                                  'assets/new_ic_loginimg.png',
+                                  fit: BoxFit.fill,
+                                  width: 50.w,
+                                  height: 50.w,
+                                ),
+                              )),
+                            ],
+                          ),
+                        )))
+              ],
+            )
+
+            /*Container(
+              child: Stack(children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Image.asset('assets/new_appicon.png',
+                      width: 200, height: 60),
+                ),
               ]),
-            ),
+            )*/
+            ,
           ));
         },
       ),
     );
   }
 }
-//const Column(children: [
-//                             Align(
-//                               alignment: Alignment.center,
-//                               child: Image(
-//                                 image: AssetImage(
-//                                   "assets/loginbg.png",
-//                                 ),
-//                               ),
-//                             ),
-//                           ]

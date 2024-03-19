@@ -9,12 +9,11 @@ import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/startupdeals_repository.dart';
 import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_event.dart';
 import 'package:startinsights/Screen/StartupDeals/bloc/startupdeals_state.dart';
-import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 
 class StartupdealsBloc extends Bloc<StartupdealsEvent, StartupdealsStatus> {
   final BuildContext mContext;
-  List<Datum> mStartupDealsList = [];
+  List<DealList> mStartupDealsList = [];
 
   StartupdealsBloc({
     required this.mContext,
@@ -26,15 +25,15 @@ class StartupdealsBloc extends Bloc<StartupdealsEvent, StartupdealsStatus> {
     //final userId = await sl<StorageService>().getString(StorageServiceConstant.MUSEREMAIL);
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final userId = (prefs.getString(StorageServiceConstant.MUSEREMAIL) ?? '');
+    //final userId = (prefs.getString(StorageServiceConstant.MUSEREMAIL) ?? '');
 
     if (await checkNetworkStatus()) {
       Loading(mLoaderGif).start(mContext);
-      ApiResults apiResults =
-          await StartupDealsRepository().getStartupDealsData(userId);
+      ApiResults apiResults = await StartupDealsRepository()
+          .getStartupDealsData("jagadeesan.a1104@gmail.com");
       if (apiResults is ApiSuccess) {
         mStartupDealsList =
-            StartupDealsResponse.fromJson(apiResults.data).message!.data!;
+            StartupDealsResponse.fromJson(apiResults.data).message!.dealList!;
 
         emit(GetStartupdealsInfoSuccessState(mStartupDealsList));
 

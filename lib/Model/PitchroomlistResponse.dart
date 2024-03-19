@@ -59,6 +59,9 @@ class PitchRoomDetail {
   String? roomName;
   String? companyName;
   String? aboutStartup;
+  String? notes;
+  List<dynamic>? documents;
+  List<dynamic>? sharedUsers;
 
   PitchRoomDetail({
     this.id,
@@ -66,6 +69,9 @@ class PitchRoomDetail {
     this.roomName,
     this.companyName,
     this.aboutStartup,
+    this.notes,
+    this.documents,
+    this.sharedUsers,
   });
 
   factory PitchRoomDetail.fromJson(Map<String, dynamic> json) =>
@@ -75,6 +81,13 @@ class PitchRoomDetail {
         roomName: json["room_name"],
         companyName: json["company_name"],
         aboutStartup: json["about_startup"],
+        notes: json["notes"],
+        documents: json["documents"] == null
+            ? []
+            : List<dynamic>.from(json["documents"]!.map((x) => x)),
+        sharedUsers: json["shared_users"] == null
+            ? []
+            : List<dynamic>.from(json["shared_users"]!.map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -83,5 +96,12 @@ class PitchRoomDetail {
         "room_name": roomName,
         "company_name": companyName,
         "about_startup": aboutStartup,
+        "notes": notes,
+        "documents": documents == null
+            ? []
+            : List<dynamic>.from(documents!.map((x) => x)),
+        "shared_users": sharedUsers == null
+            ? []
+            : List<dynamic>.from(sharedUsers!.map((x) => x)),
       };
 }

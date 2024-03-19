@@ -383,4 +383,13 @@ class LanguageEn extends Languages {
   String get mCreateaPitchRoom => "Create a Pitch Room";
   String get mCreateaRoom => "Create a Room";
   String get mcoverimage => "Upload your Cover Image";
+  String get mEnterAboutStartup => "Enter About Start-up";
+  String get mEnterNotes => "Enter Notes";
+  String get mEnterCreateaRoom => "Enter Create a Room";
+  String get mUploadFiles => "Upload Your files";
+  String get mView => "View";
+  String get mAddMore => "Add More";
+  String get mCoursesOverview => "Courses Overview";
+  String get mCoursesSummary => "Courses Summary";
+  String get mAlreadyUsed => "Already Used";
 }

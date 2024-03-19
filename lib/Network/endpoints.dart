@@ -48,13 +48,13 @@ const String lmscertificateAPI =
     '$baseUrl/method/startinsights.website_api.lms_certificate.lms_certificate';
 
 const String getstartupdealAPI =
-    '$baseUrl/method/startinsights.website_api.startup_deals.get_startup_deal';
+    '$baseUrl/method/startinsights.website_api.startup_deals.get_deal_list';
 
 const String getdealsredeemcodeAPI =
     '$baseUrl/method/startinsights.website_api.startup_deals.redeem_code';
 
 const String getpitchroomlistAPI =
-    '$baseUrl/method/startinsights.website_api.pitch_room.pitch_room_list';
+    '$baseUrl/method/startinsights.website_api.pitch_room.get_room_details';
 
 const String getuserswithroleAPI =
     '$baseUrl/method/startinsights.website_api.pitch_room.get_users_with_role';
@@ -117,3 +117,6 @@ const String makeservicepaymentAPI =
 
 const String servicedetailsAPI =
     '$baseUrl/method/startinsights.website_api.services.get_my_service_details';
+
+const String updateRoomAPI =
+    '$baseUrl/method/startinsights.website_api.pitch_room.pitch_room_doc_upload';
