@@ -60,7 +60,7 @@ class PitchRoomDetail {
   String? companyName;
   String? aboutStartup;
   String? notes;
-  List<dynamic>? documents;
+  List<Document>? documents;
   List<dynamic>? sharedUsers;
 
   PitchRoomDetail({
@@ -84,7 +84,8 @@ class PitchRoomDetail {
         notes: json["notes"],
         documents: json["documents"] == null
             ? []
-            : List<dynamic>.from(json["documents"]!.map((x) => x)),
+            : List<Document>.from(
+                json["documents"]!.map((x) => Document.fromJson(x))),
         sharedUsers: json["shared_users"] == null
             ? []
             : List<dynamic>.from(json["shared_users"]!.map((x) => x)),
@@ -99,9 +100,46 @@ class PitchRoomDetail {
         "notes": notes,
         "documents": documents == null
             ? []
-            : List<dynamic>.from(documents!.map((x) => x)),
+            : List<dynamic>.from(documents!.map((x) => x.toJson())),
         "shared_users": sharedUsers == null
             ? []
             : List<dynamic>.from(sharedUsers!.map((x) => x)),
       };
+}
+
+enum CompanyName { ABC, EMPTY }
+
+final companyNameValues =
+    EnumValues({"ABC": CompanyName.ABC, "": CompanyName.EMPTY});
+
+class Document {
+  String? documentType;
+  String? attach;
+
+  Document({
+    this.documentType,
+    this.attach,
+  });
+
+  factory Document.fromJson(Map<String, dynamic> json) => Document(
+        documentType: json["document_type"],
+        attach: json["attach"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "document_type": documentType,
+        "attach": attach,
+      };
+}
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
 }

@@ -392,4 +392,19 @@ class LanguageEn extends Languages {
   String get mCoursesOverview => "Courses Overview";
   String get mCoursesSummary => "Courses Summary";
   String get mAlreadyUsed => "Already Used";
+  String get mShareSettings => "Share Settings";
+  String get mShareRoomMsg => "Share Room Link with Investors";
+  String get mSelectInvestors => "Select Investors";
+  String get maboutproject => "Write about your Project ";
+  String get maboutprojectoptional => "Write about your Project (Optional)";
+  String get mcreateroomlink => "Create Pitch Room Link";
+  String get mCopyLink => "Copy Link";
+  String get mSendInvestors => "Send Investors";
+  String get mselectInvestors => "Please select Investors";
+
+  String get mmyLearnlink => "Dashboard >  Learn > ";
+  String get mOnlineEvents => "Online Events";
+  String get mSpeaker => "Speaker: ";
+  String get mLive => "Live";
+  String get mRecordedPastEvents => "Recorded Past Events";
 }

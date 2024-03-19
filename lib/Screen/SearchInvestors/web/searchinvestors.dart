@@ -1662,6 +1662,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                     height: 10,
                                                   ),
                                                   Container(
+
                                                     padding: const EdgeInsets
                                                         .fromLTRB(
                                                         30, 10, 10, 10),

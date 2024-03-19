@@ -13,11 +13,13 @@ class NewPitchRoomItem extends StatelessWidget {
   final BuildContext context;
   int mIndex;
   final VoidCallback onPressed;
+  final VoidCallback onShareLink;
   NewPitchRoomItem({
     required this.mPitchRoomDetail,
     required this.mPitchroomBloc,
     required this.context,
     required this.onPressed,
+    required this.onShareLink,
     required this.mIndex,
     super.key,
   });
@@ -154,41 +156,47 @@ class NewPitchRoomItem extends StatelessWidget {
                               ),
                             ],
                           )),
-                      Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            height: 35,
-                            width: 150,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: ((mPitchRoomDetail.documents!.isNotEmpty))
-                                  ? mgradientThree
-                                  : mgradientFive,
-                            ),
-                            child: Center(
-                                child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/new_ic_sharelink.svg',
-                                  width: 20,
-                                  height: 20,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  Languages.of(context)!.mShareLink,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                      fontFamily: 'OpenSauceSansMedium',
-                                      fontSize: mSizeThree,
-                                      color: Colors.white),
-                                )
-                              ],
+                      InkWell(
+                        onTap: ((mPitchRoomDetail.documents!.isNotEmpty))
+                            ? onShareLink
+                            : () {},
+                        child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              height: 35,
+                              width: 150,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color:
+                                    ((mPitchRoomDetail.documents!.isNotEmpty))
+                                        ? mgradientThree
+                                        : mgradientFive,
+                              ),
+                              child: Center(
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/new_ic_sharelink.svg',
+                                    width: 20,
+                                    height: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    Languages.of(context)!.mShareLink,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                        fontFamily: 'OpenSauceSansMedium',
+                                        fontSize: mSizeThree,
+                                        color: Colors.white),
+                                  )
+                                ],
+                              )),
                             )),
-                          )),
+                      ),
                     ]),
               ),
       ],

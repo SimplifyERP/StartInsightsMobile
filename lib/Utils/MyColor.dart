@@ -99,6 +99,7 @@ const Color mS1GreenSeven = Color(0xff00CCA7);
 const Color mS1GreenEigth = Color(0xff00997D);
 const Color mS1GreenNine = Color(0xff006654);
 const Color mS1GreenTen = Color(0xff00332A);
+const Color mS1Green = Color(0xff3EB14A);
 
 const Color mBlueOne = Color(0xff276CEC);
 const Color mBlueTwo = Color(0xffD4E2FB);

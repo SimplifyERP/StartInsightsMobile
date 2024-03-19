@@ -85,22 +85,24 @@ class DocView extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Align(
-              alignment: Alignment.center,
-              child: InkWell(
-                  onTap: mViewFile,
-                  child: Container(
-                      width: 170,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: mGreyTwo,
-                        border: Border.all(color: mGreyTwo, width: 1),
-                      ),
-                      child: Center(
-                        child: Text(Languages.of(context)!.mView),
-                      ))),
-            ),
+            Visibility(
+                visible: ((mUploadFiles.attach ?? "").isEmpty) ? false : true,
+                child: Align(
+                  alignment: Alignment.center,
+                  child: InkWell(
+                      onTap: mViewFile,
+                      child: Container(
+                          width: 170,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: mGreyTwo,
+                            border: Border.all(color: mGreyTwo, width: 1),
+                          ),
+                          child: Center(
+                            child: Text(Languages.of(context)!.mView),
+                          ))),
+                )),
           ]),
     );
   }

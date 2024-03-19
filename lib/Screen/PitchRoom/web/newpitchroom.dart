@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:html' as html;
 
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' show Client;
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CommonResponse.dart';
+import 'package:startinsights/Model/GetuserswithroleResponse.dart';
 import 'package:startinsights/Model/PitchroomlistResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/pitchroom_repository.dart';
@@ -29,7 +31,6 @@ import 'package:startinsights/Widgets/Appbarnew.dart';
 import 'package:startinsights/Widgets/auth_form_field.dart';
 import 'package:startinsights/Widgets/button.dart';
 import 'package:startinsights/Widgets/deletebutton.dart';
-import 'package:startinsights/Widgets/primary_button.dart';
 import 'package:startinsights/Widgets/sidemenunew.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -71,9 +72,11 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
       mExecutivesummaryFileName = "";
   String mSelectPeople = "";
   List<UploadFiles> mUploadFiles = [];
+  final TextEditingController mprojectController = TextEditingController();
 
   final PitchroomRepository _apiService1 = PitchroomRepository();
-  List<String> mUserList = [];
+  List<UserRole> mUserList = [];
+  List<String> mSelectedShareUser = [];
   int _selected = -1;
 
   DateTime _focusedDay = DateTime.now();
@@ -91,6 +94,8 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
   String mCaptureUserImage = "";
 
   bool mReload = false;
+
+  final MultiSelectController<UserRole> _controller = MultiSelectController();
 
   @override
   void initState() {
@@ -585,6 +590,44 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                                             mPitchroomList[index]);
                                                                       }
                                                                     },
+                                                                    onShareLink:
+                                                                        () {
+                                                                      if (mUserList
+                                                                          .isEmpty) {
+                                                                        Loading(mLoaderGif)
+                                                                            .start(context);
+
+                                                                        _apiService1
+                                                                            .getuserswithroleData("")
+                                                                            .then((value) async {
+                                                                          print(
+                                                                              value);
+
+                                                                          if (value
+                                                                              is ApiSuccess) {
+                                                                            Loading.stop();
+                                                                            mUserList =
+                                                                                GetuserswithroleResponse.fromJson(value.data).message!.userRole!;
+
+                                                                            OnLoadDialogUser(
+                                                                                mUserList,
+                                                                                context,
+                                                                                setState,
+                                                                                mPitchRoom.id ?? "");
+                                                                          } else if (value
+                                                                              is ApiFailure) {
+                                                                            Loading.stop();
+                                                                          }
+                                                                        });
+                                                                      } else {
+                                                                        OnLoadDialogUser(
+                                                                            mUserList,
+                                                                            context,
+                                                                            setState,
+                                                                            mPitchRoom.id ??
+                                                                                "");
+                                                                      }
+                                                                    },
                                                                   ),
                                                                 );
                                                               },
@@ -608,7 +651,93 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                       child: SingleChildScrollView(
                                         child: Container(
                                             child: Column(
-                                          children: [],
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                color: Colors.white,
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    color: Colors.white,
+                                                    blurRadius: 1.0,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(
+                                                          30, 10, 10, 10),
+                                                      child: RichText(
+                                                        text: TextSpan(
+                                                          children: <TextSpan>[
+                                                            TextSpan(
+                                                                text: Languages.of(
+                                                                        context)!
+                                                                    .mmyservicelink,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'OpenSauceSansMedium',
+                                                                    fontSize:
+                                                                        mSizeThree,
+                                                                    color:
+                                                                        mGreyTen)),
+                                                            TextSpan(
+                                                                text: Languages.of(
+                                                                        context)!
+                                                                    .mMyServices,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'OpenSauceSansBold',
+                                                                    fontSize:
+                                                                        mSizeThree,
+                                                                    color:
+                                                                        mGreyTen)),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 15,
+                                                    ),
+                                                    Container(
+                                                      color: mGreyThree,
+                                                      height: 1,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(
+                                                          30, 10, 50, 10),
+                                                      child:
+                                                          SingleChildScrollView(
+                                                              child: Text("")),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                  ]),
+                                            ),
+                                          ],
                                         )), //
                                       ),
                                     )),
@@ -763,6 +892,17 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
     PitchroomController.text = mPitchroomList.roomName ?? "";
     mNotesController.text = mPitchroomList.notes ?? "";
     mGetCoverImage = mPitchroomList.coverImage ?? "";
+
+    for (int i = 0; i < mPitchroomList.documents!.length; i++) {
+      UploadFiles objUploadFiles = UploadFiles();
+
+      objUploadFiles.attach = mPitchroomList.documents![i].attach!;
+      objUploadFiles.documenttype = mPitchroomList.documents![i].documentType!;
+      objUploadFiles.name = mPitchroomList.documents![i].attach!;
+
+      mUploadFiles.add(objUploadFiles);
+    }
+
     showDialog(
       context: context,
       builder: (context2) {
@@ -1150,17 +1290,12 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                     );
                                                   },
                                                   mViewFile: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PDFView(
-                                                                pdfData:
-                                                                    _paths![0]
-                                                                        .bytes!),
-                                                      ),
-                                                    );
                                                     //OpenFilex.open("");
+
+                                                    html.window.open(
+                                                        mLessonsList.attach ??
+                                                            "",
+                                                        'new tab');
                                                   },
                                                 );
                                               }),
@@ -1366,7 +1501,6 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
     showDialog(
       context: context,
       builder: (context2) {
-        String contentText = "Content of Dialog";
         return StatefulBuilder(
           builder: (context1, setState) {
             return AlertDialog(
@@ -1718,8 +1852,8 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
     );
   }
 
-  void OnLoadDialogUser(List<String> mUserList, BuildContext mGetcontext,
-      StateSetter getsetState) {
+  void OnLoadDialogUser(List<UserRole> mUserList, BuildContext mGetcontext,
+      StateSetter getsetState, String mRoomid) {
     showDialog(
       context: context,
       builder: (context3) {
@@ -1727,116 +1861,317 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
         return StatefulBuilder(
           builder: (context4, setState) {
             return AlertDialog(
-              contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
               //  title: Center(child: Text("Information")),
               shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
 
-              content: SizedBox(
-                width: MediaQuery.of(context4).size.width / 3,
+              content: Container(
+                width: 600,
+                height: 400,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: mUserList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return RadioListTile(
-                                title: Text(mUserList[index],
-                                    style: const TextStyle(
-                                        fontFamily: 'ManropeSemiBold',
-                                        fontSize: 16,
-                                        color: mBlackColor)),
-                                value: index,
-                                groupValue: _selected,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selected = index;
-                                  });
-                                });
-                          }),
-                      SizedBox(
-                        height: 30,
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                                flex: 7,
+                                child: Text(
+                                  Languages.of(context)!.mShareSettings,
+                                  style: const TextStyle(
+                                      fontFamily: 'OpenSauceSansSemiBold',
+                                      fontSize: mSizeFour,
+                                      color: mGreyTen),
+                                )),
+                            Expanded(
+                                flex: 3,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: SvgPicture.asset(
+                                          'assets/new_ic_close.svg',
+                                          width: 18,
+                                          height: 18,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ))
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        color: mGreyThree,
+                        height: 1,
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: Text(
+                          Languages.of(context)!.mShareRoomMsg,
+                          style: const TextStyle(
+                              fontFamily: 'OpenSauceSansMedium',
+                              fontSize: mSizeThree,
+                              color: mBlackTwo),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                              flex: 7,
+                              child: Container(
+                                height: 45,
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: MultiSelectDropDown(
+                                  //controller: _controller,
+                                  fieldBackgroundColor: mGreyTwo,
+                                  focusedBorderColor: mGreyTwo,
+                                  borderColor: mGreyTwo,
+                                  onOptionSelected: (options) {
+                                    print(options.length);
+                                    mSelectedShareUser.clear();
+                                    for (int i = 0; i < options.length; i++) {
+                                      mSelectedShareUser
+                                          .add(options[i].value.toString());
+                                    }
+                                  },
+                                  clearIcon: const Icon(
+                                    Icons.close,
+                                    size: 15,
+                                    color: mBlackTwo,
+                                  ),
+                                  options: modelDBItems(mUserList),
+
+                                  maxItems: mUserList.length,
+                                  singleSelectItemStyle: const TextStyle(
+                                      fontFamily: 'OpenSauceSansMedium',
+                                      fontSize: mSizeTwo,
+                                      color: mBlackTwo),
+                                  hint: Languages.of(context)!.mSelectInvestors,
+                                  hintStyle: const TextStyle(
+                                      fontFamily: 'OpenSauceSansMedium',
+                                      fontSize: mSizeTwo,
+                                      color: mBlackTwo),
+                                  chipConfig: const ChipConfig(
+                                      wrapType: WrapType.wrap,
+                                      backgroundColor: Colors.white,
+                                      labelStyle: TextStyle(
+                                          fontFamily: 'OpenSauceSansMedium',
+                                          fontSize: mSizeTwo,
+                                          color: mBlackTwo),
+                                      radius: 8,
+                                      deleteIcon: Icon(
+                                        Icons.close,
+                                        size: 15,
+                                        color: mBlackTwo,
+                                      )),
+                                  optionTextStyle: const TextStyle(
+                                      fontFamily: 'OpenSauceSansMedium',
+                                      fontSize: mSizeTwo,
+                                      color: mBlackTwo),
+                                  selectedOptionIcon: const Icon(
+                                    Icons.close,
+                                    size: 15,
+                                    color: mBlackTwo,
+                                  ),
+                                  searchEnabled: true,
+                                  dropdownBorderRadius: 10,
+                                  dropdownBackgroundColor: Colors.white,
+                                  selectedOptionBackgroundColor: Colors.white,
+                                  selectedOptionTextColor: mBlackTwo,
+                                  dropdownMargin: 2,
+                                  onOptionRemoved: (index, option) {},
+                                ),
+                              )),
+                          Expanded(
+                              flex: 3,
+                              child: Button(
+                                  mButtonname:
+                                      Languages.of(context)!.mSendInvestors,
+                                  onpressed: () {
+                                    if (mSelectedShareUser.isEmpty) {
+                                      ErrorToast(
+                                          context: context,
+                                          text: Languages.of(context)!
+                                              .mselectInvestors);
+                                    } else {
+                                      Loading(mLoaderGif).start(context);
+
+                                      _apiService1
+                                          .mSharedUser(
+                                        mRoomid,
+                                        mprojectController.text,
+                                        mSelectedShareUser,
+                                      )
+                                          .then((value) async {
+                                        print(value);
+
+                                        if (value is ApiSuccess) {
+                                          if (CommonResponse.fromJson(
+                                                      value.data)!
+                                                  .message!
+                                                  .status ??
+                                              false) {
+                                            Loading.stop();
+
+                                            SucessToast(
+                                                context: context,
+                                                text: CommonResponse.fromJson(
+                                                            value.data)!
+                                                        .message!
+                                                        .message ??
+                                                    "");
+
+                                            Navigator.pop(context4, false);
+
+                                            setState(
+                                              () {
+                                                // GoRouter.of(context1)
+                                                //     .push('/Pitchroom');
+                                              },
+                                            );
+                                          } else {
+                                            Loading.stop();
+                                            ErrorToast(
+                                                context: context,
+                                                text: CommonResponse.fromJson(
+                                                            value.data)!
+                                                        .message!
+                                                        .message ??
+                                                    "");
+                                          }
+                                        } else if (value is ApiFailure) {
+                                          Loading.stop();
+                                        }
+                                      });
+                                    }
+
+                                    //print(mSelectedShareUser);
+                                  },
+                                  mSelectcolor: mBtnColor,
+                                  mTextColor: mWhiteColor,
+                                  mFontSize: 16,
+                                  mWidth: 150,
+                                  mHeigth: 40))
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        child: AuthFormField(
+                            // validator: (value) =>
+                            //     emailController.text.isEmpty
+                            //         ? ""
+                            //         : null,
+                            controller: mprojectController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.text,
+                            hintText:
+                                Languages.of(context)!.maboutprojectoptional,
+                            radius: 30,
+                            maxLines: 7,
+                            labelText: Languages.of(context)!.maboutproject,
+                            mBorderView: false,
+                            mImageView: true,
+                            mIncreshHeight: true,
+                            viewbgColor: Colors.white),
+                      ),
+                      const SizedBox(
+                        height: 15,
                       ),
                       Container(
                         height: 60,
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            color: mGreyTwo),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment:
-                              CrossAxisAlignment.center, // set your alignment
-                          children: <Widget>[
-                            Container(
-                                height: 40,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: mBtnColor,
-                                    border: Border.all(
-                                      color: mBtnColor,
-                                      width: 1,
-                                    )),
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: InkWell(
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: PrimaryButton(
-                                            mButtonname:
-                                                Languages.of(context)!.mCancel,
-                                            onpressed: () {
-                                              Navigator.pop(context4);
-                                            },
-                                            mSelectcolor: mBtnColor,
-                                            mTextColor: mWhiteColor,
-                                            mFontSize: 16,
-                                            mHeigth: 40),
-                                      ),
-                                    ))),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Container(
-                                height: 40,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: mBtnColor,
-                                    border: Border.all(
-                                      color: mBtnColor,
-                                      width: 1,
-                                    )),
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: InkWell(
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: PrimaryButton(
-                                            mButtonname:
-                                                Languages.of(context)!.mok,
-                                            onpressed: () {
-                                              Navigator.pop(context4);
-                                              getsetState(
-                                                () {
-                                                  mSelectPeople =
-                                                      mUserList[_selected];
-                                                },
-                                              );
-                                            },
-                                            mSelectcolor: mBtnColor,
-                                            mTextColor: mWhiteColor,
-                                            mFontSize: 16,
-                                            mHeigth: 40),
-                                      ),
-                                    ))),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                          ],
-                        ),
-                      )
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  flex: 7,
+                                  child: Text(
+                                    Languages.of(context)!.mcreateroomlink,
+                                    style: const TextStyle(
+                                        fontFamily: 'OpenSauceSansRegular',
+                                        fontSize: mSizeThree,
+                                        color: mBlackTwo),
+                                  )),
+                              Expanded(
+                                flex: 2,
+                                child: InkWell(
+                                    onTap: () {},
+                                    child: Container(
+                                        width: 100,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.white,
+                                          border: Border.all(
+                                              color: mGreyFour, width: 1),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/new_ic_link.svg',
+                                              width: 20,
+                                              height: 20,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              Languages.of(context)!.mCopyLink,
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  fontFamily:
+                                                      'OpenSauceSansRegular',
+                                                  fontSize: mSizeTwo,
+                                                  color: mBlackTwo),
+                                            )
+                                          ],
+                                        ))),
+                              )
+                            ]),
+                      ),
                     ]),
               ),
             );
@@ -1871,6 +2206,20 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
   //     }
   //   });
   // }
+
+  modelDBItems(List<UserRole>? mGetDBlist) {
+    final list = (mGetDBlist as List<UserRole>).map((e) {
+      final fullName = e.fullName as String;
+      final emailId = e.emailId as String;
+
+      return ValueItem(
+        label: fullName,
+        value: emailId,
+      );
+    }).toList();
+
+    return list;
+  }
 }
 
 class UploadFiles {

@@ -58,7 +58,7 @@ class _PitchroomState extends State<PitchroomWeb> {
   String mSelectPeople = "";
 
   final PitchroomRepository _apiService1 = PitchroomRepository();
-  List<String> mUserList = [];
+  List<UserRole> mUserList = [];
   int _selected = -1;
 
   DateTime _focusedDay = DateTime.now();
@@ -1473,8 +1473,9 @@ class _PitchroomState extends State<PitchroomWeb> {
                                                             mUserList =
                                                                 GetuserswithroleResponse
                                                                         .fromJson(
-                                                                            value.data)!
-                                                                    .message!;
+                                                                            value.data)
+                                                                    .message!
+                                                                    .userRole!;
 
                                                             OnLoadDialogUser(
                                                                 mUserList,
@@ -1896,13 +1897,14 @@ class _PitchroomState extends State<PitchroomWeb> {
     );
   }
 
-  void OnLoadDialogUser(List<String> mUserList, BuildContext mGetcontext,
+  void OnLoadDialogUser(List<UserRole> mUserList, BuildContext mGetcontext,
       StateSetter getsetState) {
     showDialog(
       context: context,
       builder: (context3) {
         String contentText = "Content of Dialog";
-        return StatefulBuilder(
+        return Text("sasfafa");
+        /*StatefulBuilder(
           builder: (context4, setState) {
             return AlertDialog(
               contentPadding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -2019,7 +2021,7 @@ class _PitchroomState extends State<PitchroomWeb> {
               ),
             );
           },
-        );
+        );*/
       },
     );
   }

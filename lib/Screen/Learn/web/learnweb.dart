@@ -9,6 +9,7 @@ import 'package:startinsights/Model/SearchinvestorslistResponse.dart';
 import 'package:startinsights/Repository/SearchinvestorsRepo.dart';
 import 'package:startinsights/Screen/Learn/bloc/learn_bloc.dart';
 import 'package:startinsights/Screen/Learn/bloc/learn_state.dart';
+import 'package:startinsights/Screen/Learn/web/learnItem.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/screens.dart';
@@ -42,7 +43,7 @@ class _LearnWebState extends State<LearnWeb> {
   ValueNotifier<bool> setnotifier = ValueNotifier(true);
 
   // 1-> LMS list , 3->LMS list Details , 2 -> Event View
-  int mSelectView = 3;
+  int mSelectView = 1;
   int mGetCount = 0;
   int numPages = 1;
   int currentPage = 1;
@@ -128,16 +129,13 @@ class _LearnWebState extends State<LearnWeb> {
       });
     }
 
-    var _crossAxisSpacing = 8;
+    var _crossAxisSpacing = 10;
     var _screenWidth = MediaQuery.of(context).size.width;
     var _crossAxisCount = 2;
     var _width = (_screenWidth - ((_crossAxisCount - 1) * _crossAxisSpacing)) /
         _crossAxisCount;
-    var cellHeight = 900;
+    var cellHeight = 850;
     var _aspectRatio = _width / cellHeight;
-
-    var DetailscellHeight = 700;
-    var DetailsaspectRatio = DetailscellHeight / cellHeight;
 
     return WillPopScope(
       onWillPop: () {
@@ -697,233 +695,34 @@ class _LearnWebState extends State<LearnWeb> {
                                                   const SizedBox(
                                                     height: 10,
                                                   ),
-                                                  Column(
-                                                    children: [
-                                                      Container(
-                                                        height: 320,
-                                                        width: 300,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(10),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          color: mGreyTwo,
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                              color: mGreyTwo,
-                                                              blurRadius: 0,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerLeft,
-                                                                  child:
-                                                                      ClipRRect(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            8.0),
-                                                                    child: SvgPicture
-                                                                        .asset(
-                                                                      'assets/new_ic_watermarkbg.svg',
-                                                                      width:
-                                                                          280,
-                                                                      height:
-                                                                          140,
-                                                                    ),
-                                                                  )),
-                                                              Center(
-                                                                  child: Text(
-                                                                      "1.1 Understand the investor's mind in startups",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: const TextStyle(
-                                                                          fontFamily:
-                                                                              'OpenSauceSansSemiBold',
-                                                                          fontSize:
-                                                                              mSizeThree,
-                                                                          color:
-                                                                              mGreyTen))),
-                                                              SizedBox(
-                                                                height: 20,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Expanded(
-                                                                      flex: 3,
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          SvgPicture
-                                                                              .asset(
-                                                                            'assets/new_ic_chapters.svg',
-                                                                            width:
-                                                                                15,
-                                                                            height:
-                                                                                15,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                10,
-                                                                          ),
-                                                                          Text(
-                                                                              Languages.of(context)!.mChapters,
-                                                                              textAlign: TextAlign.center,
-                                                                              style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven))
-                                                                        ],
-                                                                      )),
-                                                                  SizedBox(
-                                                                    width: 10,
-                                                                  ),
-                                                                  Expanded(
-                                                                      flex: 3,
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          SvgPicture
-                                                                              .asset(
-                                                                            'assets/new_ic_video.svg',
-                                                                            width:
-                                                                                15,
-                                                                            height:
-                                                                                15,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                10,
-                                                                          ),
-                                                                          Text(
-                                                                              Languages.of(context)!.mVideos,
-                                                                              textAlign: TextAlign.center,
-                                                                              style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven))
-                                                                        ],
-                                                                      )),
-                                                                  SizedBox(
-                                                                    width: 10,
-                                                                  ),
-                                                                  Expanded(
-                                                                      flex: 3,
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.center,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
-                                                                        children: [
-                                                                          SvgPicture
-                                                                              .asset(
-                                                                            'assets/new_ic_quizze.svg',
-                                                                            width:
-                                                                                15,
-                                                                            height:
-                                                                                15,
-                                                                          ),
-                                                                          SizedBox(
-                                                                            width:
-                                                                                10,
-                                                                          ),
-                                                                          Text(
-                                                                              Languages.of(context)!.mQuizzes,
-                                                                              textAlign: TextAlign.center,
-                                                                              style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeTwo, color: mGreySeven))
-                                                                        ],
-                                                                      ))
-                                                                ],
-                                                              ),
-                                                              SizedBox(
-                                                                height: 20,
-                                                              ),
-                                                              Container(
-                                                                color:
-                                                                    mGreyThree,
-                                                                height: 1,
-                                                                width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                              ),
-                                                              SizedBox(
-                                                                height: 20,
-                                                              ),
-                                                              Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Expanded(
-                                                                    flex: 8,
-                                                                    child: PrimaryButton(
-                                                                        mButtonname:
-                                                                            Languages.of(context)!
-                                                                                .mViewCourse,
-                                                                        onpressed:
-                                                                            () async {},
-                                                                        mSelectcolor:
-                                                                            mBlueOne,
-                                                                        mTextColor:
-                                                                            mWhiteColor,
-                                                                        mFontSize:
-                                                                            mSizeTwo,
-                                                                        mHeigth:
-                                                                            40),
-                                                                  ),
-                                                                  Expanded(
-                                                                    flex: 2,
-                                                                    child: Align(
-                                                                        alignment: Alignment.center,
-                                                                        child: InkWell(
-                                                                            onTap: () {},
-                                                                            child: SvgPicture.asset(
-                                                                              'assets/new_ic_heart.svg',
-                                                                              width: 25,
-                                                                              height: 25,
-                                                                            )
-                                                                            // Image.asset('assets/new_ic_heart.png',
-                                                                            //         width: 25,
-                                                                            //         height: 25,
-                                                                            //         fit: BoxFit.fill)
-                                                                            //     : SvgPicture.asset(
-                                                                            //     'assets/new_ic_emptyheart.svg',
-                                                                            //     width: 25,
-                                                                            //     height: 25,
-                                                                            //     fit: BoxFit.fill),
-                                                                            )),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ]),
-                                                      )
-                                                    ],
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        left: 10, right: 10),
+                                                    child:
+                                                        SingleChildScrollView(
+                                                            child:
+                                                                GridView.count(
+                                                      crossAxisCount: 4,
+                                                      crossAxisSpacing: 0,
+                                                      mainAxisSpacing: 0,
+                                                      childAspectRatio:
+                                                          _aspectRatio,
+                                                      shrinkWrap: true,
+                                                      children: List.generate(
+                                                        10,
+                                                        // mBookAnExpertList.length,
+                                                        (index) {
+                                                          // final mgetCoursesList = mBookAnExpertList[index];
+                                                          return LearnItem(
+                                                            onPressed: () {
+                                                              setState(() {
+                                                                mSelectView = 3;
+                                                              });
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
+                                                    )),
                                                   ),
                                                   const SizedBox(
                                                     height: 10,
@@ -940,7 +739,510 @@ class _LearnWebState extends State<LearnWeb> {
                                     child: SingleChildScrollView(
                                       child: Container(
                                           child: Column(
-                                        children: [],
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: Colors.white,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.white,
+                                                  blurRadius: 1.0,
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(
+                                                        30, 10, 10, 10),
+                                                    child: RichText(
+                                                      text: TextSpan(
+                                                        children: <TextSpan>[
+                                                          TextSpan(
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mmyLearnlink,
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      'OpenSauceSansMedium',
+                                                                  fontSize:
+                                                                      mSizeThree,
+                                                                  color:
+                                                                      mGreyTen)),
+                                                          TextSpan(
+                                                              text: Languages.of(
+                                                                      context)!
+                                                                  .mEvents,
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      'OpenSauceSansBold',
+                                                                  fontSize:
+                                                                      mSizeThree,
+                                                                  color:
+                                                                      mGreyTen)),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                  Container(
+                                                    color: mGreyThree,
+                                                    height: 1,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .fromLTRB(
+                                                        30, 10, 50, 10),
+                                                    child: SingleChildScrollView(
+                                                        child: Text(
+                                                            Languages.of(
+                                                                    context)!
+                                                                .mOnlineEvents,
+                                                            style: const TextStyle(
+                                                                fontFamily:
+                                                                    'OpenSauceSansBold',
+                                                                fontSize:
+                                                                    mSizeThree,
+                                                                color:
+                                                                    mGreyTen))),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    height: 400,
+                                                    child: ListView.builder(
+                                                        shrinkWrap: true,
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemCount: 10,
+                                                        itemBuilder:
+                                                            (_, index) {
+                                                          // final mDashboardList =
+                                                          // mDashboarddata[index];
+                                                          return InkWell(
+                                                            onTap: () {},
+                                                            child: Container(
+                                                              height: 400,
+                                                              width: 300,
+                                                              margin: EdgeInsets
+                                                                  .all(10),
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(10),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                                color: mGreyTwo,
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    blurRadius:
+                                                                        1.0,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Stack(
+                                                                      children: [
+                                                                        Align(
+                                                                            alignment:
+                                                                                Alignment.center,
+                                                                            child: ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(8.0),
+                                                                              child: SvgPicture.asset(
+                                                                                'assets/new_ic_watermarkbg.svg',
+                                                                                width: 350,
+                                                                                height: 140,
+                                                                              ),
+                                                                            )),
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.end,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            Align(
+                                                                                alignment: Alignment.topRight,
+                                                                                child: ClipRRect(
+                                                                                  borderRadius: BorderRadius.circular(8.0),
+                                                                                  child: Container(
+                                                                                    height: 25,
+                                                                                    width: 80,
+                                                                                    decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(15),
+                                                                                      color: mRedColorOne,
+                                                                                      boxShadow: const [
+                                                                                        BoxShadow(
+                                                                                          color: mRedColorOne,
+                                                                                          blurRadius: 1.0,
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                    child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                                                                      Container(
+                                                                                        height: 15,
+                                                                                        width: 15,
+                                                                                        //square box; equal height and width so that it won't look like oval
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.white,
+                                                                                          shape: BoxShape.circle,
+                                                                                        ),
+                                                                                      ),
+                                                                                      SizedBox(
+                                                                                        width: 5,
+                                                                                      ),
+                                                                                      Text(Languages.of(context)!.mLive, textAlign: TextAlign.center, style: const TextStyle(fontFamily: 'OpenSauceSansSemiBold', fontSize: mSizeThree, color: Colors.white))
+                                                                                    ]),
+                                                                                  ),
+                                                                                )),
+                                                                            SizedBox(
+                                                                              width: 20,
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                    ),
+                                                                    Center(
+                                                                        child: Text(
+                                                                            "1.1 Understand the investor's mind in ",
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansSemiBold',
+                                                                                fontSize: mSizeThree,
+                                                                                color: mGreyTen))),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        Text(
+                                                                            Languages.of(context)!
+                                                                                .mSpeaker,
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansSemiBold',
+                                                                                fontSize: mSizeThree,
+                                                                                color: mBlueOne)),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            "Prem Ananth & Rajesh Kumar",
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansRegular',
+                                                                                fontSize: mSizeThree,
+                                                                                color: mBlueOne))
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Container(
+                                                                      color:
+                                                                          mGreyThree,
+                                                                      height: 1,
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          10,
+                                                                    ),
+                                                                    Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        SvgPicture
+                                                                            .asset(
+                                                                          'assets/new_ic_calendar.svg',
+                                                                          width:
+                                                                              25,
+                                                                          height:
+                                                                              25,
+                                                                        ),
+                                                                        SizedBox(
+                                                                          width:
+                                                                              10,
+                                                                        ),
+                                                                        Text(
+                                                                            "31-Oct-2024 | 5:00PM",
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansRegular',
+                                                                                fontSize: mSizeTwo,
+                                                                                color: mGreySeven))
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                    ),
+                                                                    PrimaryButton(
+                                                                        mButtonname:
+                                                                            Languages.of(context)!
+                                                                                .mregister,
+                                                                        onpressed:
+                                                                            () async {},
+                                                                        mSelectcolor:
+                                                                            mS1Green,
+                                                                        mTextColor:
+                                                                            mWhiteColor,
+                                                                        mFontSize:
+                                                                            mSizeTwo,
+                                                                        mHeigth:
+                                                                            40),
+                                                                  ]),
+                                                            ),
+                                                          );
+                                                        }),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Material(
+                                                    color: Colors.white,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            const SizedBox(
+                                                              width: 20,
+                                                            ),
+                                                            InkWell(
+                                                              hoverColor:
+                                                                  Colors.white,
+                                                              onTap: () {
+                                                                setState(() {});
+                                                              },
+                                                              child: Container(
+                                                                width: 170,
+                                                                height: 40,
+                                                                child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .centerLeft,
+                                                                    child: Text(
+                                                                        Languages.of(context)!
+                                                                            .mRecordedPastEvents,
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .center,
+                                                                        style: TextStyle(
+                                                                            fontFamily:
+                                                                                'OpenSauceSansBold',
+                                                                            fontSize:
+                                                                                mSizeThree,
+                                                                            color:
+                                                                                mgradientThree))),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Row(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            const SizedBox(
+                                                              width: 20,
+                                                            ),
+                                                            Container(
+                                                              width: 170,
+                                                              height: 2,
+                                                              child: Container(
+                                                                color:
+                                                                    mgradientThree,
+                                                                width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                height: 1,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Material(
+                                                          color: Colors.white,
+                                                          child: Container(
+                                                            color: mGreyFive,
+                                                            width:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                            height: 1,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Container(
+                                                    height: 250,
+                                                    child: ListView.builder(
+                                                        shrinkWrap: true,
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemCount: 10,
+                                                        itemBuilder:
+                                                            (_, index) {
+                                                          // final mDashboardList =
+                                                          // mDashboarddata[index];
+                                                          return InkWell(
+                                                            onTap: () {},
+                                                            child: Container(
+                                                              height: 250,
+                                                              width: 300,
+                                                              margin: EdgeInsets
+                                                                  .all(10),
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(10),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            20),
+                                                                color: mGreyTwo,
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    blurRadius:
+                                                                        1.0,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Stack(
+                                                                      children: [
+                                                                        Align(
+                                                                            alignment:
+                                                                                Alignment.center,
+                                                                            child: ClipRRect(
+                                                                              borderRadius: BorderRadius.circular(8.0),
+                                                                              child: SvgPicture.asset(
+                                                                                'assets/new_ic_watermarkbg.svg',
+                                                                                width: 350,
+                                                                                height: 140,
+                                                                              ),
+                                                                            )),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                    ),
+                                                                    Center(
+                                                                        child: Text(
+                                                                            "1.1 Understand the investor's mind in ",
+                                                                            textAlign: TextAlign
+                                                                                .center,
+                                                                            style: const TextStyle(
+                                                                                fontFamily: 'OpenSauceSansSemiBold',
+                                                                                fontSize: mSizeThree,
+                                                                                color: mGreyTen))),
+                                                                    SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                    ),
+                                                                  ]),
+                                                            ),
+                                                          );
+                                                        }),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                ]),
+                                          ),
+                                        ],
                                       )), //
                                     ),
                                   )),

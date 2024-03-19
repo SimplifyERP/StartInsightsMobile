@@ -49,6 +49,15 @@ class PitchroomRepository {
     });
   }
 
+  Future<ApiResults> mSharedUser(
+      String roomid, String notes, List<String> json) async {
+    return await sl<MyDio>().postData(endPoint: shareduserAPI, data: {
+      'pitch_room_id': roomid,
+      'notes': notes,
+      'user_ids': jsonEncode(json),
+    });
+  }
+
   Future<ApiResults> CreatePitchroom(
     String userId,
     String roomname,

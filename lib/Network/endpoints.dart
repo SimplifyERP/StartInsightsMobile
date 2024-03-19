@@ -120,3 +120,6 @@ const String servicedetailsAPI =
 
 const String updateRoomAPI =
     '$baseUrl/method/startinsights.website_api.pitch_room.pitch_room_doc_upload';
+
+const String shareduserAPI =
+    '$baseUrl/method/startinsights.website_api.pitch_room.shared_user';

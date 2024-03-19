@@ -387,4 +387,18 @@ abstract class Languages {
   String get mCoursesOverview;
   String get mCoursesSummary;
   String get mAlreadyUsed;
+  String get mShareSettings;
+  String get mShareRoomMsg;
+  String get mSelectInvestors;
+  String get maboutproject;
+  String get maboutprojectoptional;
+  String get mcreateroomlink;
+  String get mCopyLink;
+  String get mSendInvestors;
+  String get mselectInvestors;
+  String get mmyLearnlink;
+  String get mOnlineEvents;
+  String get mSpeaker;
+  String get mLive;
+  String get mRecordedPastEvents;
 }
