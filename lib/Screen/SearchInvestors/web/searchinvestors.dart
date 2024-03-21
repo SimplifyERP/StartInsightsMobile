@@ -101,12 +101,21 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
 
   String mFilterValue = "";
   String mStatusChange = "";
+  String mAddStatusChange = "SHORTLIST";
 
   String mSelectId = "";
 
   List<String> mStages = [];
 
   final List<String> itemStages = [];
+
+  final TextEditingController mCompanyNameController = TextEditingController();
+  final TextEditingController mContactPersonController =
+      TextEditingController();
+  final TextEditingController mDescriptionController = TextEditingController();
+  final TextEditingController mWebsiteController = TextEditingController();
+  final TextEditingController mEmailController = TextEditingController();
+  final TextEditingController mMobileController = TextEditingController();
 
   @override
   void initState() {
@@ -129,6 +138,12 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   void dispose() {
     super.dispose();
     mSearchEditingController.dispose();
+    mCompanyNameController.dispose();
+    mContactPersonController.dispose();
+    mDescriptionController.dispose();
+    mWebsiteController.dispose();
+    mEmailController.dispose();
+    mMobileController.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -1022,40 +1037,115 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                     child: SingleChildScrollView(
                                       child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.stretch,
+                                              CrossAxisAlignment.center,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Container(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      30, 10, 10, 10),
-                                              child: RichText(
-                                                text: TextSpan(
-                                                  children: <TextSpan>[
-                                                    TextSpan(
-                                                        text: Languages.of(
-                                                                context)!
-                                                            .mFundraisinglink,
-                                                        style: const TextStyle(
-                                                            fontFamily:
-                                                                'OpenSauceSansMedium',
-                                                            fontSize:
-                                                                mSizeThree,
-                                                            color: mGreyTen)),
-                                                    TextSpan(
-                                                        text: Languages.of(
-                                                                context)!
-                                                            .mFundingCRM,
-                                                        style: const TextStyle(
-                                                            fontFamily:
-                                                                'OpenSauceSansBold',
-                                                            fontSize:
-                                                                mSizeThree,
-                                                            color: mGreyTen)),
-                                                  ],
-                                                ),
-                                              ),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                    flex: 7,
+                                                    child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.7,
+                                                      child: Align(
+                                                        alignment: Alignment
+                                                            .centerLeft,
+                                                        child: RichText(
+                                                          text: TextSpan(
+                                                            children: <TextSpan>[
+                                                              TextSpan(
+                                                                  text: Languages.of(
+                                                                          context)!
+                                                                      .mFundraisinglink,
+                                                                  style: const TextStyle(
+                                                                      fontFamily:
+                                                                          'OpenSauceSansMedium',
+                                                                      fontSize:
+                                                                          mSizeThree,
+                                                                      color:
+                                                                          mGreyTen)),
+                                                              TextSpan(
+                                                                  text: Languages.of(
+                                                                          context)!
+                                                                      .mFundingCRM,
+                                                                  style: const TextStyle(
+                                                                      fontFamily:
+                                                                          'OpenSauceSansBold',
+                                                                      fontSize:
+                                                                          mSizeThree,
+                                                                      color:
+                                                                          mGreyTen)),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        OnAddInvestor(
+                                                            StagesItems);
+                                                      },
+                                                      child: Container(
+                                                        child: Align(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Container(
+                                                            width: 200,
+                                                            height: 40,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          30),
+                                                              color: mGreyTwo,
+                                                              border: Border.all(
+                                                                  color:
+                                                                      mBlackColor,
+                                                                  width: 1),
+                                                            ),
+                                                            child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Icon(
+                                                                      Icons.add,
+                                                                      size: 20,
+                                                                      color:
+                                                                          mBlackColor),
+                                                                  SizedBox(
+                                                                    width: 10,
+                                                                  ),
+                                                                  Text(
+                                                                      Languages.of(
+                                                                              context)!
+                                                                          .mAddInvestors,
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          fontFamily:
+                                                                              'OpenSauceSansMedium',
+                                                                          fontSize:
+                                                                              mSizeThree,
+                                                                          color:
+                                                                              mBlackColor))
+                                                                ]),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ))
+                                              ],
                                             ),
                                             const SizedBox(
                                               height: 15,
@@ -1340,12 +1430,6 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                   mSortlistList[
                                                                       index],
                                                                   StagesItems);
-
-                                                              ErrorToast(
-                                                                  context:
-                                                                      context,
-                                                                  text: index
-                                                                      .toString());
                                                             },
                                                             child: FundingCRMList(
                                                                 mIndex: index,
@@ -1662,7 +1746,6 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                     height: 10,
                                                   ),
                                                   Container(
-
                                                     padding: const EdgeInsets
                                                         .fromLTRB(
                                                         30, 10, 10, 10),
@@ -2327,7 +2410,8 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                           context)
                                                                       .size
                                                                       .width,
-                                                                  padding: EdgeInsets.only(
+                                                                  padding: const EdgeInsets
+                                                                      .only(
                                                                       left: 20,
                                                                       top: 10,
                                                                       right: 20,
@@ -2462,12 +2546,14 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                                           crossAxisAlignment: CrossAxisAlignment.center,
                                                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                                                           children: [
-                                                                                            SvgPicture.asset(
-                                                                                              'assets/new_ic_linkedin.svg',
-                                                                                              width: 30,
-                                                                                              height: 30,
-                                                                                            ),
-                                                                                            SizedBox(
+                                                                                            (mViewSearchInvestorsList!.website!.isNotEmpty)
+                                                                                                ? SvgPicture.asset(
+                                                                                                    'assets/new_ic_linkedin.svg',
+                                                                                                    width: 30,
+                                                                                                    height: 30,
+                                                                                                  )
+                                                                                                : const Text(""),
+                                                                                            const SizedBox(
                                                                                               width: 10,
                                                                                             ),
                                                                                             SvgPicture.asset(
@@ -2475,14 +2561,16 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                                               width: 30,
                                                                                               height: 30,
                                                                                             ),
-                                                                                            SizedBox(
+                                                                                            const SizedBox(
                                                                                               width: 10,
                                                                                             ),
-                                                                                            SvgPicture.asset(
-                                                                                              'assets/new_ic_web.svg',
-                                                                                              width: 30,
-                                                                                              height: 30,
-                                                                                            )
+                                                                                            (mViewSearchInvestorsList!.website!.isNotEmpty)
+                                                                                                ? SvgPicture.asset(
+                                                                                                    'assets/new_ic_web.svg',
+                                                                                                    width: 30,
+                                                                                                    height: 30,
+                                                                                                  )
+                                                                                                : Text("")
                                                                                           ],
                                                                                         ))
                                                                                   ]),
@@ -2768,11 +2856,13 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                                               alignment: Alignment.center,
                                                                               child: InkWell(
                                                                                   onTap: () {},
-                                                                                  child: SvgPicture.asset(
-                                                                                    'assets/new_ic_details_heart.svg',
-                                                                                    width: 45,
-                                                                                    height: 45,
-                                                                                  )),
+                                                                                  child: (mViewSearchInvestorsList!.favouritesStatus!)
+                                                                                      ? SvgPicture.asset(
+                                                                                          'assets/new_ic_details_fillheart.svg',
+                                                                                          width: 45,
+                                                                                          height: 45,
+                                                                                        )
+                                                                                      : SvgPicture.asset('assets/new_ic_details_heart.svg', width: 45, height: 45, fit: BoxFit.fill)),
                                                                             ))
                                                                       ]),
                                                                 )
@@ -2815,6 +2905,695 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
             ),
           ],
         );
+      },
+    );
+  }
+
+  void OnAddInvestor(List<MenuItem> stagesItems) {
+    showGeneralDialog(
+      barrierLabel: "",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      // transitionDuration: Duration(milliseconds: 700),
+      context: context,
+      pageBuilder: (context, anim1, anim2) {
+        return StatefulBuilder(builder: (context1, setState) {
+          return Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: MediaQuery.of(context).size.width / 3,
+              height: MediaQuery.of(context).size.height - 100,
+              padding: const EdgeInsets.only(
+                  left: 10, right: 20, bottom: 5, top: 20),
+              margin: const EdgeInsets.only(left: 12, right: 20),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: mGreyThree, width: 1)),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        flex: 8,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Material(
+                              color: Colors.white,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: InkWell(
+                                    focusColor: Colors.white,
+                                    hoverColor: Colors.white,
+                                    onTap: () {
+                                      Navigator.pop(context1);
+                                    },
+                                    child: SvgPicture.asset(
+                                      'assets/new_ic_close.svg',
+                                      width: 15,
+                                      height: 15,
+                                    )),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Material(
+                              child: Container(
+                                  height: 70,
+                                  color: Colors.white,
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      CircleAvatar(
+                                        radius: 40.0,
+                                        backgroundColor: Colors.white,
+                                        child: ClipOval(
+                                            child: Image.asset(
+                                          'assets/avathar.png',
+                                        )
+                                            // (mViewSearchInvestorsList!
+                                            //         .logo!.isNotEmpty)
+                                            //     ? ImageNetwork(
+                                            //         image:
+                                            //             mViewSearchInvestorsList!
+                                            //                     .logo ??
+                                            //                 "",
+                                            //         height: 100,
+                                            //         width: 100,
+                                            //       )
+                                            //     : Image.asset(
+                                            //         'assets/avathar.png',
+                                            //         width: 100,
+                                            //         height: 100,
+                                            //         fit: BoxFit.fill),
+                                            ),
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Container(
+                                        height: 40,
+                                        width: 350,
+                                        child: TextField(
+                                          controller: mCompanyNameController,
+                                          maxLength: 35,
+                                          style: const TextStyle(
+                                              fontFamily: 'OpenSauceSansBold',
+                                              fontSize: mSizeFour,
+                                              height: 1.5,
+                                              color: mBlackOne),
+                                          decoration: const InputDecoration(
+                                            counterText: "",
+                                            border: InputBorder.none,
+                                            labelText: 'Enter Name',
+                                            labelStyle: TextStyle(
+                                                fontFamily: 'OpenSauceSansBold',
+                                                fontSize: mSizeFour,
+                                                color: mGreyEigth),
+                                            floatingLabelBehavior:
+                                                FloatingLabelBehavior.never,
+                                            hintText: 'Enter Your Name',
+                                            hintStyle: TextStyle(
+                                                fontFamily: 'OpenSauceSansBold',
+                                                fontSize: mSizeFour,
+                                                color: mGreyEigth),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Material(
+                              color: Colors.white,
+                              child: Container(
+                                color: mGreyFive,
+                                width: MediaQuery.of(context).size.width,
+                                height: 1,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Expanded(
+                                child: SingleChildScrollView(
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mStatus,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton2(
+                                                    customButton: Container(
+                                                      height: 32,
+                                                      width: 150,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: mYellowFour,
+                                                        boxShadow: const [
+                                                          BoxShadow(
+                                                            color: Colors.white,
+                                                            blurRadius: 1.0,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                                (mAddStatusChange.isEmpty)
+                                                                    ? Languages.of(
+                                                                            context)!
+                                                                        .mFilter
+                                                                    : mAddStatusChange,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'OpenSauceSansBold',
+                                                                    fontSize:
+                                                                        mSizeThree,
+                                                                    color:
+                                                                        mGreyTen)),
+                                                            const Icon(
+                                                              Icons
+                                                                  .arrow_drop_down_outlined,
+                                                              size: 30,
+                                                              color:
+                                                                  mBlackThree,
+                                                            )
+                                                          ]),
+                                                    ),
+                                                    items: [
+                                                      ...stagesItems.map(
+                                                        (item) =>
+                                                            DropdownMenuItem<
+                                                                MenuItem>(
+                                                          value: item,
+                                                          child:
+                                                              buildItem(item),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                    onChanged: (value) {
+                                                      print(value!.text);
+
+                                                      setState(() {
+                                                        mAddStatusChange =
+                                                            value!.text;
+                                                      });
+
+                                                      // MenuItems.onChanged(
+                                                      //     context,
+                                                      //     value! as MenuItem);
+                                                    },
+                                                    dropdownStyleData:
+                                                        DropdownStyleData(
+                                                      width: 160,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 6),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(4),
+                                                        border: Border.all(
+                                                            color: mGreyThree,
+                                                            width: 2),
+                                                        color: Colors.white,
+                                                      ),
+                                                      offset:
+                                                          const Offset(5, -10),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mContactedPerson,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: SizedBox(
+                                                height: 35,
+                                                child: TextField(
+                                                  controller:
+                                                      mContactPersonController,
+                                                  maxLength: 35,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansBold',
+                                                      fontSize: mSizeThree,
+                                                      height: 1.5,
+                                                      color: mBlackOne),
+                                                  decoration: InputDecoration(
+                                                    counterText: "",
+                                                    border: InputBorder.none,
+                                                    labelText: Languages.of(
+                                                            context)!
+                                                        .mContactedPersonname,
+                                                    labelStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                    floatingLabelBehavior:
+                                                        FloatingLabelBehavior
+                                                            .never,
+                                                    hintText: Languages.of(
+                                                            context)!
+                                                        .mContactedPersonname,
+                                                    hintStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                  ),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mDescription,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: SizedBox(
+                                                height: 35,
+                                                child: TextField(
+                                                  controller:
+                                                      mDescriptionController,
+                                                  maxLength: 35,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansBold',
+                                                      fontSize: mSizeThree,
+                                                      height: 1.5,
+                                                      color: mBlackOne),
+                                                  decoration: InputDecoration(
+                                                    counterText: "",
+                                                    border: InputBorder.none,
+                                                    labelText:
+                                                        Languages.of(context)!
+                                                            .mEnterDescription,
+                                                    labelStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                    floatingLabelBehavior:
+                                                        FloatingLabelBehavior
+                                                            .never,
+                                                    hintText:
+                                                        Languages.of(context)!
+                                                            .mEnterDescription,
+                                                    hintStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                  ),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Container(
+                                        color: mGreyFive,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 1,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mWebsite,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: SizedBox(
+                                                height: 35,
+                                                child: TextField(
+                                                  controller:
+                                                      mWebsiteController,
+                                                  maxLength: 35,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansBold',
+                                                      fontSize: mSizeThree,
+                                                      height: 1.5,
+                                                      color: mBlackOne),
+                                                  decoration: InputDecoration(
+                                                    counterText: "",
+                                                    border: InputBorder.none,
+                                                    labelText:
+                                                        Languages.of(context)!
+                                                            .mEnterWebsite,
+                                                    labelStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                    floatingLabelBehavior:
+                                                        FloatingLabelBehavior
+                                                            .never,
+                                                    hintText:
+                                                        Languages.of(context)!
+                                                            .mEnterWebsite,
+                                                    hintStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                  ),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mMailAddress,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: SizedBox(
+                                                height: 35,
+                                                child: TextField(
+                                                  controller: mEmailController,
+                                                  maxLength: 35,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansBold',
+                                                      fontSize: mSizeThree,
+                                                      height: 1.5,
+                                                      color: mBlackOne),
+                                                  decoration: InputDecoration(
+                                                    counterText: "",
+                                                    border: InputBorder.none,
+                                                    labelText:
+                                                        Languages.of(context)!
+                                                            .mEntermailid,
+                                                    labelStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                    floatingLabelBehavior:
+                                                        FloatingLabelBehavior
+                                                            .never,
+                                                    hintText:
+                                                        Languages.of(context)!
+                                                            .mEntermailid,
+                                                    hintStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                  ),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                  Languages.of(context)!
+                                                      .mContactNumber,
+                                                  textAlign: TextAlign.left,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mGreyEigth)),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Expanded(
+                                              flex: 7,
+                                              child: SizedBox(
+                                                height: 35,
+                                                child: TextField(
+                                                  controller: mMobileController,
+                                                  maxLength: 35,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansBold',
+                                                      fontSize: mSizeThree,
+                                                      height: 1.5,
+                                                      color: mBlackOne),
+                                                  decoration: InputDecoration(
+                                                    counterText: "",
+                                                    border: InputBorder.none,
+                                                    labelText:
+                                                        Languages.of(context)!
+                                                            .mEntermobileno,
+                                                    labelStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                    floatingLabelBehavior:
+                                                        FloatingLabelBehavior
+                                                            .never,
+                                                    hintText:
+                                                        Languages.of(context)!
+                                                            .mEntermobileno,
+                                                    hintStyle: const TextStyle(
+                                                        fontFamily:
+                                                            'OpenSauceSansBold',
+                                                        fontSize: mSizeThree,
+                                                        color: mGreyEigth),
+                                                  ),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ]),
+                            ))
+                          ],
+                        )),
+                    Expanded(
+                        flex: 1,
+                        child: Container(
+                          color: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Material(
+                                color: Colors.white,
+                                child: Container(
+                                  color: mGreyFive,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 1,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 6,
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text("")),
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Center(
+                                      child: Button(
+                                          mButtonname: Languages.of(context)!
+                                              .mSaveChanges,
+                                          onpressed: () {},
+                                          mSelectcolor: mBtnColor,
+                                          mTextColor: mWhiteColor,
+                                          mFontSize: 16,
+                                          mWidth: 130,
+                                          mHeigth: 40),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ))
+                  ]),
+            ),
+          );
+        });
       },
     );
   }

@@ -407,4 +407,11 @@ class LanguageEn extends Languages {
   String get mSpeaker => "Speaker: ";
   String get mLive => "Live";
   String get mRecordedPastEvents => "Recorded Past Events";
+  String get mAddInvestors => "Add Investors";
+  String get mContactedPersonname => "Enter Contacted Person name";
+  String get mEnterDescription => "Enter Description";
+  String get mEnterWebsite => "Enter Website";
+  String get mEntermailid => "Enter Mail Address";
+  String get mEntermobileno => "Enter Contact Number";
+  String get mCheckFundabilityTest => "Check Fundability Test";
 }

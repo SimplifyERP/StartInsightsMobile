@@ -5,6 +5,7 @@ import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/DashboardResponse.dart';
@@ -417,103 +418,114 @@ class _DashboardState extends State<Dashboard> {
                                           ),
                                           Expanded(
                                             flex: 3,
-                                            child: Container(
-                                              height: 280,
-                                              width: double.infinity,
-                                              padding: const EdgeInsets.all(15),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                color: Colors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.white,
-                                                    blurRadius: 1.0,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 5,
+                                            child: InkWell(
+                                              onTap: () {
+                                                GoRouter.of(context)
+                                                    .go('/ReviewDeck');
+                                              },
+                                              child: Container(
+                                                height: 280,
+                                                width: double.infinity,
+                                                padding:
+                                                    const EdgeInsets.all(15),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  color: Colors.white,
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                      color: Colors.white,
+                                                      blurRadius: 1.0,
                                                     ),
-                                                    Text(
-                                                        Languages.of(context)!
-                                                            .mReviewYouPitchDeck,
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              'OpenSauceSansSemiBold',
-                                                          fontSize: mSizeFive,
-                                                        )),
-                                                    const SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                    Container(
-                                                      height: 200,
-                                                      width: double.infinity,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              15),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        color: mGreyTwo,
-                                                        boxShadow: const [
-                                                          BoxShadow(
-                                                            color: Colors.white,
-                                                            blurRadius: 1.0,
-                                                          ),
-                                                        ],
+                                                  ],
+                                                ),
+                                                child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 5,
                                                       ),
-                                                      child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Image.asset(
-                                                              'assets/new_ic_upload.png',
-                                                              height: 80,
-                                                              width: 80,
+                                                      Text(
+                                                          Languages.of(context)!
+                                                              .mReviewYouPitchDeck,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontFamily:
+                                                                'OpenSauceSansSemiBold',
+                                                            fontSize: mSizeFive,
+                                                          )),
+                                                      const SizedBox(
+                                                        height: 15,
+                                                      ),
+                                                      Container(
+                                                        height: 200,
+                                                        width: double.infinity,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(15),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                          color: mGreyTwo,
+                                                          boxShadow: const [
+                                                            BoxShadow(
+                                                              color:
+                                                                  Colors.white,
+                                                              blurRadius: 1.0,
                                                             ),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Text(
-                                                                Languages.of(
-                                                                        context)!
-                                                                    .mUploadyourpitchdeckordraganddrophere,
-                                                                style: const TextStyle(
-                                                                    fontFamily:
-                                                                        'OpenSauceSansRegular',
-                                                                    fontSize:
-                                                                        mSizeTwo,
-                                                                    color:
-                                                                        mGreySeven)),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Text(
-                                                                Languages.of(
-                                                                        context)!
-                                                                    .mAcceptsPDFfilesupto,
-                                                                style: const TextStyle(
-                                                                    fontFamily:
-                                                                        'OpenSauceSansRegular',
-                                                                    fontSize:
-                                                                        mSizeTwo,
-                                                                    color:
-                                                                        mGreySeven)),
-                                                          ]),
-                                                    )
-                                                  ]),
+                                                          ],
+                                                        ),
+                                                        child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Image.asset(
+                                                                'assets/new_ic_upload.png',
+                                                                height: 80,
+                                                                width: 80,
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Text(
+                                                                  Languages.of(
+                                                                          context)!
+                                                                      .mUploadyourpitchdeckordraganddrophere,
+                                                                  style: const TextStyle(
+                                                                      fontFamily:
+                                                                          'OpenSauceSansRegular',
+                                                                      fontSize:
+                                                                          mSizeTwo,
+                                                                      color:
+                                                                          mGreySeven)),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Text(
+                                                                  Languages.of(
+                                                                          context)!
+                                                                      .mAcceptsPDFfilesupto,
+                                                                  style: const TextStyle(
+                                                                      fontFamily:
+                                                                          'OpenSauceSansRegular',
+                                                                      fontSize:
+                                                                          mSizeTwo,
+                                                                      color:
+                                                                          mGreySeven)),
+                                                            ]),
+                                                      )
+                                                    ]),
+                                              ),
                                             ),
                                           ),
                                           const SizedBox(
@@ -547,7 +559,7 @@ class _DashboardState extends State<Dashboard> {
                                                     ),
                                                     Text(
                                                         Languages.of(context)!
-                                                            .mReviewYouPitchDeck,
+                                                            .mBuildyourPitchroom,
                                                         style: const TextStyle(
                                                           fontFamily:
                                                               'OpenSauceSansSemiBold',
@@ -733,26 +745,29 @@ class _DashboardState extends State<Dashboard> {
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                InkWell(
-                                  hoverColor: Colors.white,
-                                  onTap: () {
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    width: 200,
-                                    height: 40,
-                                    child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                            Languages.of(context)!
-                                                .mAccountSettings,
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontFamily: 'OpenSauceSansBold',
-                                                fontSize: mSizeFour,
-                                                color: mBlackTwo))),
-                                  ),
-                                )
+                                Visibility(
+                                    visible: false,
+                                    child: InkWell(
+                                      hoverColor: Colors.white,
+                                      onTap: () {
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        width: 200,
+                                        height: 40,
+                                        child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                                Languages.of(context)!
+                                                    .mAccountSettings,
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontFamily:
+                                                        'OpenSauceSansBold',
+                                                    fontSize: mSizeFour,
+                                                    color: mBlackTwo))),
+                                      ),
+                                    ))
                               ],
                             ),
                             const SizedBox(
@@ -774,13 +789,16 @@ class _DashboardState extends State<Dashboard> {
                                 const SizedBox(
                                   width: 5,
                                 ),
-                                Container(
-                                  width: 200,
-                                  height: 2,
+                                Visibility(
+                                  visible: false,
                                   child: Container(
-                                    color: mS1GreenNine,
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 1,
+                                    width: 200,
+                                    height: 2,
+                                    child: Container(
+                                      color: mS1GreenNine,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 1,
+                                    ),
                                   ),
                                 )
                               ],

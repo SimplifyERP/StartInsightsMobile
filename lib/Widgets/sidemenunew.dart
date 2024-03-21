@@ -670,10 +670,13 @@ class SideMenuNew extends StatelessWidget {
               ),
               Button(
                   mButtonname: Languages.of(context)!.mFundraisingExperts,
-                  onpressed: () {},
+                  onpressed: () {
+                    GoRouter.of(context).go('/FundabilityTest');
+                  },
                   mSelectcolor: mBtnColor,
                   mTextColor: mWhiteColor,
                   mFontSize: 16,
+                  mHovercolor: mBlueTwo,
                   mWidth: 200),
               const SizedBox(
                 height: 20,

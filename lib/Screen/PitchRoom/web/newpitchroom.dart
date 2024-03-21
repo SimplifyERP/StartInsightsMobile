@@ -838,17 +838,25 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
 
         onFileLoading: (FilePickerStatus status) => print(status),
         // allowedExtensions: ['png', 'jpg', 'jpeg', 'heic'],
-        allowedExtensions: ['pdf', 'docx', 'doc', 'xlsx'],
+        allowedExtensions: [
+          'pdf',
+          'docx',
+          'doc',
+          'xlsx',
+          'png',
+          'jpg',
+          'jpeg',
+        ],
       ))
           ?.files;
     } on PlatformException catch (e) {
       log('Unsupported operation' + e.toString());
-      // Loading.stop();
+      Loading.stop();
     } catch (e) {
       log(e.toString());
-      //Loading.stop();
+      Loading.stop();
     }
-    //Loading.stop();
+    Loading.stop();
     // setState1((){});
     setState1(() {
       if (_paths != null) {
@@ -1317,7 +1325,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                     mButtonname:
                                         Languages.of(context)!.mAddMore,
                                     onpressed: () {
-                                      Loading(mLoaderGif).start(context);
+                                      // Loading(mLoaderGif).start(context);
                                       pickFiles(3, setState, context1);
                                     },
                                     mSelectcolor: mBtnColor,

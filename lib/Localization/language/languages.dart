@@ -401,4 +401,11 @@ abstract class Languages {
   String get mSpeaker;
   String get mLive;
   String get mRecordedPastEvents;
+  String get mAddInvestors;
+  String get mContactedPersonname;
+  String get mEnterDescription;
+  String get mEnterWebsite;
+  String get mEntermailid;
+  String get mEntermobileno;
+  String get mCheckFundabilityTest;
 }

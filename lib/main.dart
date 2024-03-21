@@ -14,6 +14,8 @@ import 'package:startinsights/Screen/Dashboard/web/dashboard.dart';
 import 'package:startinsights/Screen/ForgetPassword/bloc/forgetpwd_bloc.dart';
 import 'package:startinsights/Screen/ForgetPassword/web/forgetpwd.dart';
 import 'package:startinsights/Screen/ForgetPassword/web/resetpwd.dart';
+import 'package:startinsights/Screen/FundabilityTest/bloc/fundabilitytest_bloc.dart';
+import 'package:startinsights/Screen/FundabilityTest/web/fundabilitytest.dart';
 import 'package:startinsights/Screen/Learn/bloc/learn_bloc.dart';
 import 'package:startinsights/Screen/Learn/web/learnweb.dart';
 import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
@@ -27,6 +29,8 @@ import 'package:startinsights/Screen/Register/bloc/register_bloc.dart';
 import 'package:startinsights/Screen/Register/web/registerfirst.dart';
 import 'package:startinsights/Screen/Register/web/registesecond.dart';
 import 'package:startinsights/Screen/Register/web/verificationpage.dart';
+import 'package:startinsights/Screen/ReviewDeck/bloc/reviewdeck_bloc.dart';
+import 'package:startinsights/Screen/ReviewDeck/web/reviewdeck.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.dart';
 import 'package:startinsights/Screen/SearchInvestors/web/searchinvestors.dart';
 import 'package:startinsights/Screen/Service/bloc/servicelist_bloc.dart';
@@ -157,8 +161,11 @@ class _MyAppState extends State<MyApp> {
           ],
           //child: DashboardWeb(),
 
-          child: Dashboard(
-            mFrom: state.extra as String?,
+          child: ResponsiveLayout(
+            mobileScreenLayout: const LoginMobile(),
+            webScreenLayout: Dashboard(
+              mFrom: state.extra as String?,
+            ),
           ),
         ),
         /*  routes: <RouteBase>[
@@ -218,6 +225,34 @@ class _MyAppState extends State<MyApp> {
             ],
           ),
         ],*/
+      ),
+      GoRoute(
+        name: "ReviewDeck",
+        path: "/ReviewDeck",
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider<ReviewDeckBloc>(
+              create: (context) => ReviewDeckBloc(mContext: context),
+            )
+          ],
+          //child: DashboardWeb(),
+
+          child: ReviewDeck(),
+        ),
+      ),
+      GoRoute(
+        name: "FundabilityTest",
+        path: "/FundabilityTest",
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider<FundabilityTestBloc>(
+              create: (context) => FundabilityTestBloc(mContext: context),
+            )
+          ],
+          //child: DashboardWeb(),
+
+          child: FundabilityTest(),
+        ),
       ),
       GoRoute(
           name: "Fundraising",
