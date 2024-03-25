@@ -174,6 +174,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                             print(value);
                             setnotifier.value = value;
                           },
+                          isExpanded: true,
                         ),
                         //invisibleSubMenus(),
                         ValueListenableBuilder(
@@ -874,8 +875,8 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
             // String fileName = _paths!.first.files!.first.name;
             //   file = File(_paths!.files.single.path!);
 
-            // objUploadFiles.attach = base64Encode(_paths![i].bytes!);
-            objUploadFiles.attach = "";
+            objUploadFiles.attach = base64Encode(_paths![i].bytes!);
+            //objUploadFiles.attach = "";
             objUploadFiles.documenttype = _paths![i].extension!;
             objUploadFiles.name = _paths![i].name!;
 

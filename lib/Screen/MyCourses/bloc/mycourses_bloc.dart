@@ -4,17 +4,16 @@ import 'package:bloc/bloc.dart';
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:startinsights/Model/CoursesDetailsResponse.dart';
+import 'package:startinsights/Model/CourseDetailsResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/courselistdetails_repository.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_event.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_state.dart';
-import 'package:startinsights/Utils/StorageServiceConstant.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 
 class MyCoursesBloc extends Bloc<MyCoursesEvent, MyCoursesStatus> {
   final BuildContext mContext;
-  List<Course> mCoursesDetailsList = [];
+  List<CourseDetail> mCoursesDetailsList = [];
   MyCoursesBloc({
     required this.mContext,
   }) : super(MyCoursesInitialState()) {
@@ -24,15 +23,18 @@ class MyCoursesBloc extends Bloc<MyCoursesEvent, MyCoursesStatus> {
   void getCoursesListData(String CoursesId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final userId = (prefs.getString(StorageServiceConstant.MUSEREMAIL) ?? '');
+    // final userId = (prefs.getString(StorageServiceConstant.MUSEREMAIL) ?? '');
+
+    final userId = "jagadeesan.a1104@gmail.com";
 
     if (await checkNetworkStatus()) {
       Loading(mLoaderGif).start(mContext);
       ApiResults apiResults =
           await CoursesDetailsRepository().getCoursesDetails(CoursesId, userId);
       if (apiResults is ApiSuccess) {
-        mCoursesDetailsList =
-            CoursesDetailsResponse.fromJson(apiResults.data).message!.course!;
+        mCoursesDetailsList = CourseDetailsResponse.fromJson(apiResults.data)
+            .message!
+            .courseDetails!;
 
         emit(GetMyCoursesInfoSuccessState(mCoursesDetailsList));
         // hideLoading(mContext);

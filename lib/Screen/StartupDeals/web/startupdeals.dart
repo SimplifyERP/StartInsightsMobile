@@ -101,6 +101,7 @@ class _StartupDealsState extends State<StartupDealsWeb> {
                             print(value);
                             setnotifier.value = value;
                           },
+                          isExpanded: true,
                         ),
                         //invisibleSubMenus(),
                         ValueListenableBuilder(

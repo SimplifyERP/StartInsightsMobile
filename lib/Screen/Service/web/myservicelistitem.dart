@@ -156,10 +156,10 @@ class MyServiceListItem extends StatelessWidget {
                         trimMode: TrimMode.Line,
                         trimCollapsedText: 'See more',
                         trimExpandedText: ' show less',
-                        onpressed: () {
-                          showAlert(
-                              context, mMyServiceList.shortDescription ?? "");
-                        },
+                        onpressed: onpressed,
+                        //     () {
+                        //   //showAlert(context, mMyServiceList.shortDescription ?? "");
+                        // },
                       ),
                     ],
                   )),

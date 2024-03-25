@@ -3,16 +3,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:flutter/material.dart';
-import 'package:startinsights/Model/SearchinvestorslistResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
-import 'package:startinsights/Repository/SearchinvestorsRepo.dart';
+import 'package:startinsights/Repository/lms_repository.dart';
 import 'package:startinsights/Screen/Learn/bloc/learn_event.dart';
 import 'package:startinsights/Screen/Learn/bloc/learn_state.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
 
+import '../../../Model/LearnlistResponse.dart';
+
 class LearnBloc extends Bloc<LearnEvent, LearnStatus> {
   final BuildContext mContext;
-  List<SearchInvestorsList> mSearchInvestorsList = [];
+  List<CoursesList> mCoursesList = [];
   int mGetCount = 0;
 
   LearnBloc({
@@ -21,28 +22,17 @@ class LearnBloc extends Bloc<LearnEvent, LearnStatus> {
     onLoadView();
   }
 
-  void getLearnData(
-    int PageNo,
-    String country,
-    String fundingstage,
-    String amount,
-  ) async {
+  void getLearnList() async {
     if (await checkNetworkStatus()) {
       Loading(mLoaderGif).start(mContext);
-      List<String> mStages = [];
-      ApiResults apiResults = await SearchinvestorsRepo()
-          .getSearchinvestors("jagadeesan.a1104@gmail.com", 1, '', mStages, '');
+
+      ApiResults apiResults =
+          await LMSRepository().getLearnList("jagadeesan.a1104@gmail.com");
       if (apiResults is ApiSuccess) {
-        mSearchInvestorsList =
-            SearchinvestorslistResponse.fromJson(apiResults.data)
-                .message!
-                .searchInvestorsList!;
+        mCoursesList =
+            LearnlistResponse.fromJson(apiResults.data).message!.coursesList!;
 
-        mGetCount = SearchinvestorslistResponse.fromJson(apiResults.data)
-            .message!
-            .investorsCount!;
-
-        emit(GetLearnInfoSuccessState(mSearchInvestorsList, mGetCount));
+        emit(GetLearnInfoSuccessState(mCoursesList));
 
         // hideLoading(mContext);
         Loading.stop();

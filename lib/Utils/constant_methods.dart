@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 void printResponse(String text) {
@@ -199,3 +200,8 @@ double mTabelText = 15;
 double mLeaveTabelText = 16;
 double mTabelTitleText = 18;
 double mCaptableTabelText = 14;
+
+sharedPreferencesStatus() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs;
+}

@@ -91,6 +91,8 @@ dependencies:
   webview_flutter_web: ^0.1.0+4
   webview_flutter_platform_interface: ^1.9.5
   #  pointer_interceptor: ^0.10.1
+  responsive_sizer: ^3.3.0+1
+  webengage_flutter: ^1.2.1
 
 
 

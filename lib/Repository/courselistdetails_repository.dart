@@ -9,7 +9,7 @@ class CoursesDetailsRepository {
     String userId,
   ) async {
     return await sl<MyDio>().postData(
-        endPoint: coursesdetailsAPI,
+        endPoint: CourseDetailsAPI,
         data: {'course_id': CoursesId, 'user_id': userId});
   }
 

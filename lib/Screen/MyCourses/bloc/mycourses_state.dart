@@ -1,6 +1,6 @@
 //
 
-import 'package:startinsights/Model/CoursesDetailsResponse.dart';
+import 'package:startinsights/Model/CourseDetailsResponse.dart';
 
 abstract class MyCoursesStatus {}
 
@@ -16,6 +16,6 @@ class GetMyCoursesInfoFailState extends MyCoursesStatus {
 }
 
 class GetMyCoursesInfoSuccessState extends MyCoursesStatus {
-  final List<Course> mCoursesDetails;
+  final List<CourseDetail> mCoursesDetails;
   GetMyCoursesInfoSuccessState(this.mCoursesDetails);
 }

@@ -133,6 +133,7 @@ class _SearchListState extends State<SearchList> {
                           print(value);
                           setnotifier.value = value;
                         },
+                        isExpanded: true,
                       ),
                       //invisibleSubMenus(),
                       ValueListenableBuilder(
@@ -498,6 +499,11 @@ class _SearchListState extends State<SearchList> {
                                                                           0,
                                                                       context);
                                                                 });
+                                                              },
+                                                              onpressed: () {
+                                                                OnLoadDialog(
+                                                                    mServiceList[
+                                                                        index]);
                                                               },
                                                             ),
                                                           );
@@ -1616,7 +1622,17 @@ class _SearchListState extends State<SearchList> {
                                         child: ServiceButton(
                                             mButtonname: Languages.of(context)!
                                                 .mAddtoService,
-                                            onpressed: () {},
+                                            onpressed: () {
+                                              Navigator.pop(context1);
+                                              mAlertDialogcontext = context;
+                                              mPitchcraftid =
+                                                  mMyService.id ?? "";
+                                              mAmount = mMyService.pricing ?? 0;
+
+                                              openCheckout(
+                                                  mMyService.pricing ?? 0,
+                                                  context);
+                                            },
                                             mTextColor: mWhiteColor,
                                             mFontSize: 16,
                                             mWidth: 150,

@@ -25,31 +25,31 @@ class _ReviewDeckState extends State<ReviewDeck> {
 
   ValueNotifier<bool> setnotifier = ValueNotifier(true);
 
-  late Widget _iframeWidget;
-  final IFrameElement _iframeElement = IFrameElement();
+  late Widget iframeWidget;
+  final IFrameElement iframeElement = IFrameElement();
 
   @override
   void initState() {
     super.initState();
 
-    _iframeElement.height = '100%';
-    _iframeElement.width = '100%';
+    iframeElement.height = '100%';
+    iframeElement.width = '100%';
 
-    _iframeElement.style.margin = '0';
-    _iframeElement.style.padding = '0';
-    _iframeElement.style.position = 'fixed';
-    _iframeElement.src = 'https://startinsights.fornax.ai/';
-    _iframeElement.style.border = 'none';
+    iframeElement.style.margin = '0';
+    iframeElement.style.padding = '0';
+    iframeElement.style.position = 'fixed';
+    iframeElement.src = 'https://startinsights.fornax.ai/';
+    iframeElement.style.border = 'none';
 
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
-      'iframeElement',
-      (int viewId) => _iframeElement,
+      'iframeElement1',
+      (int viewId) => iframeElement,
     );
 
-    _iframeWidget = HtmlElementView(
+    iframeWidget = HtmlElementView(
       key: UniqueKey(),
-      viewType: 'iframeElement',
+      viewType: 'iframeElement1',
     );
   }
 
@@ -103,6 +103,7 @@ class _ReviewDeckState extends State<ReviewDeck> {
                           print(value);
                           setnotifier.value = value;
                         },
+                        isExpanded: true,
                       ),
                       //invisibleSubMenus(),
                       ValueListenableBuilder(
@@ -182,7 +183,7 @@ class _ReviewDeckState extends State<ReviewDeck> {
                                           MediaQuery.of(context).size.height +
                                               200,
                                       color: Colors.white,
-                                      child: _iframeWidget)
+                                      child: iframeWidget)
                                   // SingleChildScrollView(
                                   //   child: Container(
                                   //       height:

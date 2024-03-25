@@ -23,7 +23,7 @@ class DashboardItemList extends StatelessWidget {
       //onTap: (() => selectMeal(context)),
       child: Container(
         height: 260,
-        width: 260,
+        width: MediaQuery.of(context).size.width / 5,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.only(right: 10, left: 10),
         decoration: BoxDecoration(

@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_network/image_network.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:startinsights/Localization/language/languages.dart';
+import 'package:startinsights/Model/LearnlistResponse.dart';
 import 'package:startinsights/Repository/startupdeals_repository.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Widgets/primary_button.dart';
 
 class LearnItem extends StatelessWidget {
-  // final PitchRoomDetail mPitchRoomDetail;
-  // final PitchroomBloc mPitchroomBloc;
-  // final BuildContext context;
-  // int mIndex;
+  final CoursesList mCoursesList;
+  final VoidCallback RemoveFavonpressed;
+  final VoidCallback AddFavonpressed;
   final VoidCallback onPressed;
   // final VoidCallback onShareLink;
   LearnItem({
-    // required this.mPitchRoomDetail,
-    // required this.mPitchroomBloc,
-    // required this.context,
+    required this.mCoursesList,
+    required this.RemoveFavonpressed,
+    required this.AddFavonpressed,
     required this.onPressed,
     // required this.onShareLink,
     // required this.mIndex,
@@ -54,16 +56,30 @@ class LearnItem extends StatelessWidget {
                   Align(
                       alignment: Alignment.center,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: SvgPicture.asset(
-                          'assets/new_ic_watermarkbg.svg',
-                          width: 280,
-                          height: 140,
-                        ),
-                      )),
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: ((mCoursesList.image ?? "").isNotEmpty)
+                              ? ImageNetwork(
+                                  image: mCoursesList.image!,
+                                  height: 140,
+                                  width: 280,
+                                )
+                              : SvgPicture.asset(
+                                  'assets/new_ic_watermarkbg.svg',
+                                  width: 280,
+                                  height: 140,
+                                )
+
+                          // SvgPicture.asset(
+                          //   'assets/new_ic_watermarkbg.svg',
+                          //   width: 280,
+                          //   height: 140,
+                          // ),
+                          )),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Center(
-                      child: Text(
-                          "1.1 Understand the investor's mind in startups",
+                      child: Text(mCoursesList.title ?? "",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                               fontFamily: 'OpenSauceSansSemiBold',
@@ -84,22 +100,24 @@ class LearnItem extends StatelessWidget {
                             children: [
                               SvgPicture.asset(
                                 'assets/new_ic_chapters.svg',
-                                width: 15,
-                                height: 15,
+                                width: 10,
+                                height: 10,
                               ),
                               SizedBox(
-                                width: 5,
+                                width: 2,
                               ),
-                              Text(Languages.of(context)!.mChapters,
+                              Text(
+                                  //"${mCoursesList.chapterCount} ${Languages.of(context)!.mChapters}",
+                                  " ${mCoursesList.chapterCount} ${Languages.of(context)!.mChapters}",
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontFamily: 'OpenSauceSansRegular',
-                                      fontSize: mSizeTwo,
+                                      fontSize: 11.Q,
                                       color: mGreySeven))
                             ],
                           )),
                       SizedBox(
-                        width: 10,
+                        width: 8,
                       ),
                       Expanded(
                           flex: 3,
@@ -109,22 +127,23 @@ class LearnItem extends StatelessWidget {
                             children: [
                               SvgPicture.asset(
                                 'assets/new_ic_video.svg',
-                                width: 15,
-                                height: 15,
+                                width: 10,
+                                height: 10,
                               ),
                               SizedBox(
-                                width: 5,
+                                width: 2,
                               ),
-                              Text(Languages.of(context)!.mVideos,
+                              Text(
+                                  " ${mCoursesList.videosCount} ${Languages.of(context)!.mVideos}",
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontFamily: 'OpenSauceSansRegular',
-                                      fontSize: mSizeTwo,
+                                      fontSize: 11.Q,
                                       color: mGreySeven))
                             ],
                           )),
                       SizedBox(
-                        width: 10,
+                        width: 8,
                       ),
                       Expanded(
                           flex: 3,
@@ -134,17 +153,16 @@ class LearnItem extends StatelessWidget {
                             children: [
                               SvgPicture.asset(
                                 'assets/new_ic_quizze.svg',
-                                width: 15,
-                                height: 15,
+                                width: 10,
+                                height: 10,
                               ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(Languages.of(context)!.mQuizzes,
+                              Text(
+                                  //  "${mCoursesList.quizCount} ${Languages.of(context)!.mQuizzes}",
+                                  " ${mCoursesList.quizCount} ${Languages.of(context)!.mQuizzes}",
                                   textAlign: TextAlign.center,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontFamily: 'OpenSauceSansRegular',
-                                      fontSize: mSizeTwo,
+                                      fontSize: 11.Q,
                                       color: mGreySeven))
                             ],
                           ))
@@ -180,22 +198,18 @@ class LearnItem extends StatelessWidget {
                         child: Align(
                             alignment: Alignment.center,
                             child: InkWell(
-                                onTap: () {},
-                                child: SvgPicture.asset(
-                                  'assets/new_ic_heart.svg',
-                                  width: 25,
-                                  height: 25,
-                                )
-                                // Image.asset('assets/new_ic_heart.png',
-                                //         width: 25,
-                                //         height: 25,
-                                //         fit: BoxFit.fill)
-                                //     : SvgPicture.asset(
-                                //     'assets/new_ic_emptyheart.svg',
-                                //     width: 25,
-                                //     height: 25,
-                                //     fit: BoxFit.fill),
-                                )),
+                              onTap: (mCoursesList!.favouriteStatus!)
+                                  ? RemoveFavonpressed
+                                  : AddFavonpressed,
+                              child: (mCoursesList.favouriteStatus ?? false)
+                                  ? SvgPicture.asset('assets/new_ic_heart.svg',
+                                      width: 25, height: 25, fit: BoxFit.fill)
+                                  : SvgPicture.asset(
+                                      'assets/new_ic_emptyheart.svg',
+                                      width: 25,
+                                      height: 25,
+                                      fit: BoxFit.fill),
+                            )),
                       )
                     ],
                   ),

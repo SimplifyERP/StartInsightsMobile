@@ -1,12 +1,13 @@
 import 'dart:html';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sizer/sizer.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:startinsights/Localization/localizations_delegate.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
@@ -457,8 +458,7 @@ class _MyAppState extends State<MyApp> {
                     create: (context) =>
 
                         // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
-                        LearnBloc(mContext: context),
-                    // ..getServiceListData(1),
+                        LearnBloc(mContext: context)..getLearnList(),
                   )
                 ],
                 child: LearnWeb(),
@@ -522,9 +522,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(
+    //  return Sizer(
+    return ResponsiveSizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp.router(
+          scrollBehavior: const MaterialScrollBehavior().copyWith(
+            dragDevices: {PointerDeviceKind.mouse},
+          ),
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           routerConfig: router,

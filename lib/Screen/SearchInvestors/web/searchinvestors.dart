@@ -245,6 +245,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                           print(value);
                           setnotifier.value = value;
                         },
+                        isExpanded: true,
                       ),
                       //invisibleSubMenus(),
                       ValueListenableBuilder(

@@ -34,6 +34,7 @@ abstract class Languages {
   String get mStaysignedin;
   String get mForgotpassword;
   String get mregister;
+  String get mregistered;
   String get mor;
   String get mContinuewithTwitter;
   String get mContinuewithGmail;
@@ -408,4 +409,5 @@ abstract class Languages {
   String get mEntermailid;
   String get mEntermobileno;
   String get mCheckFundabilityTest;
+  String get meventregister;
 }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Localization/language/languages.dart';
-import 'package:startinsights/Model/CoursesDetailsResponse.dart';
+import 'package:startinsights/Model/CourseDetailsResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/courselistdetails_repository.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_bloc.dart';
@@ -38,7 +38,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
   @override
   late MyCoursesBloc mMyCoursesBloc;
   bool checkedValue = false;
-  List<Course> mCoursesDetailsList = [];
+  List<CourseDetail> mCoursesDetailsList = [];
   String mDescriptionText = "";
   late ChewieController _chewieController;
 
@@ -171,7 +171,7 @@ class _MyCoursesWebState extends State<MyCoursesWeb> {
                     mLessonStatus.add(mCoursesDetailsList![0]
                             .chapters![i]
                             .lessons![j]
-                            .status ??
+                            .courseSeenStatus ??
                         false);
                   }
                 }

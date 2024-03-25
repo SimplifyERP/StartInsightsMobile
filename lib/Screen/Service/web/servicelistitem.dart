@@ -6,19 +6,18 @@ import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/ServiceListResponse.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
-import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/servicebutton.dart';
 
 class ServiceListItem extends StatelessWidget {
   final int mIndex;
   final MyServices mMyServiceList;
-  // final VoidCallback onpressed;
+  final VoidCallback onpressed;
   final VoidCallback onPaymentClick;
 
   const ServiceListItem({
     required this.mIndex,
     required this.mMyServiceList,
-    // required this.onpressed,
+    required this.onpressed,
     required this.onPaymentClick,
     super.key,
   });
@@ -139,25 +138,27 @@ class ServiceListItem extends StatelessWidget {
                       SizedBox(
                         height: 20,
                       ),
-                      ReadMoreText(mMyServiceList.shortDescription ?? "",
-                          trimLines: 3,
-                          preDataTextStyle: const TextStyle(
-                              fontFamily: 'OpenSauceSansRegular',
-                              fontSize: mSizeTwo,
-                              height: 1.5,
-                              color: mGreySeven),
-                          style: const TextStyle(
-                              fontFamily: 'OpenSauceSansRegular',
-                              fontSize: mSizeTwo,
-                              height: 1.5,
-                              color: mGreySeven),
-                          colorClickableText: mBlueOne,
-                          trimMode: TrimMode.Line,
-                          trimCollapsedText: 'See more',
-                          trimExpandedText: ' show less', onpressed: () {
-                        showAlert(
-                            context, mMyServiceList.shortDescription ?? "");
-                      }),
+                      ReadMoreText(
+                        mMyServiceList.shortDescription ?? "",
+                        trimLines: 3,
+                        preDataTextStyle: const TextStyle(
+                            fontFamily: 'OpenSauceSansRegular',
+                            fontSize: mSizeTwo,
+                            height: 1.5,
+                            color: mGreySeven),
+                        style: const TextStyle(
+                            fontFamily: 'OpenSauceSansRegular',
+                            fontSize: mSizeTwo,
+                            height: 1.5,
+                            color: mGreySeven),
+                        colorClickableText: mBlueOne,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: 'See more',
+                        trimExpandedText: ' show less', onpressed: onpressed,
+                        //     onpressed: () {
+                        //   //showAlert(context, mMyServiceList.shortDescription ?? "");
+                        // }
+                      ),
                     ],
                   )),
               Expanded(
@@ -210,7 +211,8 @@ class ServiceListItem extends StatelessWidget {
                                 child: ServiceButton(
                                     mButtonname:
                                         Languages.of(context)!.mAddtoService,
-                                    onpressed: onPaymentClick,
+                                    //onpressed: onPaymentClick,
+                                    onpressed: onpressed,
                                     mTextColor: mWhiteColor,
                                     mFontSize: 16,
                                     mWidth: 130,

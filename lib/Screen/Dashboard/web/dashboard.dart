@@ -5,7 +5,6 @@ import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/DashboardResponse.dart';
@@ -17,6 +16,7 @@ import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Repository/dashboard_repo.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_state.dart';
+import 'package:startinsights/Screen/Dashboard/web/dashboardFundabilitylist.dart';
 import 'package:startinsights/Screen/Dashboard/web/dashboarditemist.dart';
 import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
@@ -27,13 +27,15 @@ import 'package:startinsights/Utils/pref_manager.dart';
 import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbarnew.dart';
 import 'package:startinsights/Widgets/auth_form_field.dart';
-import 'package:startinsights/Widgets/button.dart';
 import 'package:startinsights/Widgets/servicebutton.dart';
 import 'package:startinsights/Widgets/sidemenunew.dart';
 
 class Dashboard extends StatefulWidget {
   final String? mFrom;
-  Dashboard({super.key, required this.mFrom});
+  Dashboard({
+    super.key,
+    required this.mFrom,
+  });
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -48,7 +50,7 @@ class _DashboardState extends State<Dashboard> {
   List<MessageElement> mDashboarddata = [];
 
   String mUserName = ""; //Padhu NPN
-  ValueNotifier<bool> setnotifier = ValueNotifier(true);
+  ValueNotifier<bool> setnotifier = ValueNotifier(false);
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController companynameController = TextEditingController();
@@ -141,14 +143,15 @@ class _DashboardState extends State<Dashboard> {
                           print(value);
                           setnotifier.value = value;
                         },
+                        isExpanded: false,
                       ),
                       //invisibleSubMenus(),
                       ValueListenableBuilder(
                         valueListenable: setnotifier,
                         builder: (context, value, child) => Container(
                           width: value
-                              ? MediaQuery.of(context).size.width * 0.78
-                              : MediaQuery.of(context).size.width * 0.906,
+                              ? (MediaQuery.of(context).size.width * 0.82) - 50
+                              : (MediaQuery.of(context).size.width * 0.95) - 50,
                           margin: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                           padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
                           child: Column(
@@ -319,321 +322,42 @@ class _DashboardState extends State<Dashboard> {
                                       SizedBox(
                                         height: 15,
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            flex: 3,
-                                            child: Container(
-                                              height: 280,
-                                              width: double.infinity,
-                                              padding: const EdgeInsets.all(15),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                color: Colors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.white,
-                                                    blurRadius: 1.0,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                        Languages.of(context)!
-                                                            .mCheckyourFundability,
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              'OpenSauceSansSemiBold',
-                                                          fontSize: mSizeFive,
-                                                        )),
-                                                    const SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                    Container(
-                                                      height: 200,
-                                                      width: double.infinity,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              15),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        color: mGreyTwo,
-                                                        boxShadow: const [
-                                                          BoxShadow(
-                                                            color: Colors.white,
-                                                            blurRadius: 1.0,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Image.asset(
-                                                              'assets/new_ic_checkscore.png',
-                                                              height: 120,
-                                                              width: 150,
-                                                            ),
-                                                            Button(
-                                                                mButtonname:
-                                                                    Languages.of(
-                                                                            context)!
-                                                                        .mCheckyourScore,
-                                                                onpressed:
-                                                                    () {},
-                                                                mSelectcolor:
-                                                                    mBtnColor,
-                                                                mTextColor:
-                                                                    mWhiteColor,
-                                                                mFontSize:
-                                                                    mSizeTen,
-                                                                mWidth: 200,
-                                                                mHeigth: 40),
-                                                          ]),
-                                                    )
-                                                  ]),
+                                      Container(
+                                        height: 320,
+                                        width: double.infinity,
+                                        // padding: const EdgeInsets.all(15),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: mGreyTwo,
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: mGreyTwo,
+                                              blurRadius: 1.0,
                                             ),
-                                          ),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            flex: 3,
-                                            child: InkWell(
-                                              onTap: () {
-                                                GoRouter.of(context)
-                                                    .go('/ReviewDeck');
-                                              },
-                                              child: Container(
+                                          ],
+                                        ),
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
                                                 height: 280,
-                                                width: double.infinity,
-                                                padding:
-                                                    const EdgeInsets.all(15),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  color: Colors.white,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Colors.white,
-                                                      blurRadius: 1.0,
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Text(
-                                                          Languages.of(context)!
-                                                              .mReviewYouPitchDeck,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontFamily:
-                                                                'OpenSauceSansSemiBold',
-                                                            fontSize: mSizeFive,
-                                                          )),
-                                                      const SizedBox(
-                                                        height: 15,
-                                                      ),
-                                                      Container(
-                                                        height: 200,
-                                                        width: double.infinity,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(15),
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(20),
-                                                          color: mGreyTwo,
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                              color:
-                                                                  Colors.white,
-                                                              blurRadius: 1.0,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Image.asset(
-                                                                'assets/new_ic_upload.png',
-                                                                height: 80,
-                                                                width: 80,
-                                                              ),
-                                                              SizedBox(
-                                                                height: 10,
-                                                              ),
-                                                              Text(
-                                                                  Languages.of(
-                                                                          context)!
-                                                                      .mUploadyourpitchdeckordraganddrophere,
-                                                                  style: const TextStyle(
-                                                                      fontFamily:
-                                                                          'OpenSauceSansRegular',
-                                                                      fontSize:
-                                                                          mSizeTwo,
-                                                                      color:
-                                                                          mGreySeven)),
-                                                              SizedBox(
-                                                                height: 10,
-                                                              ),
-                                                              Text(
-                                                                  Languages.of(
-                                                                          context)!
-                                                                      .mAcceptsPDFfilesupto,
-                                                                  style: const TextStyle(
-                                                                      fontFamily:
-                                                                          'OpenSauceSansRegular',
-                                                                      fontSize:
-                                                                          mSizeTwo,
-                                                                      color:
-                                                                          mGreySeven)),
-                                                            ]),
-                                                      )
-                                                    ]),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                          Expanded(
-                                            flex: 3,
-                                            child: Container(
-                                              height: 280,
-                                              width: double.infinity,
-                                              padding: const EdgeInsets.all(15),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                                color: Colors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.white,
-                                                    blurRadius: 1.0,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Text(
-                                                        Languages.of(context)!
-                                                            .mBuildyourPitchroom,
-                                                        style: const TextStyle(
-                                                          fontFamily:
-                                                              'OpenSauceSansSemiBold',
-                                                          fontSize: mSizeFive,
-                                                        )),
-                                                    const SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                    Container(
-                                                      height: 200,
-                                                      width: double.infinity,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              15),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        color: mGreyTwo,
-                                                        boxShadow: const [
-                                                          BoxShadow(
-                                                            color: Colors.white,
-                                                            blurRadius: 1.0,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Image.asset(
-                                                              'assets/new_ic_upload.png',
-                                                              height: 80,
-                                                              width: 80,
-                                                            ),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Text(
-                                                                Languages.of(
-                                                                        context)!
-                                                                    .mUploadyourpitchdeckordraganddrophere,
-                                                                style: const TextStyle(
-                                                                    fontFamily:
-                                                                        'OpenSauceSansRegular',
-                                                                    fontSize:
-                                                                        mSizeTwo,
-                                                                    color:
-                                                                        mGreySeven)),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            Text(
-                                                                Languages.of(
-                                                                        context)!
-                                                                    .mAcceptsPDFfilesupto,
-                                                                style: const TextStyle(
-                                                                    fontFamily:
-                                                                        'OpenSauceSansRegular',
-                                                                    fontSize:
-                                                                        mSizeTwo,
-                                                                    color:
-                                                                        mGreySeven)),
-                                                          ]),
-                                                    )
-                                                  ]),
-                                            ),
-                                          ),
-                                        ],
-                                      )
+                                                child: ListView.builder(
+                                                    shrinkWrap: true,
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    itemCount: 3,
+                                                    itemBuilder: (_, index) {
+                                                      return DashboardFundabilitylist(
+                                                          mIndex: index,
+                                                          isExpanded: value);
+                                                    }),
+                                              )
+                                            ]),
+                                      ),
                                     ],
                                   )), //
                                 ),

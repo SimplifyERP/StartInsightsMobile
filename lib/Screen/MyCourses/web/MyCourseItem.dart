@@ -29,7 +29,7 @@ class MyCourseItem extends StatelessWidget {
           ),
           children: [
             Container(
-              height: mChapterList.lessons!.length * 40,
+              height: mChapterList.lessons!.length * 80,
               color: mWhiteColor,
               child: ListView.builder(
                 itemBuilder: ((context, index) {

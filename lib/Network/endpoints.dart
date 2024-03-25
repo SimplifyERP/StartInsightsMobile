@@ -123,3 +123,24 @@ const String updateRoomAPI =
 
 const String shareduserAPI =
     '$baseUrl/method/startinsights.website_api.pitch_room.shared_user';
+
+const String LearnListAPI =
+    '$baseUrl/method/startinsights.website_api.lms_course.learn_list';
+
+const String AddFavouritecourseAPI =
+    '$baseUrl/method/startinsights.website_api.lms_course.mark_favourite_course';
+
+const String RemoveFavouritecourseAPI =
+    '$baseUrl/method/startinsights.website_api.lms_course.unmarked_favourite_course';
+
+const String FavouritecourseListAPI =
+    '$baseUrl/method/startinsights.website_api.lms_course.get_favourite_courses';
+
+const String CourseDetailsAPI =
+    '$baseUrl/method/startinsights.website_api.lms_course.learn_details';
+
+const String EventListAPI =
+    '$baseUrl/method/startinsights.website_api.event.get_events';
+
+const String mAddEventRegister =
+    '$baseUrl/method/startinsights.website_api.event.create_registered_event';

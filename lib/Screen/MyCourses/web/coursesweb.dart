@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:startinsights/Localization/language/languages.dart';
-import 'package:startinsights/Model/CoursesDetailsResponse.dart';
+import 'package:startinsights/Model/CourseDetailsResponse.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_bloc.dart';
 import 'package:startinsights/Screen/MyCourses/bloc/mycourses_state.dart';
 import 'package:startinsights/Utils/MyColor.dart';
@@ -21,7 +21,7 @@ class _CoursesWebState extends State<CoursesWeb> {
   @override
   late MyCoursesBloc mMyCoursesBloc;
   bool SidemenuVisble = true;
-  List<Course> mCoursesDetailsList = [];
+  List<CourseDetail> mCoursesDetailsList = [];
 
   late PodPlayerController controller;
   bool? isVideoPlaying;
@@ -119,7 +119,7 @@ class _CoursesWebState extends State<CoursesWeb> {
                     mLessonViewedList.add(mCoursesDetailsList![0]
                         .chapters![i]
                         .lessons![j]
-                        .status!);
+                        .courseSeenStatus!);
                   }
                 }
 
@@ -271,7 +271,7 @@ class _CoursesWebState extends State<CoursesWeb> {
                                                                       index1];
                                                               return ListTile(
                                                                   leading: (mLessonsList
-                                                                              .status ??
+                                                                              .courseSeenStatus ??
                                                                           false)
                                                                       ? Image
                                                                           .asset(

@@ -7,4 +7,5 @@ class StorageServiceConstant {
   static const String MLOGINSTATUS = 'mloginstatus';
   static const String MCLICKPITCH = 'mclickpitch';
   static const String MUSERINFO = 'muserinfo';
+  static const String MFROMSIDEMENU = 'mFromSideMenu';
 }

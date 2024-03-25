@@ -173,6 +173,7 @@ class _ProfileState extends State<Profile> {
                           print(value);
                           setnotifier.value = value;
                         },
+                        isExpanded: true,
                       ),
                       //invisibleSubMenus(),
                       ValueListenableBuilder(

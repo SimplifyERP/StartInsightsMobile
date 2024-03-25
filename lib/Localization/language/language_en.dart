@@ -33,6 +33,7 @@ class LanguageEn extends Languages {
   String get mStaysignedin => "Stay signed in";
   String get mForgotpassword => "Forgot your password?";
   String get mregister => "Register";
+  String get mregistered => "Registered";
   String get mor => "OR";
   String get mContinuewithTwitter => "Continue with Twitter";
   String get mContinuewithGmail => "Continue with Gmail";
@@ -48,7 +49,7 @@ class LanguageEn extends Languages {
 
   String get mCommunityFeed => "Community Feed";
   String get mPitchCraft => "Pitch Craft";
-  String get mMyServices => "My Services";
+  String get mMyServices => "All Services";
   String get mStartupSchool => "Startup School";
   String get mBookanExpert => "Book an Expert";
   String get mHireourteam => "Hire our team";
@@ -414,4 +415,5 @@ class LanguageEn extends Languages {
   String get mEntermailid => "Enter Mail Address";
   String get mEntermobileno => "Enter Contact Number";
   String get mCheckFundabilityTest => "Check Fundability Test";
+  String get meventregister => "Are you sure want to Register this event?";
 }

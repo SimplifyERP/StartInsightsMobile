@@ -1,6 +1,6 @@
 //
 
-import 'package:startinsights/Model/SearchinvestorslistResponse.dart';
+import 'package:startinsights/Model/LearnlistResponse.dart';
 
 abstract class LearnStatus {}
 
@@ -16,8 +16,6 @@ class GetLearnInfoFailState extends LearnStatus {
 }
 
 class GetLearnInfoSuccessState extends LearnStatus {
-  final List<SearchInvestorsList> mSearchInvestorsList;
-  final int mSearchInvestorsCount;
-  GetLearnInfoSuccessState(
-      this.mSearchInvestorsList, this.mSearchInvestorsCount);
+  final List<CoursesList> mCoursesList;
+  GetLearnInfoSuccessState(this.mCoursesList);
 }
