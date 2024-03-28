@@ -1,16 +1,22 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:custom_gif_loading/custom_gif_loading.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_network/image_network.dart';
 import 'package:startinsights/Libery/numberpaginator/lib/number_paginator.dart';
 import 'package:startinsights/Localization/language/languages.dart';
+import 'package:startinsights/Model/CommonResponse.dart';
 import 'package:startinsights/Model/FavouriteResponse.dart';
 import 'package:startinsights/Model/FundingCrmResponse.dart';
 import 'package:startinsights/Model/SearchinvestorslistResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/SearchinvestorsRepo.dart';
+import 'package:startinsights/Screen/Login/bloc/login_bloc.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_bloc.dart';
 import 'package:startinsights/Screen/SearchInvestors/bloc/searchinvestors_state.dart';
 import 'package:startinsights/Screen/SearchInvestors/web/fundingcrmlist.dart';
@@ -21,6 +27,7 @@ import 'package:startinsights/Utils/constant_methods.dart';
 import 'package:startinsights/Utils/screens.dart';
 import 'package:startinsights/Utils/utils.dart';
 import 'package:startinsights/Widgets/Appbarnew.dart';
+import 'package:startinsights/Widgets/auth_form_field.dart';
 import 'package:startinsights/Widgets/button.dart';
 import 'package:startinsights/Widgets/deletebutton.dart';
 import 'package:startinsights/Widgets/servicebutton.dart';
@@ -64,8 +71,6 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   int numPages = 1;
   int currentPage = 1;
   int SetcurrentPage = 0;
-
-  final SearchinvestorsRepo apiService = SearchinvestorsRepo();
 
   late Sortlist mSortlist;
   int mSortlistCount = 0;
@@ -116,6 +121,13 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
   final TextEditingController mWebsiteController = TextEditingController();
   final TextEditingController mEmailController = TextEditingController();
   final TextEditingController mMobileController = TextEditingController();
+  final TextEditingController mNotesController = TextEditingController();
+
+  //Company Logo
+  String selectedFile = '';
+  String selectedFileExtension = '';
+  Uint8List? image;
+  String mCaptureUserImage = "";
 
   @override
   void initState() {
@@ -144,6 +156,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
     mWebsiteController.dispose();
     mEmailController.dispose();
     mMobileController.dispose();
+    mNotesController.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -2974,25 +2987,41 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                         radius: 40.0,
                                         backgroundColor: Colors.white,
                                         child: ClipOval(
-                                            child: Image.asset(
-                                          'assets/avathar.png',
-                                        )
-                                            // (mViewSearchInvestorsList!
-                                            //         .logo!.isNotEmpty)
-                                            //     ? ImageNetwork(
-                                            //         image:
-                                            //             mViewSearchInvestorsList!
-                                            //                     .logo ??
-                                            //                 "",
-                                            //         height: 100,
-                                            //         width: 100,
-                                            //       )
-                                            //     : Image.asset(
-                                            //         'assets/avathar.png',
-                                            //         width: 100,
-                                            //         height: 100,
-                                            //         fit: BoxFit.fill),
-                                            ),
+                                          child: InkWell(
+                                              onTap: () {
+                                                selectFile(setState);
+                                              },
+                                              child: (image != null)
+                                                  ? Image.memory(
+                                                      image!,
+                                                      fit: BoxFit.fill,
+                                                      width: 50,
+                                                      height: 50,
+                                                    )
+                                                  : SvgPicture.asset(
+                                                      'assets/new_ic_addinvestor.svg',
+                                                      width: 50,
+                                                      height: 50,
+                                                    )),
+
+                                          //new_ic_addinvestor.svg
+
+                                          // (mViewSearchInvestorsList!
+                                          //         .logo!.isNotEmpty)
+                                          //     ? ImageNetwork(
+                                          //         image:
+                                          //             mViewSearchInvestorsList!
+                                          //                     .logo ??
+                                          //                 "",
+                                          //         height: 100,
+                                          //         width: 100,
+                                          //       )
+                                          //     : Image.asset(
+                                          //         'assets/avathar.png',
+                                          //         width: 100,
+                                          //         height: 100,
+                                          //         fit: BoxFit.fill),
+                                        ),
                                       ),
                                       SizedBox(
                                         width: 15,
@@ -3002,7 +3031,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                         width: 350,
                                         child: TextField(
                                           controller: mCompanyNameController,
-                                          maxLength: 35,
+                                          maxLength: 80,
                                           style: const TextStyle(
                                               fontFamily: 'OpenSauceSansBold',
                                               fontSize: mSizeFour,
@@ -3211,7 +3240,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                 child: TextField(
                                                   controller:
                                                       mContactPersonController,
-                                                  maxLength: 35,
+                                                  maxLength: 80,
                                                   style: const TextStyle(
                                                       fontFamily:
                                                           'OpenSauceSansBold',
@@ -3281,7 +3310,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                 child: TextField(
                                                   controller:
                                                       mDescriptionController,
-                                                  maxLength: 35,
+                                                  maxLength: 1000,
                                                   style: const TextStyle(
                                                       fontFamily:
                                                           'OpenSauceSansBold',
@@ -3363,7 +3392,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                 child: TextField(
                                                   controller:
                                                       mWebsiteController,
-                                                  maxLength: 35,
+                                                  maxLength: 100,
                                                   style: const TextStyle(
                                                       fontFamily:
                                                           'OpenSauceSansBold',
@@ -3429,10 +3458,9 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                           Expanded(
                                               flex: 7,
                                               child: SizedBox(
-                                                height: 35,
                                                 child: TextField(
                                                   controller: mEmailController,
-                                                  maxLength: 35,
+                                                  maxLength: 100,
                                                   style: const TextStyle(
                                                       fontFamily:
                                                           'OpenSauceSansBold',
@@ -3501,7 +3529,7 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                 height: 35,
                                                 child: TextField(
                                                   controller: mMobileController,
-                                                  maxLength: 35,
+                                                  maxLength: 10,
                                                   style: const TextStyle(
                                                       fontFamily:
                                                           'OpenSauceSansBold',
@@ -3534,6 +3562,34 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                                 ),
                                               ))
                                         ],
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Material(
+                                      color: Colors.white,
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                            left: 20, right: 20),
+                                        alignment: Alignment.center,
+                                        child: AuthFormField(
+                                          controller: mNotesController,
+                                          textInputAction: TextInputAction.next,
+                                          keyboardType: TextInputType.text,
+                                          hintText:
+                                              Languages.of(context)!.mNotes,
+                                          radius: 30,
+                                          maxLength: 3000,
+                                          maxLines: 5,
+                                          labelText:
+                                              Languages.of(context)!.mNotes,
+                                          mBorderView: false,
+                                          mImageView: true,
+                                          isMandatory: false,
+                                          viewbgColor: mYellowTwo,
+                                          borderColor: mYellowFive,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(
@@ -3578,7 +3634,118 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
                                       child: Button(
                                           mButtonname: Languages.of(context)!
                                               .mSaveChanges,
-                                          onpressed: () {},
+                                          onpressed: () {
+                                            if (mCompanyNameController
+                                                .text.isEmpty) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .mentercompanyname);
+                                            } else if (mContactPersonController
+                                                .text.isEmpty) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .mContactedPersonname);
+                                            } else if (mDescriptionController
+                                                .text.isEmpty) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .menterroomdescription);
+                                            } else if (mWebsiteController
+                                                .text.isEmpty) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .mEnterWebsite);
+                                            } else if (mEmailController
+                                                .text.isEmpty) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .mEntermailid);
+                                            } else if (!mEmailController.text
+                                                .isValidEmail()) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .mVaildEmailAddresshint);
+                                            } else if (mMobileController
+                                                .text.isEmpty) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .mEntermobileno);
+                                            } else if (!isMobileNumberValid(
+                                                mMobileController.text)) {
+                                              showAlert(context,
+                                                  "Not Valid  Mobile Number");
+                                            } else if (mNotesController
+                                                .text.isEmpty) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .mEnterNotes);
+                                            } else if (mCaptureUserImage
+                                                .isEmpty) {
+                                              showAlert(
+                                                  context,
+                                                  Languages.of(context)!
+                                                      .mSelectCompanyLogo);
+                                            }
+                                            //
+                                            else {
+                                              Loading(mLoaderGif)
+                                                  .start(context);
+                                              apiService1.AddNewInvestor(
+                                                      "jagadeesan.a1104@gmail.com",
+                                                      mCompanyNameController
+                                                          .text,
+                                                      mAddStatusChange,
+                                                      mContactPersonController
+                                                          .text,
+                                                      mAddStatusChange,
+                                                      mDescriptionController
+                                                          .text,
+                                                      mWebsiteController.text,
+                                                      mEmailController.text,
+                                                      mMobileController.text,
+                                                      mNotesController.text,
+                                                      selectedFileExtension,
+                                                      selectedFile,
+                                                      mCaptureUserImage)
+                                                  .then((value) async {
+                                                if (value is ApiSuccess) {
+                                                  if (CommonResponse.fromJson(
+                                                              value.data)!
+                                                          .message!
+                                                          .status ??
+                                                      false) {
+                                                    Loading.stop();
+                                                    setState(() {
+                                                      Navigator.pop(context1);
+                                                      OnLoadFundingCRM(
+                                                          "jagadeesan.a1104@gmail.com");
+                                                    });
+                                                  } else {
+                                                    Loading.stop();
+                                                    ErrorToast(
+                                                        context: context,
+                                                        text: CommonResponse
+                                                                    .fromJson(value
+                                                                        .data)!
+                                                                .message!
+                                                                .message ??
+                                                            "");
+                                                  }
+                                                } else if (value
+                                                    is ApiFailure) {
+                                                  Loading.stop();
+                                                }
+                                              });
+                                            }
+                                          },
                                           mSelectcolor: mBtnColor,
                                           mTextColor: mWhiteColor,
                                           mFontSize: 16,
@@ -4648,6 +4815,28 @@ class _SearchInvestorsState extends State<SearchInvestorsWeb> {
         return alert;
       },
     );
+  }
+
+  void selectFile(StateSetter setState1) async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'png',
+        'jpg',
+        'jpeg',
+      ],
+    );
+
+    if (result != null) {
+      setState1(() {
+        selectedFile = result.files.first.name;
+        selectedFileExtension = result.files.first.extension!;
+      });
+
+      image = result.files.first.bytes;
+
+      mCaptureUserImage = base64Encode(image!);
+    }
   }
 
 /*  void onChanged(BuildContext context, ProfileMenuItem item) {

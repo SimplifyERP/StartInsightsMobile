@@ -16,10 +16,10 @@ class GetCaptableInfoFailState extends CaptableStatus {
 }
 
 class GetCaptableInfoSuccessState extends CaptableStatus {
-  final List<InvestorWiseList> mInvestorWiseList;
+  final List<InvestorWise> mInvestorWiseList;
   final List<WiseGraph> mInvestorWiseGraphList;
   final List<WiseGraph> mRoundWiseGraphList;
-  final List<RoundWiseList> mRoundWiseList;
+  final List<RoundWise> mRoundWiseList;
   GetCaptableInfoSuccessState(
       this.mInvestorWiseList,
       this.mInvestorWiseGraphList,

@@ -55,14 +55,15 @@ class Message {
 class Userinfo {
   String? userName;
   String? fullName;
-  dynamic userEmail;
-  dynamic companyName;
-  dynamic phoneNo;
+  String? userEmail;
+  String? companyName;
+  String? phoneNo;
   String? designation;
-  dynamic linkedin;
+  String? linkedin;
   String? profileImage;
   String? loginType;
-  dynamic role;
+  String? role;
+  String? website;
 
   Userinfo({
     this.userName,
@@ -75,6 +76,7 @@ class Userinfo {
     this.profileImage,
     this.loginType,
     this.role,
+    this.website,
   });
 
   factory Userinfo.fromJson(Map<String, dynamic> json) => Userinfo(
@@ -88,6 +90,7 @@ class Userinfo {
         profileImage: json["profile_image"],
         loginType: json["login_type"],
         role: json["role"],
+        website: json["website"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -101,5 +104,6 @@ class Userinfo {
         "profile_image": profileImage,
         "login_type": loginType,
         "role": role,
+        "website": website,
       };
 }

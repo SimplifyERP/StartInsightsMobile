@@ -63,7 +63,7 @@ class SearchInvestorsList {
   bool? favouritesStatus;
   String? title;
   String? logo;
-  int? investorVerified;
+  String? investorVerified;
   String? linkedin;
   String? website;
   String? aboutUs;
@@ -78,10 +78,10 @@ class SearchInvestorsList {
   SearchInvestorsList({
     this.id,
     this.name,
+    this.favouritesStatus,
     this.title,
     this.logo,
     this.investorVerified,
-    this.favouritesStatus,
     this.linkedin,
     this.website,
     this.aboutUs,
@@ -98,10 +98,10 @@ class SearchInvestorsList {
       SearchInvestorsList(
         id: json["id"],
         name: json["name"],
+        favouritesStatus: json["favourites_status"],
         title: json["title"],
         logo: json["logo"],
         investorVerified: json["investor_verified"],
-        favouritesStatus: json["favourites_status"],
         linkedin: json["linkedin"],
         website: json["website"],
         aboutUs: json["about_us"],
@@ -120,10 +120,10 @@ class SearchInvestorsList {
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "favourites_status": favouritesStatus,
         "title": title,
         "logo": logo,
         "investor_verified": investorVerified,
-        "favourites_status": favouritesStatus,
         "linkedin": linkedin,
         "website": website,
         "about_us": aboutUs,

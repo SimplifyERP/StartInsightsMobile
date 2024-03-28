@@ -63,7 +63,7 @@ class FundingCRMList extends StatelessWidget {
                   ),
                   Expanded(
                       flex: 7,
-                      child: Text(mInvestor.name ?? "",
+                      child: Text(mInvestor.investorname ?? "",
                           textAlign: TextAlign.left,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

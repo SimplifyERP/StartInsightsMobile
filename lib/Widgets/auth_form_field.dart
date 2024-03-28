@@ -137,8 +137,12 @@ class AuthFormField extends StatelessWidget {
               color: mGreyEigth,
             ),
             isDense: true, // Added this
-
-            floatingLabelStyle: const TextStyle(color: Colors.blue),
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            floatingLabelStyle: const TextStyle(
+              color: Colors.blue,
+              fontSize: mSizeTwo,
+              fontFamily: 'OpenSauceSansRegular',
+            ),
             // floatingLabelBehavior: FloatingLabelBehavior.never,
             contentPadding: EdgeInsets.fromLTRB(10, mTop, 10, mBottom),
             enabledBorder: OutlineInputBorder(

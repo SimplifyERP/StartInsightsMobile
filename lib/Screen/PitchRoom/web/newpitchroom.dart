@@ -11,16 +11,20 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' show Client;
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/CommonResponse.dart';
 import 'package:startinsights/Model/GetuserswithroleResponse.dart';
+import 'package:startinsights/Model/InvestorroundwiseResponse.dart';
 import 'package:startinsights/Model/PitchroomlistResponse.dart';
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Repository/pitchroom_repository.dart';
 import 'package:startinsights/Screen/PitchRoom/bloc/pitchroom_bloc.dart';
 import 'package:startinsights/Screen/PitchRoom/bloc/pitchroom_state.dart';
 import 'package:startinsights/Screen/PitchRoom/web/docview.dart';
+import 'package:startinsights/Screen/PitchRoom/web/invosterwiseItem.dart';
 import 'package:startinsights/Screen/PitchRoom/web/newpichroomItem.dart';
+import 'package:startinsights/Screen/PitchRoom/web/roundwiseItem.dart';
 import 'package:startinsights/Utils/FontSizes.dart';
 import 'package:startinsights/Utils/MyColor.dart';
 import 'package:startinsights/Utils/constant_methods.dart';
@@ -31,6 +35,7 @@ import 'package:startinsights/Widgets/Appbarnew.dart';
 import 'package:startinsights/Widgets/auth_form_field.dart';
 import 'package:startinsights/Widgets/button.dart';
 import 'package:startinsights/Widgets/deletebutton.dart';
+import 'package:startinsights/Widgets/primary_button.dart';
 import 'package:startinsights/Widgets/sidemenunew.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -77,6 +82,8 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
   final PitchroomRepository _apiService1 = PitchroomRepository();
   List<UserRole> mUserList = [];
   List<String> mSelectedShareUser = [];
+  List<String> mShareUser = [];
+  List<SharedUser> mShareUserList = [];
   int _selected = -1;
 
   DateTime _focusedDay = DateTime.now();
@@ -93,9 +100,48 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
   Uint8List? image;
   String mCaptureUserImage = "";
 
+  //Cover Image
+  String UpdateselectedFile = '';
+  Uint8List? Updateimage;
+  String UpdatemCaptureUserImage = "";
+
   bool mReload = false;
+  bool mRemoveSharedUser = true;
 
   final MultiSelectController<UserRole> _controller = MultiSelectController();
+
+  //Captable
+  Map<String, double> InvesteddataMap = {};
+  Map<String, double> RoundWisedataMap = {};
+  List<WiseGraph> mRoundWiseGraphList = [];
+  List<WiseGraph> mInvestorWiseGraphList = [];
+  List<InvestorWise> mInvestorWiseList = [];
+  List<RoundWise> mRoundWiseList = [];
+  List<Color> InvestedcolorList = [
+    mColorOne,
+    mColorTwo,
+    mColorThree,
+    mColorFour,
+    mColorFive,
+    mColorSix,
+    mColorSeven,
+  ];
+
+  List<Color> RoundWisecolorList = [
+    mColorSeven,
+    mColorTwo,
+    mColorOne,
+    mColorFour,
+    mColorThree,
+    mColorSix,
+    mColorFive
+  ];
+
+  List<DataColumn> InvesteddataColumns = [];
+
+  List<DataColumn> RoundWiseColumns = [];
+
+  var mFrom = 1;
 
   @override
   void initState() {
@@ -117,6 +163,153 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
 
   Widget build(BuildContext context) {
     mPitchroomBloc = PitchroomBloc(mContext: context);
+
+    InvesteddataColumns.clear();
+    RoundWiseColumns.clear();
+    //mInvestorName
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mInvestorName,
+    )));
+
+    //   mTagName;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mTagName,
+    )));
+
+    //   mDateofAllotment;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mDateofAllotment,
+    )));
+
+    //   mInvestedRound;
+
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mInvestedRound,
+    )));
+
+    //   mAmountInvested;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mAmountInvested,
+    )));
+
+    //   mDistinctiveShareNo;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mDistinctiveShareNo,
+    )));
+
+    //   mShareCertificate;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mShareCertificate,
+    )));
+
+    //   mSharesAllotted;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mSharesAllotted,
+    )));
+
+    //   mPricePerShare;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mPricePerShare,
+    )));
+
+    //   mFullyDilutedShares;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mFullyDilutedShares,
+    )));
+
+    //   mClassOfShares;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mClassOfShares,
+    )));
+
+    //   mFolioNumber;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mFolioNumber,
+    )));
+
+    //   mShareholding;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mShareholding,
+    )));
+
+    //   mCreationPersonID;
+    InvesteddataColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mCreationPersonID,
+    )));
+
+    //mNameoftheround;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mNameoftheround,
+    )));
+
+    //mRoundType;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mRoundType,
+    )));
+
+    //mClosingdateoftheRound;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mClosingdateoftheRound,
+    )));
+
+    //mRoundDescription;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mRoundDescription,
+    )));
+
+    //mSelectSecurityPrefix;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mSelectSecurityPrefix,
+    )));
+
+    //mAmountRaised;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mAmountRaised,
+    )));
+
+    //mPricepershare;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mPricepershare,
+    )));
+
+    //mPreMoneyValuation;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mPreMoneyValuation,
+    )));
+
+    //mDilutionforthisround;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mDilutionforthisround,
+    )));
+
+    //mDilutionforthisround;
+    RoundWiseColumns.add(DataColumn(
+        label: DataTitleText(
+      menuname: Languages.of(context)!.mCreationPersonID,
+    )));
 
     var _crossAxisSpacing = 8;
     var _screenWidth = MediaQuery.of(context).size.width;
@@ -342,6 +535,8 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                                   setState(() {
                                                                     mSelectView =
                                                                         2;
+
+                                                                    OnLoadCaptable();
                                                                   });
                                                                 },
                                                                 child:
@@ -620,6 +815,31 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                                             Loading.stop();
                                                                           }
                                                                         });
+                                                                        Loading(mLoaderGif)
+                                                                            .start(context);
+
+                                                                        _apiService1
+                                                                            .getuserswithroleData("")
+                                                                            .then((value) async {
+                                                                          print(
+                                                                              value);
+
+                                                                          if (value
+                                                                              is ApiSuccess) {
+                                                                            Loading.stop();
+                                                                            mUserList =
+                                                                                GetuserswithroleResponse.fromJson(value.data).message!.userRole!;
+
+                                                                            OnLoadDialogUser(
+                                                                                mUserList,
+                                                                                context,
+                                                                                setState,
+                                                                                mPitchRoom.id ?? "");
+                                                                          } else if (value
+                                                                              is ApiFailure) {
+                                                                            Loading.stop();
+                                                                          }
+                                                                        });
                                                                       } else {
                                                                         OnLoadDialogUser(
                                                                             mUserList,
@@ -688,7 +908,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                             TextSpan(
                                                                 text: Languages.of(
                                                                         context)!
-                                                                    .mmyservicelink,
+                                                                    .mtoolsLink,
                                                                 style: const TextStyle(
                                                                     fontFamily:
                                                                         'OpenSauceSansMedium',
@@ -699,7 +919,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                             TextSpan(
                                                                 text: Languages.of(
                                                                         context)!
-                                                                    .mMyServices,
+                                                                    .mCaptable,
                                                                 style: const TextStyle(
                                                                     fontFamily:
                                                                         'OpenSauceSansBold',
@@ -731,7 +951,562 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                           30, 10, 50, 10),
                                                       child:
                                                           SingleChildScrollView(
-                                                              child: Text("")),
+                                                              child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                              Languages.of(
+                                                                      context)!
+                                                                  .mCaptableOverview,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              style: const TextStyle(
+                                                                  fontFamily:
+                                                                      'OpenSauceSansSemiBold',
+                                                                  fontSize:
+                                                                      mSizeFive,
+                                                                  color:
+                                                                      mBlackTwo)),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              Expanded(
+                                                                flex:
+                                                                    5, // takes 30% of available width
+                                                                child: Container(
+                                                                    height: 500,
+                                                                    width: MediaQuery.of(context).size.width / 2,
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius.circular(10),
+                                                                        color: Colors.white10,
+                                                                        border: Border.all(
+                                                                          color:
+                                                                              mBlueSix,
+                                                                          width:
+                                                                              1,
+                                                                        )),
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
+                                                                      child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment
+                                                                              .start,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            Container(
+                                                                              height: 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                                                                                color: mBlueSeven,
+                                                                              ),
+                                                                              child: Align(alignment: Alignment.center, child: Text(Languages.of(context)!.mInvestorwiseoverview, textAlign: TextAlign.start, style: const TextStyle(fontFamily: 'OpenSauceSansSemiBold', fontSize: mSizeFour, color: Colors.white))),
+                                                                            ),
+                                                                            SizedBox(
+                                                                              height: 30,
+                                                                            ),
+                                                                            (mInvestorWiseGraphList.isNotEmpty)
+                                                                                ? PieChart(
+                                                                                    dataMap: InvesteddataMap,
+                                                                                    animationDuration: const Duration(milliseconds: 800),
+                                                                                    chartLegendSpacing: 32,
+                                                                                    chartRadius: 300,
+                                                                                    colorList: InvestedcolorList,
+                                                                                    initialAngleInDegree: 0,
+                                                                                    chartType: ChartType.ring,
+                                                                                    ringStrokeWidth: 40,
+                                                                                    centerText: "",
+                                                                                    legendOptions: const LegendOptions(
+                                                                                      showLegendsInRow: false,
+                                                                                      legendPosition: LegendPosition.bottom,
+                                                                                      showLegends: true,
+                                                                                      legendShape: BoxShape.circle,
+                                                                                      legendTextStyle: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: 14, color: mBlackColor),
+                                                                                    ),
+
+                                                                                    chartValuesOptions: const ChartValuesOptions(
+                                                                                      showChartValueBackground: true,
+                                                                                      showChartValues: true,
+                                                                                      showChartValuesInPercentage: true,
+                                                                                      showChartValuesOutside: true,
+                                                                                      decimalPlaces: 1,
+                                                                                    ),
+                                                                                    // gradientList: ---To add gradient colors---
+                                                                                    // emptyColorGradient: ---Empty Color gradient---
+                                                                                  )
+                                                                                : const Center(
+                                                                                    child: Text("No Data found", style: TextStyle(fontFamily: 'OpenSauceSansSemiBold', fontSize: 20, color: Colors.black)),
+                                                                                  )
+                                                                          ]),
+                                                                    )),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 50,
+                                                              ),
+                                                              Expanded(
+                                                                flex:
+                                                                    5, // takes 30% of available width
+                                                                child: Container(
+                                                                    height: 500,
+                                                                    width: MediaQuery.of(context).size.width / 2,
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius: BorderRadius.circular(10),
+                                                                        color: Colors.white10,
+                                                                        border: Border.all(
+                                                                          color:
+                                                                              mBlueSix,
+                                                                          width:
+                                                                              1,
+                                                                        )),
+                                                                    child: Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .fromLTRB(
+                                                                          0,
+                                                                          0,
+                                                                          0,
+                                                                          0),
+                                                                      child: Column(
+                                                                          mainAxisAlignment: MainAxisAlignment
+                                                                              .start,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            Container(
+                                                                              height: 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+                                                                                color: mBlueSeven,
+                                                                              ),
+                                                                              child: Align(alignment: Alignment.center, child: Text(Languages.of(context)!.mRoundwiseoverview, textAlign: TextAlign.start, style: const TextStyle(fontFamily: 'OpenSauceSansSemiBold', fontSize: mSizeFour, color: Colors.white))),
+                                                                            ),
+                                                                            SizedBox(
+                                                                              height: 30,
+                                                                            ),
+                                                                            (mRoundWiseGraphList.isNotEmpty)
+                                                                                ? PieChart(
+                                                                                    dataMap: RoundWisedataMap,
+                                                                                    animationDuration: const Duration(milliseconds: 800),
+                                                                                    chartLegendSpacing: 32,
+                                                                                    chartRadius: 300,
+                                                                                    colorList: RoundWisecolorList,
+                                                                                    initialAngleInDegree: 0,
+                                                                                    chartType: ChartType.ring,
+                                                                                    ringStrokeWidth: 40,
+                                                                                    centerText: "",
+                                                                                    legendOptions: const LegendOptions(
+                                                                                      showLegendsInRow: false,
+                                                                                      legendPosition: LegendPosition.bottom,
+                                                                                      showLegends: true,
+                                                                                      legendShape: BoxShape.circle,
+                                                                                      legendTextStyle: TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: 14, color: mBlackColor),
+                                                                                    ),
+                                                                                    chartValuesOptions: const ChartValuesOptions(
+                                                                                      showChartValueBackground: true,
+                                                                                      showChartValues: true,
+                                                                                      showChartValuesInPercentage: true,
+                                                                                      showChartValuesOutside: true,
+                                                                                      decimalPlaces: 1,
+                                                                                    ),
+                                                                                    // gradientList: ---To add gradient colors---
+                                                                                    // emptyColorGradient: ---Empty Color gradient---
+                                                                                  )
+                                                                                : const Center(
+                                                                                    child: Text("No Data found", style: TextStyle(fontFamily: 'OpenSauceSansSemiBold', fontSize: 20, color: Colors.black)),
+                                                                                  )
+                                                                          ]),
+                                                                    )),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 30,
+                                                          ),
+                                                          Container(
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              color:
+                                                                  mWhiteColor,
+                                                              child: Stack(
+                                                                children: [
+                                                                  Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topLeft,
+                                                                    child: Text(
+                                                                        Languages.of(context)!
+                                                                            .mCaptableOverview,
+                                                                        textAlign:
+                                                                            TextAlign
+                                                                                .start,
+                                                                        style: const TextStyle(
+                                                                            fontFamily:
+                                                                                'OpenSauceSansSemiBold',
+                                                                            fontSize:
+                                                                                mSizeFive,
+                                                                            color:
+                                                                                mBlackTwo)),
+                                                                  ),
+                                                                  Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .topRight,
+                                                                    child:
+                                                                        Container(
+                                                                      width: MediaQuery.of(context)
+                                                                              .size
+                                                                              .width /
+                                                                          2,
+                                                                      child:
+                                                                          Row(
+                                                                        //ROW 1
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.end,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        children: [
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                20,
+                                                                          ),
+                                                                          Container(
+                                                                              height: 35,
+                                                                              width: 200,
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(10),
+                                                                                  border: Border.all(
+                                                                                    color: mWhiteColor,
+                                                                                    width: 1,
+                                                                                  )),
+                                                                              child: Padding(
+                                                                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                                  child: InkWell(
+                                                                                    child: Align(
+                                                                                      alignment: Alignment.center,
+                                                                                      child: PrimaryButton(
+                                                                                          mButtonname: Languages.of(context)!.mAddFundingRound,
+                                                                                          onpressed: () {
+                                                                                            if (mFrom == 1) {
+                                                                                              //  OnCreateInvestorDialog();
+                                                                                            }
+                                                                                          },
+                                                                                          mSelectcolor: mBlueSix,
+                                                                                          mTextColor: mWhiteColor,
+                                                                                          mFontSize: 16,
+                                                                                          mHeigth: 40),
+                                                                                    ),
+                                                                                  ))),
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                5,
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              )),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Material(
+                                                            color: Colors.white,
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    const SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    InkWell(
+                                                                      hoverColor:
+                                                                          Colors
+                                                                              .white,
+                                                                      onTap:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          mFrom =
+                                                                              1;
+                                                                        });
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            150,
+                                                                        height:
+                                                                            40,
+                                                                        child: Align(
+                                                                            alignment: Alignment
+                                                                                .centerLeft,
+                                                                            child: Text(Languages.of(context)!.mInvestorwise,
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(fontFamily: (mFrom == 1) ? 'OpenSauceSansBold' : 'OpenSauceSansRegular', fontSize: mSizeFour, color: (mFrom == 1) ? mS1GreenNine : mBlackTwo))),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    InkWell(
+                                                                      hoverColor:
+                                                                          Colors
+                                                                              .white,
+                                                                      onTap:
+                                                                          () {
+                                                                        setState(
+                                                                            () {
+                                                                          mFrom =
+                                                                              2;
+                                                                        });
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            200,
+                                                                        height:
+                                                                            40,
+                                                                        child: Align(
+                                                                            alignment: Alignment
+                                                                                .centerLeft,
+                                                                            child: Text(Languages.of(context)!.mRoundwise,
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(fontFamily: (mFrom == 2) ? 'OpenSauceSansBold' : 'OpenSauceSansRegular', fontSize: mSizeFour, color: (mFrom == 2) ? mS1GreenNine : mBlackTwo))),
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Row(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .center,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Container(
+                                                                      width:
+                                                                          150,
+                                                                      height: 2,
+                                                                      child:
+                                                                          Container(
+                                                                        color: (mFrom ==
+                                                                                1)
+                                                                            ? mS1GreenNine
+                                                                            : Colors.transparent,
+                                                                        width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width,
+                                                                        height:
+                                                                            1,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 5,
+                                                                    ),
+                                                                    Container(
+                                                                      width:
+                                                                          150,
+                                                                      height: 2,
+                                                                      child:
+                                                                          Container(
+                                                                        color: (mFrom ==
+                                                                                2)
+                                                                            ? mS1GreenNine
+                                                                            : Colors.transparent,
+                                                                        width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width,
+                                                                        height:
+                                                                            1,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                                Material(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  child:
+                                                                      Container(
+                                                                    color:
+                                                                        mGreyFive,
+                                                                    width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width,
+                                                                    height: 1,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              10),
+                                                                      border:
+                                                                          Border
+                                                                              .all(
+                                                                        color:
+                                                                            mGreyFour,
+                                                                        width:
+                                                                            1,
+                                                                      )),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Container(
+                                                                      height:
+                                                                          50,
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                        color:
+                                                                            mGreyTwo,
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(8),
+                                                                            topRight: Radius.circular(8)),
+                                                                      ),
+                                                                      child:
+                                                                          Row(
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.center,
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.spaceEvenly,
+                                                                        children: [
+                                                                          Expanded(
+                                                                              flex: 1,
+                                                                              child: DataTitleText(
+                                                                                menuname: Languages.of(context)!.mname,
+                                                                              )),
+                                                                          Expanded(
+                                                                              flex: 1,
+                                                                              child: DataTitleText(
+                                                                                menuname: Languages.of(context)!.mDateofAllotment,
+                                                                              )),
+                                                                          Expanded(
+                                                                              flex: 1,
+                                                                              child: DataTitleText(
+                                                                                menuname: Languages.of(context)!.mAmountInvested,
+                                                                              )),
+                                                                          Expanded(
+                                                                              flex: 1,
+                                                                              child: DataTitleText(
+                                                                                menuname: Languages.of(context)!.mSharesAllotted,
+                                                                              )),
+                                                                          Expanded(
+                                                                              flex: 1,
+                                                                              child: DataTitleText(
+                                                                                menuname: Languages.of(context)!.mFullyDilutedShares,
+                                                                              )),
+                                                                          Expanded(
+                                                                              flex: 1,
+                                                                              child: DataTitleText(
+                                                                                menuname: Languages.of(context)!.mClassOfShares,
+                                                                              )),
+                                                                          Expanded(
+                                                                              flex: 1,
+                                                                              child: DataTitleText(
+                                                                                menuname: Languages.of(context)!.mShareholding,
+                                                                              )),
+                                                                        ],
+                                                                      )),
+                                                                  Container(
+                                                                    color:
+                                                                        mGreyThree,
+                                                                    height: 1,
+                                                                    width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 20,
+                                                                  ),
+                                                                  (mFrom == 1)
+                                                                      ? Container(
+                                                                          height:
+                                                                              mInvestorWiseList.length * 50,
+                                                                          child: ListView.builder(
+                                                                              shrinkWrap: true,
+                                                                              itemCount: mInvestorWiseList.length,
+                                                                              itemBuilder: (_, index) {
+                                                                                final mInvestorList = mInvestorWiseList[index];
+                                                                                return InkWell(
+                                                                                  onTap: () {},
+                                                                                  child: InvosterWiseList(
+                                                                                    mInvestorWiseList: mInvestorList,
+                                                                                  ),
+                                                                                );
+                                                                              }),
+                                                                        )
+                                                                      : Container(
+                                                                          height:
+                                                                              mRoundWiseList.length * 50,
+                                                                          child: ListView.builder(
+                                                                              shrinkWrap: true,
+                                                                              itemCount: mRoundWiseList.length,
+                                                                              itemBuilder: (_, index) {
+                                                                                final mRoundList = mRoundWiseList[index];
+                                                                                return InkWell(
+                                                                                  onTap: () {},
+                                                                                  child: RoundWiseList(
+                                                                                    mRoundWise: mRoundList,
+                                                                                  ),
+                                                                                );
+                                                                              }),
+                                                                        )
+                                                                ],
+                                                              )),
+                                                          const SizedBox(
+                                                            height: 80,
+                                                          ),
+                                                        ],
+                                                      )),
                                                     ),
                                                     const SizedBox(
                                                       height: 10,
@@ -876,14 +1651,13 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
             //   file = File(_paths!.files.single.path!);
 
             objUploadFiles.attach = base64Encode(_paths![i].bytes!);
-            //objUploadFiles.attach = "";
-            objUploadFiles.documenttype = _paths![i].extension!;
             objUploadFiles.name = _paths![i].name!;
+            objUploadFiles.documenttype = _paths![i].extension!;
+            objUploadFiles.docid = "";
+            objUploadFiles.isupload = false;
 
-            // Create file path
-            //  final filePath = directory + "/"+_paths![i].name!+ "."+_paths![i].extension!;
-
-            // '${directory}/ .extension'; // Change file_name and extension accordingly
+            // objUploadFiles.attach = "";
+            // objUploadFiles.name = "";
 
             mUploadFiles.add(objUploadFiles);
           }
@@ -895,25 +1669,35 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
     });
   }
 
-  void OnLoadDialog(PitchRoomDetail mPitchroomList) {
-    CompanynameController.text = mPitchroomList.companyName ?? "";
-    mUpdateAboutStartupController.text = mPitchroomList.aboutStartup ?? "";
-    PitchroomController.text = mPitchroomList.roomName ?? "";
-    mNotesController.text = mPitchroomList.notes ?? "";
-    mGetCoverImage = mPitchroomList.coverImage ?? "";
-
-    for (int i = 0; i < mPitchroomList.documents!.length; i++) {
+  void OnLoadDialog(PitchRoomDetail mgetPitchroomList) {
+    CompanynameController.text = mgetPitchroomList.companyName ?? "";
+    mUpdateAboutStartupController.text = mgetPitchroomList.aboutStartup ?? "";
+    PitchroomController.text = mgetPitchroomList.roomName ?? "";
+    mNotesController.text = mgetPitchroomList.notes ?? "";
+    mGetCoverImage = mgetPitchroomList.coverImage ?? "";
+    mUploadFiles.clear();
+    for (int i = 0; i < mgetPitchroomList.documents!.length; i++) {
       UploadFiles objUploadFiles = UploadFiles();
 
-      objUploadFiles.attach = mPitchroomList.documents![i].attach!;
-      objUploadFiles.documenttype = mPitchroomList.documents![i].documentType!;
-      objUploadFiles.name = mPitchroomList.documents![i].attach!;
+      objUploadFiles.attach = mgetPitchroomList.documents![i].attach!;
+      objUploadFiles.documenttype =
+          mgetPitchroomList.documents![i].documentType!;
+      objUploadFiles.name = mgetPitchroomList.documents![i].docName!;
+      objUploadFiles.docid = mgetPitchroomList.documents![i].docId!;
+      objUploadFiles.isupload = mgetPitchroomList.documents![i].isUpload!;
 
       mUploadFiles.add(objUploadFiles);
+    }
+    mShareUser.clear();
+    mShareUserList.clear();
+    for (int i = 0; i < mgetPitchroomList.sharedUsers!.length; i++) {
+      mShareUser.add(mgetPitchroomList.sharedUsers![i].userId!);
+      mShareUserList.add(mgetPitchroomList.sharedUsers![i]);
     }
 
     showDialog(
       context: context,
+      barrierDismissible: true,
       builder: (context2) {
         String contentText = "Content of Dialog";
         return StatefulBuilder(
@@ -945,7 +1729,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                               Expanded(
                                   flex: 7,
                                   child: Text(
-                                    mPitchroomList.roomName ?? "",
+                                    mgetPitchroomList.roomName ?? "",
                                     style: const TextStyle(
                                         fontFamily: 'OpenSauceSansSemiBold',
                                         fontSize: mSizeFour,
@@ -1050,6 +1834,7 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                               mBorderView: false,
                               mImageView: true,
                               isMandatory: false,
+                              enabled: false,
                             ),
                           ),
                           const SizedBox(
@@ -1107,93 +1892,134 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                       const SizedBox(
                                         height: 10,
                                       ),
-                                      Container(
-                                        height: 40,
-                                        padding: EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        alignment: Alignment.centerLeft,
-                                        decoration: BoxDecoration(
-                                          color: mLightColorOne,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              width: 1, color: mGreyFour),
-                                        ),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                  flex: 9,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                        child:
-                                                            ((mGetCoverImage ??
-                                                                        "")
-                                                                    .isNotEmpty)
-                                                                ? Container(
-                                                                    height: 30,
-                                                                    width: 30,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        image: NetworkImage(
-                                                                            mGetCoverImage),
-                                                                        //whatever image you can put here
-                                                                        fit: BoxFit
-                                                                            .fill,
-                                                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          print(mGetCoverImage);
+                                          // if ((mGetCoverImage ?? "").isEmpty) {
+                                          if (mGetCoverImage.isEmpty) {
+                                            updateCoverImage(setState);
+                                          }
+
+                                          // }
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          padding: EdgeInsets.only(
+                                              left: 10, right: 10),
+                                          alignment: Alignment.centerLeft,
+                                          decoration: BoxDecoration(
+                                            color: mLightColorOne,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                width: 1, color: mGreyFour),
+                                          ),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Expanded(
+                                                    flex: 9,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          child: ((mGetCoverImage ??
+                                                                      "")
+                                                                  .isNotEmpty)
+                                                              ? Container(
+                                                                  height: 30,
+                                                                  width: 30,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    image:
+                                                                        DecorationImage(
+                                                                      image: NetworkImage(
+                                                                          mGetCoverImage),
+                                                                      //whatever image you can put here
+                                                                      fit: BoxFit
+                                                                          .fill,
                                                                     ),
-                                                                  )
-                                                                : SvgPicture
-                                                                    .asset(
-                                                                    'assets/new_ic_watermarkbg.svg',
-                                                                    height: 30,
-                                                                    width: 30,
                                                                   ),
-                                                      ),
-                                                      const SizedBox(
+                                                                )
+                                                              : (Updateimage !=
+                                                                      null)
+                                                                  ? Image
+                                                                      .memory(
+                                                                      Updateimage!,
+                                                                      fit: BoxFit
+                                                                          .fill,
+                                                                      width: 30,
+                                                                      height:
+                                                                          30,
+                                                                    )
+                                                                  : SvgPicture
+                                                                      .asset(
+                                                                      'assets/new_ic_watermarkbg.svg',
+                                                                      height:
+                                                                          30,
+                                                                      width: 30,
+                                                                    ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 15,
+                                                        ),
+                                                        //UpdateselectedFile
+                                                        Text(
+                                                          (mGetCoverImage
+                                                                  .isNotEmpty)
+                                                              ? mGetCoverImage
+                                                                          .length >
+                                                                      30
+                                                                  ? '${mGetCoverImage.substring(0, 30)}...'
+                                                                  : mGetCoverImage
+                                                              : UpdateselectedFile
+                                                                          .length >
+                                                                      30
+                                                                  ? '${UpdateselectedFile.substring(0, 30)}...'
+                                                                  : UpdateselectedFile,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: const TextStyle(
+                                                              fontFamily:
+                                                                  'OpenSauceSansRegular',
+                                                              fontSize:
+                                                                  mSizeThree,
+                                                              color: mBlackTwo),
+                                                        )
+                                                      ],
+                                                    )),
+                                                Expanded(
+                                                    flex: 1,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        setState(
+                                                          () {
+                                                            mGetCoverImage = "";
+                                                          },
+                                                        );
+                                                      },
+                                                      child: SvgPicture.asset(
+                                                        'assets/new_ic_close.svg',
+                                                        height: 15,
                                                         width: 15,
+                                                        color: mBlackTwo,
                                                       ),
-                                                      Text(
-                                                        mGetCoverImage.length >
-                                                                30
-                                                            ? '${mGetCoverImage.substring(0, 30)}...'
-                                                            : mGetCoverImage,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: const TextStyle(
-                                                            fontFamily:
-                                                                'OpenSauceSansRegular',
-                                                            fontSize:
-                                                                mSizeThree,
-                                                            color: mBlackTwo),
-                                                      )
-                                                    ],
-                                                  )),
-                                              Expanded(
-                                                  flex: 1,
-                                                  child: SvgPicture.asset(
-                                                    'assets/new_ic_close.svg',
-                                                    height: 15,
-                                                    width: 15,
-                                                    color: mBlackTwo,
-                                                  ))
-                                            ]),
+                                                    ))
+                                              ]),
+                                        ),
                                       ),
                                     ],
                                   ))
@@ -1240,19 +2066,21 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                           Container(
                             alignment: Alignment.center,
                             child: AuthFormField(
-                                controller: mNotesController,
-                                textInputAction: TextInputAction.next,
-                                keyboardType: TextInputType.text,
-                                hintText: Languages.of(context)!.mNotes,
-                                radius: 30,
-                                maxLength: 3000,
-                                maxLines: 5,
-                                labelText: Languages.of(context)!.mNotes,
-                                mBorderView: false,
-                                mImageView: true,
-                                isMandatory: false,
-                                viewbgColor: mYellowTwo,
-                                borderColor: mYellowFive),
+                              controller: mNotesController,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.text,
+                              hintText: Languages.of(context)!.mNotes,
+                              radius: 30,
+                              maxLength: 3000,
+                              maxLines: 5,
+                              labelText: Languages.of(context)!.mNotes,
+                              mBorderView: false,
+                              mImageView: true,
+                              isMandatory: false,
+                              viewbgColor: mYellowTwo,
+                              borderColor: mYellowFive,
+                              enabled: false,
+                            ),
                           ),
                           const SizedBox(
                             height: 20,
@@ -1293,8 +2121,134 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                   mRemoveFile: () {
                                                     setState(
                                                       () {
-                                                        mUploadFiles
-                                                            .removeAt(index);
+                                                        if (mLessonsList
+                                                                .isupload ??
+                                                            false) {
+                                                          Widget cancelButton =
+                                                              TextButton(
+                                                            child: Text(
+                                                                Languages.of(
+                                                                        context)!
+                                                                    .mCancel,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'OpenSauceSansRegular',
+                                                                    fontSize:
+                                                                        mSizeThree,
+                                                                    color:
+                                                                        mGreyTen)),
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                          );
+                                                          Widget
+                                                              continueButton =
+                                                              TextButton(
+                                                            child: Text(
+                                                                Languages.of(
+                                                                        context)!
+                                                                    .mok,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'OpenSauceSansRegular',
+                                                                    fontSize:
+                                                                        mSizeThree,
+                                                                    color:
+                                                                        mGreyTen)),
+                                                            onPressed: () {
+                                                              mUploadFiles
+                                                                  .removeAt(
+                                                                      index);
+                                                              Loading(mLoaderGif)
+                                                                  .start(
+                                                                      context);
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                              _apiService1
+                                                                  .mRemoveDocument(
+                                                                      mgetPitchroomList
+                                                                              .id ??
+                                                                          "",
+                                                                      mLessonsList
+                                                                              .docid ??
+                                                                          "")
+                                                                  .then(
+                                                                      (value) async {
+                                                                print(value);
+
+                                                                if (value
+                                                                    is ApiSuccess) {
+                                                                  Loading
+                                                                      .stop();
+
+                                                                  setState(() {
+                                                                    OnLoadPitchRoomList();
+                                                                  });
+                                                                } else if (value
+                                                                    is ApiFailure) {
+                                                                  Loading
+                                                                      .stop();
+                                                                }
+                                                              });
+                                                            },
+                                                          );
+
+                                                          // set up the AlertDialog
+                                                          AlertDialog alert =
+                                                              AlertDialog(
+                                                            content: Text(
+                                                                Languages.of(
+                                                                        context)!
+                                                                    .mRemoveImage,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    fontFamily:
+                                                                        'OpenSauceSansRegular',
+                                                                    fontSize:
+                                                                        mSizeTen,
+                                                                    color:
+                                                                        mGreyTen)),
+                                                            actions: [
+                                                              cancelButton,
+                                                              continueButton,
+                                                            ],
+                                                          );
+
+                                                          // show the dialog
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return alert;
+                                                            },
+                                                          );
+
+                                                          /* OnRemoveImage(
+                                                              "",
+                                                              mLessonsList
+                                                                      .docid ??
+                                                                  "",
+                                                              mPitchroomList
+                                                                      .id ??
+                                                                  "",
+                                                              index,
+                                                              setState);*/
+                                                        } else {
+                                                          mUploadFiles
+                                                              .removeAt(index);
+                                                        }
                                                       },
                                                     );
                                                   },
@@ -1338,6 +2292,125 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                           const SizedBox(
                             height: 20,
                           ),
+                          Visibility(
+                            visible: (mShareUserList.isNotEmpty) ? true : false,
+                            child: Text(Languages.of(context)!.mshareduser,
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    fontFamily: 'OpenSauceSansRegular',
+                                    fontSize: mSizeThree,
+                                    color: mBlackTwo)),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Visibility(
+                            visible: (mShareUserList.isNotEmpty) ? true : false,
+                            child: Container(
+                              height: 45,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: mShareUserList.length,
+                                  itemBuilder: (_, index) {
+                                    final mDashboardList =
+                                        mShareUserList[index];
+                                    return InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                          margin: const EdgeInsets.only(
+                                              right: 8, left: 8),
+                                          padding: const EdgeInsets.only(
+                                              right: 10, left: 10),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            color: mBlueTwo,
+                                            border: Border.all(
+                                                color: mBlueTwo, width: 1),
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(mDashboardList.userId ?? "",
+                                                  textAlign: TextAlign.start,
+                                                  style: const TextStyle(
+                                                      fontFamily:
+                                                          'OpenSauceSansRegular',
+                                                      fontSize: mSizeThree,
+                                                      color: mBlackTwo)),
+                                              const SizedBox(
+                                                width: 20,
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    showDialog<String>(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          AlertDialog(
+                                                        title: null,
+                                                        content: Text(Languages
+                                                                .of(context)!
+                                                            .mRemoveuseraccess),
+                                                        actions: <Widget>[
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    'Cancel'),
+                                                            child: Text(
+                                                                Languages.of(
+                                                                        context)!
+                                                                    .mCancel),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              setState(
+                                                                () {
+                                                                  mShareUserList
+                                                                      .removeAt(
+                                                                          index);
+                                                                  mShareUser
+                                                                      .removeAt(
+                                                                          index);
+                                                                },
+                                                              );
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  'Ok');
+                                                            },
+                                                            child: Text(
+                                                                Languages.of(
+                                                                        context)!
+                                                                    .mok),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                    'assets/new_ic_docclose.svg',
+                                                    width: 20,
+                                                    height: 20,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          )),
+                                    );
+                                  }),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Container(
                             color: mGreyThree,
                             height: 1,
@@ -1352,17 +2425,19 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                             children: [
                               Expanded(
                                 flex: 7,
-                                child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: DeleteButton(
-                                        mButtonname:
-                                            Languages.of(context)!.mDelete,
-                                        onpressed: () {},
-                                        mSelectcolor: mBtnColor,
-                                        mTextColor: mWhiteColor,
-                                        mFontSize: 16,
-                                        mWidth: 150,
-                                        mHeigth: 40)),
+                                child: Visibility(
+                                    visible: false,
+                                    child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: DeleteButton(
+                                            mButtonname:
+                                                Languages.of(context)!.mDelete,
+                                            onpressed: () {},
+                                            mSelectcolor: mBtnColor,
+                                            mTextColor: mWhiteColor,
+                                            mFontSize: 16,
+                                            mWidth: 150,
+                                            mHeigth: 40))),
                               ),
                               Expanded(
                                 flex: 3,
@@ -1372,52 +2447,69 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                         mButtonname:
                                             Languages.of(context)!.mSaveChanges,
                                         onpressed: () {
+                                          print(mGetCoverImage);
+                                          print(UpdatemCaptureUserImage);
                                           if (CompanynameController
                                               .text.isEmpty) {
-                                            ErrorToast(
-                                                context: context,
-                                                text: Languages.of(context)!
+                                            showAlert(
+                                                context,
+                                                Languages.of(context)!
                                                     .mentercompanyname);
                                           } else if (PitchroomController
                                               .text.isEmpty) {
-                                            ErrorToast(
-                                                context: context,
-                                                text: Languages.of(context)!
+                                            showAlert(
+                                                context,
+                                                Languages.of(context)!
                                                     .mEnterCreateaRoom);
                                           } else if (mGetCoverImage.isEmpty) {
-                                            ErrorToast(
-                                                context: context,
-                                                text: Languages.of(context)!
+                                            showAlert(
+                                                context,
+                                                Languages.of(context)!
                                                     .mcoverimage);
                                           } else if (mUpdateAboutStartupController
                                               .text.isEmpty) {
-                                            ErrorToast(
-                                                context: context,
-                                                text: Languages.of(context)!
+                                            showAlert(
+                                                context,
+                                                Languages.of(context)!
                                                     .mEnterAboutStartup);
                                           } else if (mNotesController
                                               .text.isEmpty) {
-                                            ErrorToast(
-                                                context: context,
-                                                text: Languages.of(context)!
+                                            showAlert(
+                                                context,
+                                                Languages.of(context)!
                                                     .mEnterNotes);
                                           } else if (mUploadFiles.isEmpty) {
-                                            ErrorToast(
-                                                context: context,
-                                                text: Languages.of(context)!
+                                            showAlert(
+                                                context,
+                                                Languages.of(context)!
                                                     .mUploadFiles);
                                           } else {
                                             Loading(mLoaderGif).start(context);
 
+                                            var mSetImage = "";
+
+                                            if (UpdatemCaptureUserImage
+                                                .isNotEmpty) {
+                                              mSetImage =
+                                                  UpdatemCaptureUserImage;
+                                            } else {
+                                              mSetImage = "";
+                                            }
+
+                                            var items = <UploadFiles>[];
+                                            items = mUploadFiles
+                                                .where(
+                                                    (item) => !item.isupload!)
+                                                .toList();
+
                                             _apiService1.UpdateCreateRoom(
-                                                    mPitchroomList.id ?? "",
-                                                    mNotesController.text,
+                                                    mgetPitchroomList.id ?? "",
+                                                    PitchroomController.text,
                                                     mUpdateAboutStartupController
                                                         .text,
-                                                    CompanynameController.text,
-                                                    PitchroomController.text,
-                                                    mCaptureUserImage,
-                                                    mUploadFiles)
+                                                    mSetImage,
+                                                    mShareUser,
+                                                    items)
                                                 .then((value) async {
                                               print(value);
 
@@ -1442,15 +2534,16 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                                     () {
                                                       GoRouter.of(context1)
                                                           .push('/Pitchroom');
+
+                                                      // OnLoadPitchRoomList();
                                                     },
                                                   );
                                                 } else {
                                                   Loading.stop();
-                                                  ErrorToast(
-                                                      context: context,
-                                                      text: CommonResponse
-                                                                  .fromJson(value
-                                                                      .data)!
+                                                  showAlert(
+                                                      context,
+                                                      CommonResponse.fromJson(
+                                                                  value.data)!
                                                               .message!
                                                               .message ??
                                                           "");
@@ -1483,6 +2576,82 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
     );
   }
 
+  /*void OnRemoveImage(String UserId, String mDocId, String mRoomId, int index,
+      StateSetter setState1) {
+    Widget cancelButton = TextButton(
+      child: Text(Languages.of(context)!.mCancel,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'OpenSauceSansRegular',
+              fontSize: mSizeThree,
+              color: mGreyTen)),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = TextButton(
+      child: Text(Languages.of(context)!.mok,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'OpenSauceSansRegular',
+              fontSize: mSizeThree,
+              color: mGreyTen)),
+      onPressed: () {
+        Loading(mLoaderGif).start(context);
+        Navigator.of(context).pop();
+        _apiService1.mRemoveDocument(mRoomId, mDocId).then((value) async {
+          print(value);
+
+          if (value is ApiSuccess) {
+            Loading.stop();
+
+            setState1(() {
+              _apiService1
+                  .getPitchroomData("jagadeesan.a1104@gmail.com")
+                  .then((value) async {
+                print(value);
+
+                if (value is ApiSuccess) {
+                  Loading.stop();
+
+                  mPitchroomList = PitchroomlistResponse.fromJson(value.data)
+                      .message!
+                      .pitchRoomDetails!;
+                } else if (value is ApiFailure) {
+                  Loading.stop();
+                }
+              });
+            });
+          } else if (value is ApiFailure) {
+            Loading.stop();
+          }
+        });
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      content: Text(Languages.of(context)!.mRemoveImage,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'OpenSauceSansRegular',
+              fontSize: mSizeTen,
+              color: mGreyTen)),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }*/
+
   //Cover Image Picker View
   void selectFile(StateSetter setState) async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -1503,6 +2672,29 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
 
       mCaptureUserImage = base64Encode(image!);
       mCaptureUserImage = base64Encode(image!);
+    }
+  }
+
+  //Cover Image Picker View
+  void updateCoverImage(StateSetter setState) async {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: [
+        'png',
+        'jpg',
+        'jpeg',
+      ],
+    );
+
+    if (result != null) {
+      setState(() {
+        UpdateselectedFile = result.files.first.name;
+      });
+
+      Updateimage = result.files.first.bytes;
+
+      UpdatemCaptureUserImage = base64Encode(Updateimage!);
+      UpdatemCaptureUserImage = base64Encode(Updateimage!);
     }
   }
 
@@ -2033,6 +3225,12 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                     } else {
                                       Loading(mLoaderGif).start(context);
 
+                                      if (mRemoveSharedUser) {
+                                        mRemoveSharedUser = false;
+                                        Navigator.pop(context3);
+                                      }
+
+                                      Navigator.pop(context3);
                                       _apiService1
                                           .mSharedUser(
                                         mRoomid,
@@ -2050,22 +3248,9 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
                                               false) {
                                             Loading.stop();
 
-                                            SucessToast(
-                                                context: context,
-                                                text: CommonResponse.fromJson(
-                                                            value.data)!
-                                                        .message!
-                                                        .message ??
-                                                    "");
-
-                                            Navigator.pop(context4, false);
-
-                                            setState(
-                                              () {
-                                                // GoRouter.of(context1)
-                                                //     .push('/Pitchroom');
-                                              },
-                                            );
+                                            showAlert(context,
+                                                "Users Created Successfully");
+                                            //  OnLoadPitchRoomList();
                                           } else {
                                             Loading.stop();
                                             ErrorToast(
@@ -2190,32 +3375,6 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
     );
   }
 
-  // void OnLoadList(void Function(VoidCallback fn) getsetState) {
-  //   _apiService1
-  //       .getPitchroomData(
-  //     "jagadeesan.a1104@gmail.com",
-  //   )
-  //       .then((value) async {
-  //     if (value is ApiSuccess) {
-  //       Loading.stop();
-  //
-  //       if (PitchroomlistResponse.fromJson(value.data)!.message!.status ??
-  //           false) {
-  //         setState(
-  //           () {
-  //             mPitchroomList = PitchroomlistResponse.fromJson(value.data)
-  //                 .message!
-  //                 .pitchRoomDetails!;
-  //
-  //           },
-  //         );
-  //       } else {}
-  //     } else if (value is ApiFailure) {
-  //       Loading.stop();
-  //     }
-  //   });
-  // }
-
   modelDBItems(List<UserRole>? mGetDBlist) {
     final list = (mGetDBlist as List<UserRole>).map((e) {
       final fullName = e.fullName as String;
@@ -2229,6 +3388,70 @@ class _NewPitchRoomState extends State<NewPitchRoom> {
 
     return list;
   }
+
+  void OnLoadCaptable() {
+    Loading(mLoaderGif).start(context);
+
+    _apiService1
+        .getCaptableData("jagadeesan.a1104@gmail.com")
+        .then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        Loading.stop();
+        setState(() {
+          mInvestorWiseList = InvestorroundwiseResponse.fromJson(value.data)
+              .message!
+              .investorWise!;
+
+          mInvestorWiseGraphList =
+              InvestorroundwiseResponse.fromJson(value.data)
+                  .message!
+                  .investorWiseGraph!;
+
+          mRoundWiseList = InvestorroundwiseResponse.fromJson(value.data)
+              .message!
+              .roundWise!;
+
+          mRoundWiseGraphList = InvestorroundwiseResponse.fromJson(value.data)
+              .message!
+              .roundWiseGraph!;
+
+          final returnsMapInvested = Map.fromIterables(
+              mInvestorWiseGraphList.map((e) => e.name!),
+              mInvestorWiseGraphList.map((e) => double.parse(e.percentage!)));
+
+          InvesteddataMap.addAll(returnsMapInvested);
+
+          final returnsMapRoundWise = Map.fromIterables(
+              mRoundWiseGraphList.map((e) => e.name!),
+              mRoundWiseGraphList.map((e) => double.parse(e.percentage!)));
+
+          RoundWisedataMap.addAll(returnsMapRoundWise);
+        });
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
+
+  void OnLoadPitchRoomList() {
+    _apiService1
+        .getPitchroomData("jagadeesan.a1104@gmail.com")
+        .then((value) async {
+      print(value);
+
+      if (value is ApiSuccess) {
+        Loading.stop();
+
+        mPitchroomList = PitchroomlistResponse.fromJson(value.data)
+            .message!
+            .pitchRoomDetails!;
+      } else if (value is ApiFailure) {
+        Loading.stop();
+      }
+    });
+  }
 }
 
 class UploadFiles {
@@ -2238,22 +3461,78 @@ class UploadFiles {
   String? documenttype;
   String? attach;
   String? name;
+  String? docid;
+  String? docname;
+  bool? isupload;
 
   UploadFiles({
     this.documenttype,
     this.attach,
     this.name,
+    this.docid,
+    this.docname,
+    this.isupload,
   });
 
   factory UploadFiles.fromJson(Map<String, dynamic> json) => UploadFiles(
         documenttype: json["document_type"],
         attach: json["attach"],
         name: json["name"],
+        docid: json["doc_id"],
+        docname: json["doc_name"],
+        isupload: json["is_upload"],
       );
 
   Map<String, dynamic> toJson() => {
         "document_type": documenttype,
         "attach": attach,
         "name": name,
+        "docid": docid,
+        "docname": docname,
+        "isupload": isupload,
       };
+}
+
+class DatacellText extends StatelessWidget {
+  const DatacellText({
+    super.key,
+    required this.menuname,
+  });
+
+  final String menuname;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5.0),
+      child: Text(menuname,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'OpenSauceSansMedium',
+              fontSize: 14,
+              color: mGreyelven)),
+    );
+  }
+}
+
+class DataTitleText extends StatelessWidget {
+  const DataTitleText({
+    super.key,
+    required this.menuname,
+  });
+
+  final String menuname;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5.0),
+      child: Text(menuname,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              fontFamily: 'OpenSauceSansMedium',
+              fontSize: 14,
+              color: mBlackTwo)),
+    );
+  }
 }

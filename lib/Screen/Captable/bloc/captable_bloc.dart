@@ -15,10 +15,10 @@ import 'package:startinsights/Utils/pref_manager.dart';
 
 class CaptableBloc extends Bloc<CaptableEvent, CaptableStatus> {
   final BuildContext mContext;
-  List<InvestorWiseList> mInvestorWiseList = [];
+  List<InvestorWise> mInvestorWiseList = [];
   List<WiseGraph> mInvestorWiseGraphList = [];
   List<WiseGraph> mRoundWiseGraphList = [];
-  List<RoundWiseList> mRoundWiseList = [];
+  List<RoundWise> mRoundWiseList = [];
   CaptableBloc({
     required this.mContext,
   }) : super(CaptableInitialState()) {
@@ -35,7 +35,7 @@ class CaptableBloc extends Bloc<CaptableEvent, CaptableStatus> {
       if (apiResults is ApiSuccess) {
         mInvestorWiseList = InvestorroundwiseResponse.fromJson(apiResults.data)
             .message!
-            .investorWiseList!;
+            .investorWise!;
 
         mInvestorWiseGraphList =
             InvestorroundwiseResponse.fromJson(apiResults.data)
@@ -44,7 +44,7 @@ class CaptableBloc extends Bloc<CaptableEvent, CaptableStatus> {
 
         mRoundWiseList = InvestorroundwiseResponse.fromJson(apiResults.data)
             .message!
-            .roundWiseList!;
+            .roundWise!;
 
         mRoundWiseGraphList =
             InvestorroundwiseResponse.fromJson(apiResults.data)

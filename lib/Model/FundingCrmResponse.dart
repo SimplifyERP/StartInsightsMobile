@@ -105,9 +105,10 @@ class Investor {
   String? name;
   String? typeOfInvestor;
   String? logo;
+  String? investorname;
   String? status;
   String? contactedPerson;
-  List<FundingStage>? fundingStage;
+  String? fundingStage;
   String? description;
   String? website;
   String? mailAddress;
@@ -118,6 +119,7 @@ class Investor {
     this.name,
     this.typeOfInvestor,
     this.logo,
+    this.investorname,
     this.status,
     this.contactedPerson,
     this.fundingStage,
@@ -132,12 +134,14 @@ class Investor {
         name: json["name"],
         typeOfInvestor: json["type_of_investor"],
         logo: json["logo"],
+        investorname: json["investor_name"],
         status: json["status"],
         contactedPerson: json["contacted_person"],
-        fundingStage: json["funding_stage"] == null
+        fundingStage: json["funding_stage"],
+        /*  fundingStage: json["funding_stage"] == null
             ? []
             : List<FundingStage>.from(
-                json["funding_stage"]!.map((x) => FundingStage.fromJson(x))),
+                json["funding_stage"]!.map((x) => FundingStage.fromJson(x))),*/
         description: json["description"],
         website: json["website"],
         mailAddress: json["mail_address"],
@@ -149,11 +153,13 @@ class Investor {
         "name": name,
         "type_of_investor": typeOfInvestor,
         "logo": logo,
+        "investorname": investorname,
         "status": status,
         "contacted_person": contactedPerson,
-        "funding_stage": fundingStage == null
-            ? []
-            : List<dynamic>.from(fundingStage!.map((x) => x.toJson())),
+        "funding_stage": fundingStage,
+        // == null
+        // ? []
+        // : List<dynamic>.from(fundingStage!.map((x) => x.toJson())),
         "description": description,
         "website": website,
         "mail_address": mailAddress,

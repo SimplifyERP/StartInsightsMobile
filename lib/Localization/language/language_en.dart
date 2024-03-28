@@ -416,4 +416,17 @@ class LanguageEn extends Languages {
   String get mEntermobileno => "Enter Contact Number";
   String get mCheckFundabilityTest => "Check Fundability Test";
   String get meventregister => "Are you sure want to Register this event?";
+  String get mredeem => "Redeem";
+  String get mcopypastecode => "Copy and paste use this code";
+  String get mclickcoupon => "Click the URL use this coupon";
+  String get mSteptofollow => "Step to follow:";
+  String get mRemoveImage => "Are you sure want to remove this Document?";
+  String get mRemoveuseraccess =>
+      "Are you sure want to remove share access to this user";
+
+  String get mInvestorwiseoverview => "Investor-wise Overview";
+  String get mRoundwiseoverview => "Round-wise Overview";
+  String get mname => "Name";
+  String get mEnterContactPerson => "Enter Contact Person";
+  String get mSelectCompanyLogo => "Select Company Logo";
 }

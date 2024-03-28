@@ -27,4 +27,12 @@ class ProfileRepo {
       'password': password
     });
   }
+
+  Future<ApiResults> ProfileList(
+    String userid,
+  ) async {
+    return await sl<MyDio>().postData(endPoint: mProfileList, data: {
+      'user_id': userid,
+    });
+  }
 }

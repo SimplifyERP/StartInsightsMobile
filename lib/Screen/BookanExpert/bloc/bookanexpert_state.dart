@@ -16,6 +16,6 @@ class GetBookanExpertInfoFailState extends BookanExpertStatus {
 }
 
 class GetBookanExpertInfoSuccessState extends BookanExpertStatus {
-  List<BookAnExpertList> mBookAnExpertList;
+  List<FundraisingExpert> mBookAnExpertList;
   GetBookanExpertInfoSuccessState(this.mBookAnExpertList);
 }

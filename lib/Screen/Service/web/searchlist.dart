@@ -1,5 +1,10 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:custom_gif_loading/custom_gif_loading.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_network/image_network.dart';
@@ -15,6 +20,7 @@ import 'package:startinsights/Repository/SearchinvestorsRepo.dart';
 import 'package:startinsights/Repository/pitchcraftlist_repo.dart';
 import 'package:startinsights/Screen/Service/bloc/servicelist_bloc.dart';
 import 'package:startinsights/Screen/Service/bloc/servicelist_state.dart';
+import 'package:startinsights/Screen/Service/web/MessageItem.dart';
 import 'package:startinsights/Screen/Service/web/TrackingItem.dart';
 import 'package:startinsights/Screen/Service/web/myservicelistitem.dart';
 import 'package:startinsights/Screen/Service/web/servicelistitem.dart';
@@ -41,6 +47,25 @@ class _SearchListState extends State<SearchList> {
   final SearchinvestorsRepo apiService1 = SearchinvestorsRepo();
 
   ValueNotifier<bool> setnotifier = ValueNotifier(true);
+  final TextEditingController mSendMsgController = TextEditingController();
+
+  List<bool> mMessageFrom = [
+    false,
+    true,
+    true,
+    false,
+    true,
+    false,
+    true,
+    true,
+    false,
+    true,
+    false,
+    true,
+    true,
+    false,
+    true
+  ];
 
   List<MyServices> mServiceList = [];
   List<MyServices> mMyServiceList = [];
@@ -53,6 +78,10 @@ class _SearchListState extends State<SearchList> {
   late BuildContext mAlertDialogcontext;
   var mPitchcraftid = "";
   var mAmount = 0;
+
+  List<UploadDoc> mUploadFiles = [];
+  List<PlatformFile>? paths;
+
   @override
   void initState() {
     super.initState();
@@ -916,7 +945,15 @@ class _SearchListState extends State<SearchList> {
                                                                               shrinkWrap: true,
                                                                               itemBuilder: ((context, index) {
                                                                                 final mservicedetails = mServiceDetail[0].serviceTracking![index];
-                                                                                return TrackingItem(mTotalview: mServiceDetail[0].serviceTracking!.length, mCurrentview: index, mServiceTracking: mservicedetails, mServiceDetailsMessage: mServiceDetailsMessage);
+                                                                                return TrackingItem(
+                                                                                  mTotalview: mServiceDetail[0].serviceTracking!.length,
+                                                                                  mCurrentview: index,
+                                                                                  mServiceTracking: mservicedetails,
+                                                                                  mServiceDetailsMessage: mServiceDetailsMessage,
+                                                                                  mDocUpload: () {
+                                                                                    OnDocUpload(mservicedetails, mServiceDetail[0].id ?? "");
+                                                                                  },
+                                                                                );
                                                                               }),
                                                                               itemCount: mServiceDetail[0].serviceTracking!.length,
                                                                             )),
@@ -955,7 +992,7 @@ class _SearchListState extends State<SearchList> {
                                                                             ),
                                                                           ],
                                                                         ),
-                                                                        child: Column(
+                                                                        child: Row(
                                                                             crossAxisAlignment:
                                                                                 CrossAxisAlignment.center,
                                                                             mainAxisAlignment: MainAxisAlignment.center,
@@ -1010,87 +1047,52 @@ class _SearchListState extends State<SearchList> {
                                                                                     ],
                                                                                   )),
                                                                               Expanded(
-                                                                                  flex: 3,
-                                                                                  child: Center(
-                                                                                      child: Row(
-                                                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                                    children: [
-                                                                                      Container(
-                                                                                        width: 150,
-                                                                                        height: 30,
-                                                                                        padding: const EdgeInsets.only(right: 20, left: 20),
-                                                                                        decoration: BoxDecoration(
-                                                                                          borderRadius: BorderRadius.circular(10),
-                                                                                          color: Colors.white,
-                                                                                          boxShadow: const [
-                                                                                            BoxShadow(
-                                                                                              color: Colors.white,
-                                                                                              blurRadius: 1.0,
-                                                                                            ),
-                                                                                          ],
+                                                                                  flex: 4,
+                                                                                  child: InkWell(
+                                                                                    onTap: () {},
+                                                                                    child: Center(
+                                                                                        child: Row(
+                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        Container(
+                                                                                          width: 120,
+                                                                                          height: 30,
+                                                                                          padding: const EdgeInsets.only(right: 20, left: 20),
+                                                                                          decoration: BoxDecoration(
+                                                                                            borderRadius: BorderRadius.circular(10),
+                                                                                            color: Colors.white,
+                                                                                            boxShadow: const [
+                                                                                              BoxShadow(
+                                                                                                color: Colors.white,
+                                                                                                blurRadius: 1.0,
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                          child: Center(
+                                                                                              child: Row(
+                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                            children: [
+                                                                                              SvgPicture.asset(
+                                                                                                'assets/new_ic_call.svg',
+                                                                                                width: 20,
+                                                                                                height: 20,
+                                                                                              ),
+                                                                                              SizedBox(
+                                                                                                width: 10,
+                                                                                              ),
+                                                                                              Text(
+                                                                                                Languages.of(context)!.mCallMe,
+                                                                                                textAlign: TextAlign.center,
+                                                                                                style: const TextStyle(fontFamily: 'OpenSauceSansMedium', fontSize: mSizeTwo, color: mGreyNine),
+                                                                                              )
+                                                                                            ],
+                                                                                          )),
                                                                                         ),
-                                                                                        child: Center(
-                                                                                            child: Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                          children: [
-                                                                                            SvgPicture.asset(
-                                                                                              'assets/new_ic_call.svg',
-                                                                                              width: 20,
-                                                                                              height: 20,
-                                                                                            ),
-                                                                                            SizedBox(
-                                                                                              width: 10,
-                                                                                            ),
-                                                                                            Text(
-                                                                                              Languages.of(context)!.mCallMe,
-                                                                                              textAlign: TextAlign.center,
-                                                                                              style: const TextStyle(fontFamily: 'OpenSauceSansMedium', fontSize: mSizeTwo, color: mGreyNine),
-                                                                                            )
-                                                                                          ],
-                                                                                        )),
-                                                                                      ),
-                                                                                      SizedBox(
-                                                                                        width: 20,
-                                                                                      ),
-                                                                                      Container(
-                                                                                        width: 150,
-                                                                                        height: 30,
-                                                                                        padding: const EdgeInsets.only(right: 20, left: 20),
-                                                                                        decoration: BoxDecoration(
-                                                                                          borderRadius: BorderRadius.circular(10),
-                                                                                          color: Colors.white,
-                                                                                          boxShadow: const [
-                                                                                            BoxShadow(
-                                                                                              color: Colors.white,
-                                                                                              blurRadius: 1.0,
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                        child: Center(
-                                                                                            child: Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                          children: [
-                                                                                            SvgPicture.asset(
-                                                                                              'assets/new_ic_chat.svg',
-                                                                                              width: 20,
-                                                                                              height: 20,
-                                                                                            ),
-                                                                                            SizedBox(
-                                                                                              width: 10,
-                                                                                            ),
-                                                                                            Text(
-                                                                                              Languages.of(context)!.mChatwithMe,
-                                                                                              textAlign: TextAlign.center,
-                                                                                              style: const TextStyle(fontFamily: 'OpenSauceSansMedium', fontSize: mSizeTwo, color: mGreyNine),
-                                                                                            )
-                                                                                          ],
-                                                                                        )),
-                                                                                      ),
-                                                                                    ],
-                                                                                  )))
+                                                                                      ],
+                                                                                    )),
+                                                                                  ))
                                                                             ]),
                                                                       )
                                                                     ],
@@ -1151,7 +1153,16 @@ class _SearchListState extends State<SearchList> {
                                                                                 MainAxisAlignment.center,
                                                                             crossAxisAlignment: CrossAxisAlignment.center,
                                                                             children: [
-                                                                              Expanded(flex: 9, child: Text("")),
+                                                                              Expanded(
+                                                                                flex: 9,
+                                                                                child: ListView.builder(
+                                                                                  itemCount: mMessageFrom.length,
+                                                                                  shrinkWrap: true,
+                                                                                  itemBuilder: (context, position) {
+                                                                                    return MessageItem(mMessageFrom: mMessageFrom[position]);
+                                                                                  },
+                                                                                ),
+                                                                              ),
                                                                               Expanded(
                                                                                   flex: 1,
                                                                                   child: Column(
@@ -1173,20 +1184,29 @@ class _SearchListState extends State<SearchList> {
                                                                                           ],
                                                                                         ),
                                                                                         child: Row(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                                                                          Expanded(flex: 8, child: Text("")),
+                                                                                          Expanded(
+                                                                                            flex: 8,
+                                                                                            child: TextField(
+                                                                                              controller: mSendMsgController,
+                                                                                              style: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mBlackOne),
+                                                                                              autofocus: false,
+                                                                                              keyboardType: TextInputType.multiline,
+                                                                                              decoration: InputDecoration(
+                                                                                                counterText: "",
+                                                                                                border: InputBorder.none,
+                                                                                                labelText: Languages.of(context)!.mEnterDescription,
+                                                                                                labelStyle: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyEigth),
+                                                                                                floatingLabelBehavior: FloatingLabelBehavior.never,
+                                                                                                hintText: Languages.of(context)!.mEnterDescription,
+                                                                                                hintStyle: const TextStyle(fontFamily: 'OpenSauceSansRegular', fontSize: mSizeThree, color: mGreyEigth),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
                                                                                           Expanded(
                                                                                               flex: 2,
                                                                                               child: Row(
                                                                                                 mainAxisAlignment: MainAxisAlignment.end,
                                                                                                 children: [
-                                                                                                  SvgPicture.asset(
-                                                                                                    'assets/new_ic_attach.svg',
-                                                                                                    width: 30,
-                                                                                                    height: 30,
-                                                                                                  ),
-                                                                                                  SizedBox(
-                                                                                                    width: 20,
-                                                                                                  ),
                                                                                                   SvgPicture.asset(
                                                                                                     'assets/new_ic_sendchat.svg',
                                                                                                     width: 30,
@@ -1657,7 +1677,7 @@ class _SearchListState extends State<SearchList> {
     Loading(mLoaderGif).start(context);
 
     _apiService1
-        .getServicedetails("jagadeesan.a1104@gmail.com", "MS-Pitch Deck-00078")
+        .getServicedetails("jagadeesan.a1104@gmail.com", mServiceId)
         .then((value) async {
       print(value);
 
@@ -1946,4 +1966,132 @@ class _SearchListState extends State<SearchList> {
     OnLoadPaymentFail(mAmount.toString());
     Loading.stop();
   }
+
+  void OnDocUpload(ServiceTracking mservicedetails, String serviceid) {
+    Loading(mLoaderGif).start(context);
+    pickFiles(mservicedetails.steps ?? "", serviceid);
+  }
+
+  void pickFiles(String servicestatus, String serviceid) async {
+    try {
+      // Loading(mLoaderGif).start(context1);
+      paths = (await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowMultiple: true,
+
+        onFileLoading: (FilePickerStatus status) => print(status),
+        // allowedExtensions: ['png', 'jpg', 'jpeg', 'heic'],
+        allowedExtensions: [
+          'pdf',
+          'docx',
+          'doc',
+          'xlsx',
+          'png',
+          'jpg',
+          'jpeg',
+        ],
+      ))
+          ?.files;
+    } on PlatformException catch (e) {
+      log('Unsupported operation' + e.toString());
+      Loading.stop();
+    } catch (e) {
+      log(e.toString());
+      Loading.stop();
+    }
+    Loading.stop();
+    // setState1((){});
+    setState(() {
+      if (paths != null) {
+        if (paths != null) {
+          //passing file bytes and file name for API call
+
+          for (int i = 0; i < paths!.length; i++) {
+            print(paths![i].extension);
+
+            UploadDoc objUploadFiles = UploadDoc();
+
+            // mPitchdeck = _paths![i];
+
+            // PlatformFile file = _paths!.first;
+            // String fileName = _paths!.first.files!.first.name;
+            //   file = File(_paths!.files.single.path!);
+
+            objUploadFiles.attach = base64Encode(paths![i].bytes!);
+            objUploadFiles.name = paths![i].name!;
+            objUploadFiles.extension = paths![i].extension!;
+            objUploadFiles.service_status = servicestatus;
+
+            // objUploadFiles.attach = "";
+            // objUploadFiles.name = "";
+
+            mUploadFiles.add(objUploadFiles);
+          }
+
+          _apiService1
+              .myservicesdocupload(serviceid, mUploadFiles)
+              .then((value) async {
+            print(value);
+
+            if (value is ApiSuccess) {
+              Loading.stop();
+              if (CommonResponse.fromJson(value.data)!.message!.status ??
+                  false) {
+                SucessToast(
+                    context: context,
+                    text:
+                        CommonResponse.fromJson(value.data)!.message!.message ??
+                            "");
+              } else {
+                ErrorToast(
+                    context: context,
+                    text:
+                        CommonResponse.fromJson(value.data)!.message!.message ??
+                            "");
+              }
+
+              // setState(() {
+              //   mShowView = 3;
+              // });
+            } else if (value is ApiFailure) {
+              Loading.stop();
+            }
+          });
+
+          // ApiClient.uploadFile(_paths!.first.bytes!, _paths!.first.name);
+        }
+      }
+    });
+  }
+}
+
+class UploadDoc {
+  // String? Image;
+  // String? ImageExtension;
+
+  String? service_status;
+  String? extension;
+  String? name;
+  String? attach;
+
+  UploadDoc({
+    this.service_status,
+    this.extension,
+    this.name,
+    this.attach,
+  });
+
+  factory UploadDoc.fromJson(Map<String, dynamic> json) => UploadDoc(
+        service_status: json["service_status"],
+        extension: json["extension"],
+        name: json["name"],
+        attach: json["attach"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "service_status": service_status,
+        "extension": extension,
+        "name": name,
+        "attach": attach,
+      };
 }

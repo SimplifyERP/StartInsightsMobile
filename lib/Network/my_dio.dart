@@ -114,6 +114,11 @@ class MyDio {
     } on FormatException {
       return ApiFailure("Error");
     } on DioException catch (e) {
+      printResponse('url:    $endPoint');
+      printResponse('header:    ${dio.options.headers}');
+      //printResponse('body:    $data');
+      print('body:    $data');
+
       return ApiFailure("Error");
     } catch (e) {
       return ApiFailure("$e Error ");

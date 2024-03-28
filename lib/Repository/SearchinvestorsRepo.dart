@@ -60,4 +60,36 @@ class SearchinvestorsRepo {
       'type_of_investor': typeofinvestor
     });
   }
+
+  Future<ApiResults> AddNewInvestor(
+    String userId,
+    String investorname,
+    String investorstatus,
+    String contactedperson,
+    String fundingstage,
+    String description,
+    String website,
+    String investoremail,
+    String contactno,
+    String notes,
+    String logotype,
+    String logoname,
+    String logo,
+  ) async {
+    return await sl<MyDio>().postData(endPoint: mCreateinvestor, data: {
+      'user_id': userId,
+      'investor_name': investorname,
+      'investor_status': investorstatus,
+      'contacted_person': contactedperson,
+      'funding_stage': fundingstage,
+      'description': description,
+      'website': website,
+      'investor_email': investoremail,
+      'contact_no': contactno,
+      'notes': notes,
+      'logo_type': logotype,
+      'logo_name': logoname,
+      'logo': logo,
+    });
+  }
 }

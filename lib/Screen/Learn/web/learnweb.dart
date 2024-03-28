@@ -1126,14 +1126,9 @@ class _LearnWebState extends State<LearnWeb> {
                                                                     width: 10,
                                                                   ),
                                                                   Text(
-                                                                    // mCourseDetail[0]
-                                                                    //         .courseTitle ??
-                                                                    //     "",
-
-                                                                    '$totalHour hour: '
-                                                                    '$totalMinute minute: '
-                                                                    '$totalSeconds seconds',
-
+                                                                    mCourseDetail[0]
+                                                                            .courseTitle ??
+                                                                        "",
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
@@ -1159,7 +1154,7 @@ class _LearnWebState extends State<LearnWeb> {
                                                                         BorderRadius.circular(
                                                                             15),
                                                                     color: Colors
-                                                                        .amber,
+                                                                        .white,
                                                                     boxShadow: const [
                                                                       BoxShadow(
                                                                         color:

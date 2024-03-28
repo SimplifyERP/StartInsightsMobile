@@ -61,7 +61,7 @@ class PitchRoomDetail {
   String? aboutStartup;
   String? notes;
   List<Document>? documents;
-  List<dynamic>? sharedUsers;
+  List<SharedUser>? sharedUsers;
 
   PitchRoomDetail({
     this.id,
@@ -88,7 +88,8 @@ class PitchRoomDetail {
                 json["documents"]!.map((x) => Document.fromJson(x))),
         sharedUsers: json["shared_users"] == null
             ? []
-            : List<dynamic>.from(json["shared_users"]!.map((x) => x)),
+            : List<SharedUser>.from(
+                json["shared_users"]!.map((x) => SharedUser.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -103,43 +104,66 @@ class PitchRoomDetail {
             : List<dynamic>.from(documents!.map((x) => x.toJson())),
         "shared_users": sharedUsers == null
             ? []
-            : List<dynamic>.from(sharedUsers!.map((x) => x)),
+            : List<dynamic>.from(sharedUsers!.map((x) => x.toJson())),
       };
 }
 
-enum CompanyName { ABC, EMPTY }
-
-final companyNameValues =
-    EnumValues({"ABC": CompanyName.ABC, "": CompanyName.EMPTY});
-
 class Document {
+  String? docId;
+  String? docName;
   String? documentType;
   String? attach;
+  bool? isUpload;
+  String? createdDate;
+  String? createdTime;
 
   Document({
+    this.docId,
+    this.docName,
     this.documentType,
     this.attach,
+    this.isUpload,
+    this.createdDate,
+    this.createdTime,
   });
 
   factory Document.fromJson(Map<String, dynamic> json) => Document(
+        docId: json["doc_id"],
+        docName: json["doc_name"],
         documentType: json["document_type"],
         attach: json["attach"],
+        isUpload: json["is_upload"],
+        createdDate: json["created_date"],
+        createdTime: json["created_time"],
       );
 
   Map<String, dynamic> toJson() => {
+        "doc_id": docId,
+        "doc_name": docName,
         "document_type": documentType,
         "attach": attach,
+        "is_upload": isUpload,
+        "created_date": createdDate,
+        "created_time": createdTime,
       };
 }
 
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
+class SharedUser {
+  String? userId;
+  String? userName;
 
-  EnumValues(this.map);
+  SharedUser({
+    this.userId,
+    this.userName,
+  });
 
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
+  factory SharedUser.fromJson(Map<String, dynamic> json) => SharedUser(
+        userId: json["user_id"],
+        userName: json["user_name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "user_id": userId,
+        "user_name": userName,
+      };
 }

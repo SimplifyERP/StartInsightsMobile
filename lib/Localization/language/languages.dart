@@ -410,4 +410,15 @@ abstract class Languages {
   String get mEntermobileno;
   String get mCheckFundabilityTest;
   String get meventregister;
+  String get mredeem;
+  String get mcopypastecode;
+  String get mclickcoupon;
+  String get mSteptofollow;
+  String get mRemoveImage;
+  String get mRemoveuseraccess;
+  String get mInvestorwiseoverview;
+  String get mRoundwiseoverview;
+  String get mname;
+  String get mEnterContactPerson;
+  String get mSelectCompanyLogo;
 }

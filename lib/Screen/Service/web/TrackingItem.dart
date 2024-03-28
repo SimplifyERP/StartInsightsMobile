@@ -12,11 +12,13 @@ class TrackingItem extends StatelessWidget {
   var mCurrentview;
   ServiceTracking mServiceTracking;
   ServiceDetailsMessage mServiceDetailsMessage;
+  final VoidCallback mDocUpload;
   TrackingItem({
     required this.mTotalview,
     required this.mCurrentview,
     required this.mServiceTracking,
     required this.mServiceDetailsMessage,
+    required this.mDocUpload,
     super.key,
   });
 
@@ -25,7 +27,7 @@ class TrackingItem extends StatelessWidget {
     return InkWell(
       //onTap: (() => selectMeal(context)),
       child: SizedBox(
-        height: (mServiceTracking.steps! == "Document Collection") ? 120 : 90,
+        height: (mServiceTracking.docstatus ?? false) ? 120 : 90,
         child: Row(
           children: [
             Expanded(
@@ -49,9 +51,7 @@ class TrackingItem extends StatelessWidget {
                       child: Dash(
                           direction: Axis.vertical,
                           length:
-                              (mServiceTracking.steps! == "Document Collection")
-                                  ? 97
-                                  : 68,
+                              (mServiceTracking.docstatus ?? false) ? 97 : 68,
                           dashLength: 5,
                           dashColor: mGreySix),
                     ),
@@ -168,35 +168,37 @@ class TrackingItem extends StatelessWidget {
                                 height: 15,
                               ),
                               Visibility(
-                                  visible: (mServiceTracking.steps! ==
-                                          "Document Collection")
+                                  visible: (mServiceTracking.docstatus ?? false)
                                       ? true
                                       : false,
-                                  child: Container(
-                                    width: 140,
-                                    height: 40,
-                                    margin: const EdgeInsets.only(left: 20),
-                                    padding: const EdgeInsets.only(
-                                        right: 10, left: 10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                      color: mBlackOne,
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color: mBlackOne,
-                                          blurRadius: 1.0,
-                                        ),
-                                      ],
+                                  child: InkWell(
+                                    onTap: mDocUpload,
+                                    child: Container(
+                                      width: 140,
+                                      height: 40,
+                                      margin: const EdgeInsets.only(left: 20),
+                                      padding: const EdgeInsets.only(
+                                          right: 10, left: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: mBlackOne,
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: mBlackOne,
+                                            blurRadius: 1.0,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                        Languages.of(context)!.mUploadDoc,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontFamily: 'OpenSauceSansMedium',
+                                            fontSize: mSizeThree,
+                                            color: Colors.white),
+                                      )),
                                     ),
-                                    child: Center(
-                                        child: Text(
-                                      Languages.of(context)!.mUploadDoc,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontFamily: 'OpenSauceSansMedium',
-                                          fontSize: mSizeThree,
-                                          color: Colors.white),
-                                    )),
                                   )),
                             ]),
                       ),

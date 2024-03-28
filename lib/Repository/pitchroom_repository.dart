@@ -36,16 +36,19 @@ class PitchroomRepository {
 
   Future<ApiResults> UpdateCreateRoom(
       String roomid,
-      String notes,
+      String roomName,
       String aboutstartup,
-      String mCompanyname,
-      String mRoomname,
-      String mCoverimage,
+      String coverimage,
+      List<String> sharedUser,
       List<UploadFiles> json) async {
     return await sl<MyDio>().postData(endPoint: updateRoomAPI, data: {
       'room_id': roomid,
-      'notes': notes,
-      'pitch_room_documents': jsonEncode(json),
+      'room_name': roomName,
+      'about_startup': aboutstartup,
+      'cover_image': coverimage,
+      // 'users_shared': jsonEncode(sharedUser),
+      'users_shared': jsonEncode(sharedUser),
+      'upload_doc': jsonEncode(json),
     });
   }
 
@@ -55,6 +58,13 @@ class PitchroomRepository {
       'pitch_room_id': roomid,
       'notes': notes,
       'user_ids': jsonEncode(json),
+    });
+  }
+
+  Future<ApiResults> mRemoveDocument(String roomid, String docid) async {
+    return await sl<MyDio>().postData(endPoint: mRemovedocument, data: {
+      'room_id': roomid,
+      'doc_id': docid,
     });
   }
 
@@ -99,5 +109,14 @@ class PitchroomRepository {
     }*/
 
         );
+  }
+
+  Future<ApiResults> getCaptableData(
+    String userId,
+  ) async {
+    return await sl<MyDio>()
+        .postData(endPoint: getinvestorroundwisegraphAPI, data: {
+      'user_id': userId,
+    });
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:startinsights/Localization/language/languages.dart';
 import 'package:startinsights/Model/InvestorroundwiseResponse.dart';
@@ -61,10 +60,10 @@ class _CaptableState extends State<CaptableWeb> {
 
   List<DataColumn> RoundWiseColumns = [];
 
-  List<InvestorWiseList> mInvestorWiseList = [];
+  List<InvestorWise> mInvestorWiseList = [];
   List<WiseGraph> mInvestorWiseGraphList = [];
   List<WiseGraph> mRoundWiseGraphList = [];
-  List<RoundWiseList> mRoundWiseList = [];
+  List<RoundWise> mRoundWiseList = [];
 
   Map<String, double> InvesteddataMap = {};
   Map<String, double> RoundWisedataMap = {};
@@ -929,12 +928,12 @@ class _CaptableState extends State<CaptableWeb> {
                                                                             DataCell(DatacellText(
                                                                               menuname: getmInvestorWiseList.tagName ?? "",
                                                                             )),
-                                                                            DataCell(
-                                                                              DatacellText(menuname: DateFormat('dd MMM yyyy').format(getmInvestorWiseList.dateOfAllotment ?? DateTime.now())),
-                                                                            ),
-                                                                            DataCell(DatacellText(
-                                                                              menuname: getmInvestorWiseList.investedRound ?? "",
-                                                                            )),
+                                                                            // DataCell(
+                                                                            //   DatacellText(menuname: DateFormat('dd MMM yyyy').format(getmInvestorWiseList.dateOfAllotment ?? DateTime.now())),
+                                                                            // ),
+                                                                            // DataCell(DatacellText(
+                                                                            //   menuname: getmInvestorWiseList.investedRound ?? "",
+                                                                            // )),
                                                                             DataCell(DatacellText(
                                                                               menuname: getmInvestorWiseList.amountInvested.toString() ?? "",
                                                                             )),
@@ -962,9 +961,9 @@ class _CaptableState extends State<CaptableWeb> {
                                                                             DataCell(DatacellText(
                                                                               menuname: getmInvestorWiseList.shareholding ?? "",
                                                                             )),
-                                                                            DataCell(DatacellText(
-                                                                              menuname: getmInvestorWiseList.creationPersonId ?? "",
-                                                                            )),
+                                                                            // DataCell(DatacellText(
+                                                                            //   menuname: getmInvestorWiseList.creationPersonId ?? "",
+                                                                            // )),
                                                                           ]);
                                                                     },
                                                                   ).toList(),
@@ -1051,17 +1050,17 @@ class _CaptableState extends State<CaptableWeb> {
                                                                               index];
                                                                       return DataRow(
                                                                           cells: [
-                                                                            DataCell(
-                                                                              DatacellText(
-                                                                                menuname: getmInvestorWiseList.nameOfTheRound ?? "",
-                                                                              ),
-                                                                            ),
+                                                                            // DataCell(
+                                                                            //   DatacellText(
+                                                                            //     menuname: getmInvestorWiseList.nameOfTheRound ?? "",
+                                                                            //   ),
+                                                                            // ),
                                                                             DataCell(DatacellText(
                                                                               menuname: getmInvestorWiseList.roundType ?? "",
                                                                             )),
-                                                                            DataCell(
-                                                                              DatacellText(menuname: DateFormat('dd MMM yyyy').format(getmInvestorWiseList.closingDateOfTheRound!)),
-                                                                            ),
+                                                                            // DataCell(
+                                                                            //   DatacellText(menuname: DateFormat('dd MMM yyyy').format(getmInvestorWiseList.closingDateOfTheRound!)),
+                                                                            // ),
                                                                             DataCell(DatacellText(
                                                                               menuname: getmInvestorWiseList.description ?? "",
                                                                             )),
@@ -1080,9 +1079,9 @@ class _CaptableState extends State<CaptableWeb> {
                                                                             DataCell(DatacellText(
                                                                               menuname: getmInvestorWiseList.dilutionForThisRound.toString() ?? "",
                                                                             )),
-                                                                            DataCell(DatacellText(
-                                                                              menuname: getmInvestorWiseList.creationPersonId ?? "",
-                                                                            )),
+                                                                            // DataCell(DatacellText(
+                                                                            //   menuname: getmInvestorWiseList.creationPersonId ?? "",
+                                                                            // )),
                                                                           ]);
                                                                     },
                                                                   ).toList(),

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:startinsights/Network/api_result_handler.dart';
 import 'package:startinsights/Network/di.dart';
 import 'package:startinsights/Network/endpoints.dart';
 import 'package:startinsights/Network/my_dio.dart';
+import 'package:startinsights/Screen/Service/web/searchlist.dart';
 
 class PitchcraftListRepo {
   Future<ApiResults> getPitchcraftList(
@@ -45,6 +48,14 @@ class PitchcraftListRepo {
       'date': date,
       'payment_id': paymentid,
       'amount': amount,
+    });
+  }
+
+  Future<ApiResults> myservicesdocupload(
+      String myserviceid, List<UploadDoc> json) async {
+    return await sl<MyDio>().postData(endPoint: servicesdocupload, data: {
+      'my_service_id': myserviceid,
+      'upload_doc': jsonEncode(json),
     });
   }
 }

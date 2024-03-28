@@ -26,8 +26,8 @@ class DocView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 10, left: 10),
-      margin: EdgeInsets.only(right: 10, left: 10),
+      padding: const EdgeInsets.only(right: 10, left: 10),
+      margin: const EdgeInsets.only(right: 10, left: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Colors.white,
@@ -37,14 +37,14 @@ class DocView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                SizedBox(
+                const SizedBox(
                   width: 140,
                 ),
                 InkWell(
@@ -60,7 +60,7 @@ class DocView extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Align(
@@ -70,6 +70,9 @@ class DocView extends StatelessWidget {
                 width: 70,
                 height: 70,
               ),
+            ),
+            const SizedBox(
+              height: 5,
             ),
             Text(
               (mUploadFiles.name ?? "").length > 30
@@ -82,11 +85,11 @@ class DocView extends StatelessWidget {
                   fontSize: mSizeOne,
                   color: mBlackTwo),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Visibility(
-                visible: ((mUploadFiles.attach ?? "").isEmpty) ? false : true,
+                visible: (mUploadFiles.isupload ?? false) ? true : false,
                 child: Align(
                   alignment: Alignment.center,
                   child: InkWell(
@@ -130,6 +133,22 @@ class DocView extends StatelessWidget {
       case "xlsx":
         {
           mSetcolor = 'assets/new_ic_excel.svg';
+        }
+        break;
+
+      case "png":
+        {
+          mSetcolor = 'assets/new_ic_watermarkbg.svg';
+        }
+        break;
+      case "jpg":
+        {
+          mSetcolor = 'assets/new_ic_watermarkbg.svg';
+        }
+        break;
+      case "jpeg":
+        {
+          mSetcolor = 'assets/new_ic_watermarkbg.svg';
         }
         break;
 

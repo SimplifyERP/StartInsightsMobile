@@ -10,6 +10,8 @@ import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:startinsights/Localization/localizations_delegate.dart';
 import 'package:startinsights/Network/di.dart';
+import 'package:startinsights/Screen/BookanExpert/bloc/bookanexpert_bloc.dart';
+import 'package:startinsights/Screen/BookanExpert/web/bookanexpertweb.dart';
 import 'package:startinsights/Screen/Dashboard/bloc/dashboard_bloc.dart';
 import 'package:startinsights/Screen/Dashboard/web/dashboard.dart';
 import 'package:startinsights/Screen/ForgetPassword/bloc/forgetpwd_bloc.dart';
@@ -256,6 +258,21 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       GoRoute(
+        name: "FundraisingExperts",
+        path: "/FundraisingExperts",
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider<BookanExpertBloc>(
+              create: (context) => BookanExpertBloc(mContext: context)
+                ..getBookanexpertListData(),
+            )
+          ],
+          //child: DashboardWeb(),
+
+          child: BookanexpertWeb(),
+        ),
+      ),
+      GoRoute(
           name: "Fundraising",
           path: '/Fundraising',
           builder: (context, state) => MultiBlocProvider(
@@ -499,7 +516,7 @@ class _MyAppState extends State<MyApp> {
                     create: (context) =>
 
                         // LoginBloc(mLoginRepo: LoginRepo(), mContext: context),
-                        ProfileBloc(mContext: context),
+                        ProfileBloc(mContext: context)..getProfileData(),
                   )
                 ],
                 child: Profile(),

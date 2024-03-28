@@ -21,7 +21,7 @@ const String coursesdetailsAPI =
     '$baseUrl/method/startinsights.website_api.lms_course.lms_course_details';
 
 const String bookanexpertlistAPI =
-    '$baseUrl/method/startinsights.website_api.book_an_expert.get_book_an_expert_list';
+    '$baseUrl/method/startinsights.website_api.fundraising_experts.get_fundraising_experts';
 
 const String expertbookingAPI =
     '$baseUrl/method/startinsights.website_api.book_an_expert.book_an_expert';
@@ -63,7 +63,7 @@ const String createpitchroomAPI =
     '$baseUrl/method/startinsights.website_api.pitch_room.create_pitch_room';
 
 const String getinvestorroundwisegraphAPI =
-    '$baseUrl/method/startinsights.website_api.investor_round_wise_graph.get_investor_round_wise_details';
+    '$baseUrl/method/startinsights.website_api.captable_management.captable_management_list';
 
 const String getredeemstatusupdateAPI =
     '$baseUrl/method/startinsights.website_api.startup_deals.startup_redeem_status_update';
@@ -119,7 +119,7 @@ const String servicedetailsAPI =
     '$baseUrl/method/startinsights.website_api.services.get_my_service_details';
 
 const String updateRoomAPI =
-    '$baseUrl/method/startinsights.website_api.pitch_room.pitch_room_doc_upload';
+    '$baseUrl/method/startinsights.website_api.pitch_room.pitch_room_update';
 
 const String shareduserAPI =
     '$baseUrl/method/startinsights.website_api.pitch_room.shared_user';
@@ -144,3 +144,15 @@ const String EventListAPI =
 
 const String mAddEventRegister =
     '$baseUrl/method/startinsights.website_api.event.create_registered_event';
+
+const String mRemovedocument =
+    '$baseUrl/method/startinsights.website_api.pitch_room.remove_document';
+
+const String mProfileList =
+    '$baseUrl/method/startinsights.website_api.profile.get_profile_details';
+
+const String mCreateinvestor =
+    '$baseUrl/method/startinsights.website_api.user_creation_investor.create_investor';
+
+const String servicesdocupload =
+    '$baseUrl/method/startinsights.website_api.services.my_services_doc_upload';

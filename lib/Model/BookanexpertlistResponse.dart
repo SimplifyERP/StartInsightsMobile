@@ -30,66 +30,74 @@ class BookanexpertlistResponse {
 
 class Message {
   bool? status;
-  List<BookAnExpertList>? bookAnExpertList;
+  List<FundraisingExpert>? fundraisingExperts;
 
   Message({
     this.status,
-    this.bookAnExpertList,
+    this.fundraisingExperts,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
         status: json["status"],
-        bookAnExpertList: json["book_an_expert_list"] == null
+        fundraisingExperts: json["fundraising_experts"] == null
             ? []
-            : List<BookAnExpertList>.from(json["book_an_expert_list"]!
-                .map((x) => BookAnExpertList.fromJson(x))),
+            : List<FundraisingExpert>.from(json["fundraising_experts"]!
+                .map((x) => FundraisingExpert.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "book_an_expert_list": bookAnExpertList == null
+        "fundraising_experts": fundraisingExperts == null
             ? []
-            : List<dynamic>.from(bookAnExpertList!.map((x) => x.toJson())),
+            : List<dynamic>.from(fundraisingExperts!.map((x) => x.toJson())),
       };
 }
 
-class BookAnExpertList {
+class FundraisingExpert {
   String? id;
+  String? name;
   String? expertName;
+  String? attachImage;
   String? designation;
-  String? linkedinId;
-  String? attachimage;
+  String? mailId;
   int? price;
+  String? shortDescription;
   String? description;
 
-  BookAnExpertList({
+  FundraisingExpert({
     this.id,
+    this.name,
     this.expertName,
+    this.attachImage,
     this.designation,
-    this.linkedinId,
-    this.attachimage,
+    this.mailId,
     this.price,
+    this.shortDescription,
     this.description,
   });
 
-  factory BookAnExpertList.fromJson(Map<String, dynamic> json) =>
-      BookAnExpertList(
+  factory FundraisingExpert.fromJson(Map<String, dynamic> json) =>
+      FundraisingExpert(
         id: json["id"],
+        name: json["name"],
         expertName: json["expert_name"],
+        attachImage: json["attach_image"],
         designation: json["designation"],
-        linkedinId: json["linkedin_id"],
-        attachimage: json["attach_image"],
+        mailId: json["mail_id"],
         price: json["price"],
+        shortDescription: json["short_description"],
         description: json["description"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "name": name,
         "expert_name": expertName,
+        "attach_image": attachImage,
         "designation": designation,
-        "linkedin_id": linkedinId,
-        "attach_image": attachimage,
+        "mail_id": mailId,
         "price": price,
+        "short_description": shortDescription,
         "description": description,
       };
 }

@@ -1,6 +1,6 @@
 //
 
-import 'package:startinsights/Model/CoursesDetailsResponse.dart';
+import 'package:startinsights/Model/LoginResponse.dart';
 
 abstract class ProfileStatus {}
 
@@ -16,6 +16,6 @@ class GetProfileInfoFailState extends ProfileStatus {
 }
 
 class GetProfileInfoSuccessState extends ProfileStatus {
-  final List<Course> mCoursesDetails;
-  GetProfileInfoSuccessState(this.mCoursesDetails);
+  final Userinfo muserinfo;
+  GetProfileInfoSuccessState(this.muserinfo);
 }

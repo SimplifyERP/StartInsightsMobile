@@ -60,7 +60,7 @@ class MessageElement {
   String? name;
   String? title;
   String? logo;
-  int? investorVerified;
+  String? investorVerified;
   String? linkedin;
   String? website;
   String? aboutUs;

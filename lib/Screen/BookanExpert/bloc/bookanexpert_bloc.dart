@@ -12,7 +12,7 @@ import 'package:startinsights/Utils/constant_methods.dart';
 
 class BookanExpertBloc extends Bloc<BookanExpertEvent, BookanExpertStatus> {
   final BuildContext mContext;
-  List<BookAnExpertList> mBookAnExpertList = [];
+  List<FundraisingExpert> mBookAnExpertList = [];
 
   BookanExpertBloc({
     required this.mContext,
@@ -29,7 +29,7 @@ class BookanExpertBloc extends Bloc<BookanExpertEvent, BookanExpertStatus> {
       if (apiResults is ApiSuccess) {
         mBookAnExpertList = BookanexpertlistResponse.fromJson(apiResults.data)
             .message!
-            .bookAnExpertList!;
+            .fundraisingExperts!;
 
         emit(GetBookanExpertInfoSuccessState(mBookAnExpertList));
 

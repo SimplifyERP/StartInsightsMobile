@@ -183,12 +183,14 @@ class ServiceTracking {
   int? tat;
   String? currentStatus;
   bool? status;
+  bool? docstatus;
 
   ServiceTracking({
     this.steps,
     this.tat,
     this.currentStatus,
     this.status,
+    this.docstatus,
   });
 
   factory ServiceTracking.fromJson(Map<String, dynamic> json) =>
@@ -197,6 +199,7 @@ class ServiceTracking {
         tat: json["tat"],
         currentStatus: json["current_status"],
         status: json["status"],
+        docstatus: json["doc_status"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -204,6 +207,7 @@ class ServiceTracking {
         "tat": tat,
         "current_status": currentStatus,
         "status": status,
+        "docstatus": docstatus,
       };
 }
 
